@@ -1,0 +1,44 @@
+import qbs 1.0
+
+Module {
+    property path includeDirectory: project.buildDirectory + "/include"
+    property stringList modules: []
+    readonly property stringList modulesIncludes: {
+        var includes = [
+            includeDirectory,
+            project.sourceDirectory + "/qtbase/mkspecs/" + project.target,
+        ];
+        var moduleMap = Object({
+            core: "QtCore",
+            gui: "QtGui",
+            platformsupport: "QtPlatformSupport",
+        });
+        for (var i in modules) {
+            var baseName = modules[i];
+            var isPrivate = baseName.endsWith("-private");
+            if (isPrivate)
+                baseName = baseName.slice(0, -8);
+
+            var module = moduleMap[baseName];
+            if (!module)
+                module = "Qt" + baseName[0].toUpperCase() + baseName.slice(1);
+
+            includes.push(includeDirectory + "/" + module);
+            if (isPrivate) {
+                includes.push(includeDirectory + "/" + module + "/" + project.qtVersion);
+                includes.push(includeDirectory + "/" + module + "/" + project.qtVersion
+                                               + "/" + module);
+                includes.push(includeDirectory + "/" + module + "/" + project.qtVersion
+                                               + "/" + module + "/private");
+                if (baseName == "gui") {
+                    includes.push(includeDirectory + "/" + module + "/" + project.qtVersion
+                                                   + "/" + module + "/qpa");
+                }
+            }
+        }
+        return includes;
+    }
+
+    Depends { name: "cpp" }
+    cpp.includePaths: base.concat(modulesIncludes)
+}
