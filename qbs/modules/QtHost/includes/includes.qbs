@@ -41,4 +41,7 @@ Module {
 
     Depends { name: "cpp" }
     cpp.includePaths: base.concat(modulesIncludes)
+
+    Depends { name: "QtHost.moc" }
+    QtHost.moc.includePaths: base.concat(modulesIncludes)
 }

@@ -4,6 +4,8 @@ import qbs.File
 Project {
     id: root
 
+    property string qtVersion: "5.5.0" // ### Can we get this from a file?
+
     property string host: {
         var host;
         if (qbs.targetOS.contains("linux")) {
@@ -23,10 +25,11 @@ Project {
     qbsSearchPaths: "qbs"
 
     references: [
-        "qbs/qhost/qhost.qbs",
-        "qbs/qtbase/qtbootstrap.qbs",
-        "qbs/qtbase/tools/moc.qbs",
-        "qbs/qtbase/tools/rcc.qbs",
-        "qbs/qttools/linguist/lrelease.qbs",
+        "host-tools/bootstrap-headers.qbs",
+        "host-tools/lrelease.qbs",
+        "host-tools/moc.qbs",
+        "host-tools/qhost.qbs",
+        "host-tools/qtbootstrap.qbs",
+        "host-tools/rcc.qbs",
     ]
 }

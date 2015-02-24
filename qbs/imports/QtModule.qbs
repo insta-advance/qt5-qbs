@@ -6,7 +6,6 @@ QtLibrary {
     destinationDirectory: project.buildDirectory + "/lib"
 
     Depends { name: "QtHost.sync" }
-    QtHost.sync.module: name
 
     Group {
         fileTagsFilter: ["debuginfo", "dynamiclibrary", "dynamiclibrary_import", "staticlibrary"]

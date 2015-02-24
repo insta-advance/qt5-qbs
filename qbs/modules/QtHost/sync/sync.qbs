@@ -5,8 +5,7 @@ import qbs.TextFile
 // This is a poor man's version of syncqt.pl, using line-based rules
 // and simpler regular expressions.
 Module {
-    id: root
-
+    // Input
     property string module
 
     Depends { name: "cpp" }
@@ -18,7 +17,7 @@ Module {
             var module = product.moduleProperty("QtHost.sync", "module");
             var basePath = project.buildDirectory + "/include/" + module + "/";
 
-            var fileTags = ["hpp", "synced_hpp"];
+            var fileTags = ["hpp", "hpp_synced"];
 
             // Simply copy private headers without parsing
             if (module == "QtGui" && (input.fileName.startsWith("qplatform")
@@ -250,7 +249,7 @@ Module {
                 for (var i in outputs.hpp) {
                     var header = outputs.hpp[i];
 
-                    /*if (File.exists(header.filePath)) { // Helpful for debugging duplicates
+                    if (File.exists(header.filePath)) { // Helpful for debugging duplicates
                         var file = new TextFile(header.filePath, TextFile.ReadOnly);
                         var contents = file.readAll();
                         file.close();
@@ -259,7 +258,7 @@ Module {
                               + 'The new forwarding header is "' + input.fileName
                               + '" and the current content is "' + contents + '"';
                         return;
-                    }*/
+                    }
 
                     var file = new TextFile(header.filePath, TextFile.WriteOnly);
                     file.writeLine("#include \"" + input.filePath + "\"");

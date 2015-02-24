@@ -5,7 +5,6 @@ DynamicLibrary {
     property path includeDirectory: project.buildDirectory + "/include"
 
     Depends { name: "cpp" }
-    Depends { name: "configure" }
     Depends { name: "QtHost"; submodules: ["config", "includes", "moc", "rcc"] }
 
     cpp.defines: [
@@ -24,10 +23,10 @@ DynamicLibrary {
         ]
     }
 
-    FileTagger {
+    /*FileTagger {
         patterns: "*.cpp"
         fileTags: "moc_cpp"
-    }
+    }*/
 
     FileTagger {
         patterns: "*.qrc"
