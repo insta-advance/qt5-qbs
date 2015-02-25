@@ -60,6 +60,7 @@ Project {
         "plugins/platforms/platforms.qbs",
 
         "qtqml.qbs",
+        "qtquick.qbs",
     ]
 
     /*Project {

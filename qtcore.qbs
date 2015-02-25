@@ -42,7 +42,6 @@ QtModule {
     Group {
         id: headers_moc_p
         name: "headers (delayed moc)"
-        fileTags: "moc_hpp_p"
         prefix: basePath + "/"
         files: [
             "animation/qparallelanimationgroup.h",
@@ -68,9 +67,8 @@ QtModule {
             "itemmodels/qidentityproxymodel.h",
 
             "statemachine/qstatemachine.h",
-
-
         ]
+        fileTags: "moc_hpp_p"
     }
 
     Group {
@@ -293,7 +291,7 @@ QtModule {
     }
 
     Group {
-        name: "sources_moc"
+        name: "sources (moc)"
         prefix: basePath + "/"
         files: [
             "kernel/qtimer.cpp",
@@ -728,5 +726,10 @@ QtModule {
             };
             return cmd;
         }
+    }
+
+    Export {
+        Depends { name: "QtHost.includes" }
+        QtHost.includes.modules: ["core", "core-private"]
     }
 }

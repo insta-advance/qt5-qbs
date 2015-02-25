@@ -1,5 +1,7 @@
 import qbs 1.0
 
+// ### consider merging this with the respective headers items
+// ### or, it could be exported from Qt a modules (better)
 Module {
     property path includeDirectory: project.buildDirectory + "/include"
     property stringList modules: []
@@ -11,6 +13,7 @@ Module {
         var moduleMap = Object({
             core: "QtCore",
             gui: "QtGui",
+            platformheaders: "QtPlatformHeaders",
             platformsupport: "QtPlatformSupport",
         });
         for (var i in modules) {

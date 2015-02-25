@@ -7,7 +7,7 @@ QtModule {
     Depends { name: "QtNetworkHeaders" }
     Depends { name: "zlib" } // ### only spdy needs this
     Depends { name: "QtCore" }
-    QtHost.includes.modules: [ "core", "core-private", "network", "network-private" ]
+    QtHost.includes.modules: ["network", "network-private"]
 
     cpp.defines: base.concat([
         "QT_BUILD_NETWORK_LIB",
@@ -78,12 +78,21 @@ QtModule {
     }
 
     Group {
+        name: "sources (moc)"
+        prefix: basePath + "/"
+        files: [
+            "access/qftp.cpp",
+        ]
+        fileTags: "moc_cpp"
+        overrideTags: false
+    }
+
+    Group {
         name: "access"
-        prefix: project.sourceDirectory + "/qtbase/src/network/access/"
+        prefix: basePath + "/access/"
         files: [
             "qabstractnetworkcache.cpp",
             "qabstractprotocolhandler.cpp",
-            "qftp.cpp",
             "qhttpmultipart.cpp",
             "qhttpnetworkconnection.cpp",
             "qhttpnetworkconnectionchannel.cpp",
@@ -116,7 +125,7 @@ QtModule {
 
     Group {
         name: "bearer"
-        prefix: project.sourceDirectory + "/qtbase/src/network/bearer/"
+        prefix: basePath + "/bearer/"
         files: [
             "qbearerengine.cpp",
             "qbearerplugin.cpp",
@@ -130,7 +139,7 @@ QtModule {
 
     Group {
         name: "kernel"
-        prefix: project.sourceDirectory + "/qtbase/src/network/kernel/"
+        prefix: basePath + "/kernel/"
         files: [
             "qauthenticator.cpp",
             "qdnslookup.cpp",
@@ -151,7 +160,7 @@ QtModule {
     Group {
         name: "kernel_unix"
         condition: qbs.targetOS.contains("unix")
-        prefix: project.sourceDirectory + "/qtbase/src/network/kernel/"
+        prefix: basePath + "/kernel/"
         files: [
             "qdnslookup_unix.cpp",
             "qhostinfo_unix.cpp",
@@ -163,7 +172,7 @@ QtModule {
     Group {
         name: "kernel_windows"
         condition: qbs.targetOS.contains("windows")
-        prefix: project.sourceDirectory + "/qtbase/src/network/kernel/"
+        prefix: basePath + "/kernel/"
         files: [
             "qdnslookup_win.cpp",
             "qhostinfo_win.cpp",
@@ -174,7 +183,7 @@ QtModule {
 
     Group {
         name: "socket"
-        prefix: project.sourceDirectory + "/qtbase/src/network/socket/"
+        prefix: basePath + "/socket/"
         files: [
             "qabstractsocket.cpp",
             "qabstractsocketengine.cpp",
@@ -195,7 +204,7 @@ QtModule {
     Group {
         name: "socket_unix"
         condition: qbs.targetOS.contains("unix")
-        prefix: project.sourceDirectory + "/qtbase/src/network/socket/"
+        prefix: basePath + "/socket/"
         files: [
             "qlocalserver_unix.cpp",
             "qlocalsocket_unix.cpp",
@@ -207,7 +216,7 @@ QtModule {
     Group {
         name: "socket_windows"
         condition: qbs.targetOS.contains("windows")
-        prefix: project.sourceDirectory + "/qtbase/src/network/socket/"
+        prefix: basePath +"/socket/"
         files: [
             "qlocalserver_win.cpp",
             "qlocalsocket_win.cpp",
@@ -217,7 +226,7 @@ QtModule {
 
     Group {
         name: "ssl"
-        prefix: project.sourceDirectory + "/qtbase/src/network/ssl/"
+        prefix: basePath + "/ssl/"
         condition: false
         files: [
             "qasn1element.cpp",
@@ -244,5 +253,10 @@ QtModule {
             "qsslsocket_openssl_symbols.cpp",
             "qsslsocket_winrt.cpp",
         ]
+    }
+
+    Export {
+        Depends { name: "QtHost.includes" }
+        QtHost.includes.modules: ["network", "network-private"]
     }
 }

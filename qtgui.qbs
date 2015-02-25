@@ -11,7 +11,7 @@ QtModule {
     Depends { name: "png" }
     Depends { name: "freetype" }
     Depends { name: "QtCore" }
-    QtHost.includes.modules: ["core", "core-private", "gui", "gui-private"]
+    QtHost.includes.modules: ["gui", "gui-private"]
 
     cpp.defines: base.concat([
         "QT_BUILD_GUI_LIB",
@@ -42,7 +42,7 @@ QtModule {
 
     Group {
         id: headers_moc_p
-        name: "_headers_delayed_moc"
+        name: "headers (delayed moc)"
         prefix: basePath + "/"
         fileTags: "moc_hpp_p"
         files: [
@@ -60,20 +60,27 @@ QtModule {
         ]
     }
 
-    Group { // ### move to moc
-        id: headers_no_moc
-        name: "_headers_no_moc"
-        prefix: basePath + "/"
-        files: [
-            "text/qtextimagehandler_p.h", // "Error: Undefined interface" (see below)
-            "util/qlayoutpolicy_p.h", // "Error: Class declaration lacks Q_OBJECT macro."
-        ]
-    }
-
     QtGuiHeaders {
         name: "headers (moc)"
         fileTags: "moc_hpp"
-        excludeFiles: headers_moc_p.files.concat(headers_no_moc.files);
+        excludeFiles: {
+            var files = [
+                "util/qlayoutpolicy_p.h", // "Class declaration lacks Q_OBJECT macro."
+            ].concat(headers_moc_p.files);
+
+            return files;
+        }
+    }
+
+    Group {
+        name: "sources (moc)"
+        prefix: basePath + "/"
+        files: [
+            "image/qpixmapcache.cpp",
+            "util/qdesktopservices.cpp",
+        ]
+        fileTags: "moc_cpp"
+        overrideTags: false
     }
 
     Group {
@@ -129,7 +136,6 @@ QtModule {
             "qpixmap.cpp",
             "qpixmap_blitter.cpp",
             "qpixmap_raster.cpp",
-            "qpixmapcache.cpp",
             "qplatformpixmap.cpp",
             "qpnghandler.cpp",
             "qppmhandler.cpp",
@@ -411,10 +417,14 @@ QtModule {
         prefix: basePath + "/util/"
         files: [
             "qabstractlayoutstyleinfo.cpp",
-            "qdesktopservices.cpp",
             "qgridlayoutengine.cpp",
             "qlayoutpolicy.cpp",
             "qvalidator.cpp",
         ]
+    }
+
+    Export {
+        Depends { name: "QtHost.includes" }
+        QtHost.includes.modules: ["gui", "gui-private"]
     }
 }

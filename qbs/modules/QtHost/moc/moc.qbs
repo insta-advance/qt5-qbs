@@ -71,7 +71,7 @@ Module {
                 ]);
                 var cmd = new Command("moc", args);
                 cmd.environment = product.moduleProperty("QtHost.moc", "environment");
-                cmd.silent = true;
+                cmd.description = "moc'ing " + input.fileName;
                 commands.push(cmd);
             }
             return commands;

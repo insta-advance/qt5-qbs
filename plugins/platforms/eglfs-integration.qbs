@@ -22,7 +22,7 @@ QtModule {
         project.sourceDirectory + "/qtbase/src/3rdparty/freetype/include", // ### use Probe for system freetype
     ])
 
-    QtHost.includes.modules: [ "core-private", "gui-private", "platformsupport-private" ]
+    QtHost.includes.modules: [ "core-private", "gui-private", "platformheaders", "platformsupport-private" ]
 
     Probes.PkgConfigProbe {
         id: udevProbe

@@ -244,7 +244,7 @@ Module {
 
         prepare: {
             var cmd = new JavaScriptCommand();
-            cmd.silent = true;
+            cmd.description = "syncing " + input.fileName;
             cmd.sourceCode = function() {
                 for (var i in outputs.hpp) {
                     var header = outputs.hpp[i];
@@ -281,9 +281,8 @@ Module {
         }
         prepare: {
             var cmd = new JavaScriptCommand();
-            var module = product.moduleProperty("QtHost.sync", "module");
-            cmd.description = "Creating " + module + " module header";
-            cmd.module = module;
+            cmd.description = "creating module header " + output.fileName;
+            cmd.module = product.moduleProperty("QtHost.sync", "module");
             cmd.sourceCode = function() {
                 var file = new TextFile(output.filePath, TextFile.WriteOnly);
                 file.writeLine("#ifndef QT_" + module.toUpperCase() + "_MODULE_H");
