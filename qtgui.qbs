@@ -3,7 +3,29 @@ import qbs.File
 
 QtModule {
     name: "QtGui"
-    property path basePath: project.sourceDirectory + "/qtbase/src/gui"
+    readonly property path basePath: project.sourceDirectory + "/qtbase/src/gui"
+
+    readonly property stringList defines: {
+        var defines = [];
+
+        // ### find out why these still aren't passed to moc in dependencies
+        // ### we may need to move this type of stuff into config.qbs
+        // ### that would make sense anyway, as it would allow us to change stuff on a module level
+        if (!QtHost.config.cursor) {
+            defines.push("QT_NO_CURSOR");
+            defines.push("QT_NO_WHEELEVENT");
+            defines.push("QT_NO_DRAGANDDROP");
+        }
+
+        return defines;
+    }
+
+    QtHost.includes.modules: ["gui", "gui-private"]
+    //QtHost.config.cursor: false // to test the define propagation
+
+    cpp.defines: base.concat([
+        "QT_BUILD_GUI_LIB",
+    ]).concat(product.defines)
 
     Depends { name: "QtGuiHeaders" }
     Depends { name: "zlib" }
@@ -11,11 +33,6 @@ QtModule {
     Depends { name: "png" }
     Depends { name: "freetype" }
     Depends { name: "QtCore" }
-    QtHost.includes.modules: ["gui", "gui-private"]
-
-    cpp.defines: base.concat([
-        "QT_BUILD_GUI_LIB",
-    ])
 
     Properties {
         condition: QtHost.config.opengl == "desktop" && qbs.targetOS.contains("unix")
@@ -73,6 +90,7 @@ QtModule {
     }
 
     Group {
+        id: sources_moc
         name: "sources (moc)"
         prefix: basePath + "/"
         files: [
@@ -84,346 +102,68 @@ QtModule {
     }
 
     Group {
-        name: "accessible"
-        prefix: basePath + "/accessible/"
+        name: "sources"
+        prefix: basePath + "/"
         files: [
-            "qaccessible.cpp",
-            "qaccessiblebridge.cpp",
-            "qaccessiblecache.cpp",
-            "qaccessibleobject.cpp",
-            "qaccessibleplugin.cpp",
-            "qplatformaccessibility.cpp",
-            //"qaccessiblecache_mac.mm", //### mac
+            "accessible/*.cpp",
+            "animation/*.cpp",
+            "image/*.cpp",
+            "itemmodels/*.cpp",
+            "kernel/*.cpp",
+            "math3d/*.cpp",
+            "opengl/*.cpp",
+            "painting/*.cpp",
+            "painting/*.c",
+            "text/*.cpp",
+            "util/*.cpp",
         ]
-    }
+        excludeFiles: {
+            var excludeFiles = [
+                "image/qimage_mips_dspr2.cpp",      // ### mips
+                //"image/qjpeghandler.cpp",
+                "painting/qdrawhelper_mips_dsp.cpp",       // ## mips
+                "painting/qdrawhelper_mips_dsp_asm.S",
+                "painting/qdrawhelper_mips_dspr2_asm.S",
+                "painting/qdrawhelper_neon.cpp", // ## neon
+                "painting/qdrawhelper_neon_asm.S",
 
-    Group {
-        name: "animation"
-        prefix: basePath + "/animation/"
-        files: [
-            "qguivariantanimation.cpp",
-        ]
-    }
+                "text/qharfbuzzng.cpp", // ### hb-ng?
 
-    Group {
-        name: "image"
-        prefix: basePath + "/image/"
-        files: [
-            "qbitmap.cpp",
-            "qbmphandler.cpp",
-            "qgifhandler.cpp",
-            "qicon.cpp",
-            "qiconengine.cpp",
-            "qiconengineplugin.cpp",
-            "qiconloader.cpp",
-            "qimage.cpp",
-            "qimage_compat.cpp",
-            "qimage_conversions.cpp",
-            //"qimage_mips_dspr2.cpp",      // ### mips
-            "qimage_neon.cpp",
-            "qimage_sse2.cpp",
-            "qimage_ssse3.cpp",
-            "qimageiohandler.cpp",
-            "qimagepixmapcleanuphooks.cpp",
-            "qimagereader.cpp",
-            "qimagewriter.cpp",
-            "qjpeghandler.cpp",           // ### plugin
-            "qmovie.cpp",
-            "qnativeimage.cpp",
-            "qpaintengine_pic.cpp",
-            "qpicture.cpp",
-            "qpictureformatplugin.cpp",
-            "qpixmap.cpp",
-            "qpixmap_blitter.cpp",
-            "qpixmap_raster.cpp",
-            "qplatformpixmap.cpp",
-            "qpnghandler.cpp",
-            "qppmhandler.cpp",
-            "qxbmhandler.cpp",
-            "qxpmhandler.cpp",
-        ]
-    }
+                // included inline
+                "text/qcssscanner.cpp",
+            ];
 
-    Group {
-        name: "image_windows"
-        condition: qbs.targetOS.contains("windows")
-        prefix: basePath + "/image/"
-        files: [
-            "qpixmap_win.cpp",
-        ]
-    }
+            if (!qbs.targetOS.contains("windows")) {
+                Array.prototype.push.apply(excludeFiles, [
+                    "image/qpixmap_win.cpp",
+                ]);
+            }
 
-    Group {
-        name: "itemmodels"
-        prefix: basePath + "/itemmodels/"
-        files: [
-            "qstandarditemmodel.cpp",
-        ]
-    }
+            if (QtHost.config.opengl != "es2") {
+                Array.prototype.push.apply(excludeFiles, [
+                    "opengl/qopenglfunctions_es2.cpp",
+                ]);
+            }
 
-    Group {
-        name: "kernel"
-        prefix: basePath + "/kernel/"
-        files: [
-            "qdrag.cpp",
-            "qevent.cpp",
-            "qgenericplugin.cpp",
-            "qgenericpluginfactory.cpp",
-            "qguiapplication.cpp",
-            "qguivariant.cpp",
-            "qinputmethod.cpp",
-            "qinputdevicemanager.cpp",
-            "qkeymapper.cpp",
-            "qkeysequence.cpp",
-            "qoffscreensurface.cpp",
-            "qopenglcontext.cpp",
-            "qopenglwindow.cpp",
-            "qpaintdevicewindow.cpp",
-            "qpalette.cpp",
-            "qpixelformat.cpp",
-            "qplatformclipboard.cpp",
-            "qplatformcursor.cpp",
-            "qplatformdialoghelper.cpp",
-            "qplatformdrag.cpp",
-            "qplatformgraphicsbuffer.cpp",
-            "qplatformgraphicsbufferhelper.cpp",
-            "qplatforminputcontext.cpp",
-            "qplatforminputcontextfactory.cpp",
-            "qplatforminputcontextplugin.cpp",
-            "qplatformintegration.cpp",
-            "qplatformintegrationfactory.cpp",
-            "qplatformintegrationplugin.cpp",
-            "qplatformmenu.cpp",
-            "qplatformnativeinterface.cpp",
-            "qplatformoffscreensurface.cpp",
-            "qplatformopenglcontext.cpp",
-            "qplatformscreen.cpp",
-            "qplatformservices.cpp",
-            "qplatformsessionmanager.cpp",
-            "qplatformsharedgraphicscache.cpp",
-            "qplatformsurface.cpp",
-            "qplatformsystemtrayicon.cpp",
-            "qplatformtheme.cpp",
-            "qplatformthemefactory.cpp",
-            "qplatformthemeplugin.cpp",
-            "qplatformwindow.cpp",
-            "qrasterwindow.cpp",
-            "qscreen.cpp",
-            "qsessionmanager.cpp",
-            "qshapedpixmapdndwindow.cpp",
-            "qshortcutmap.cpp",
-            "qsimpledrag.cpp",
-            "qstylehints.cpp",
-            "qsurface.cpp",
-            "qsurfaceformat.cpp",
-            "qtouchdevice.cpp",
-            "qwindow.cpp",
-            "qwindowsysteminterface.cpp",
-            "qclipboard.cpp",
-            "qcursor.cpp",
-            "qdnd.cpp",
-        ]
-    }
+            if (QtHost.config.opengl != "desktop") {
+                Array.prototype.push.apply(excludeFiles, [
+                    "opengl/qopengltimerquery.cpp",
+                    "opengl/qopenglfunctions_1*.cpp",
+                    "opengl/qopenglfunctions_2*.cpp",
+                    "opengl/qopenglfunctions_3*.cpp",
+                    "opengl/qopenglfunctions_4*.cpp",
+                    "opengl/qopengltimerquery.cpp",
+                ]);
+            }
 
-    Group {
-        name: "math3d"
-        prefix: basePath + "/math3d/"
-        files: [
-            "qgenericmatrix.cpp",
-            "qmatrix4x4.cpp",
-            "qquaternion.cpp",
-            "qvector2d.cpp",
-            "qvector3d.cpp",
-            "qvector4d.cpp",
-        ]
-    }
-
-    Group {
-        name: "opengl"
-        prefix: basePath + "/opengl/"
-        files: [
-            "qopenglbuffer.cpp",
-            "qopenglcustomshaderstage.cpp",
-            "qopengldebug.cpp",
-            "qopenglengineshadermanager.cpp",
-            "qopenglframebufferobject.cpp",
-            "qopenglfunctions.cpp",
-            "qopenglgradientcache.cpp",
-            "qopenglpaintdevice.cpp",
-            "qopenglpaintengine.cpp",
-            "qopenglpixeltransferoptions.cpp",
-            "qopenglshaderprogram.cpp",
-            "qopengltexture.cpp",
-            "qopengltextureblitter.cpp",
-            "qopengltexturecache.cpp",
-            "qopengltextureglyphcache.cpp",
-            "qopengltexturehelper.cpp",
-            "qopenglversionfunctions.cpp",
-            "qopenglversionfunctionsfactory.cpp",
-            "qopenglvertexarrayobject.cpp",
-            "qtriangulatingstroker.cpp",
-            "qtriangulator.cpp",
-            "qopengl.cpp",
-            "qopengl2pexvertexarray.cpp",
-        ]
-    }
-
-    Group {
-        name: "opengl_es2"
-        condition: QtHost.config.opengl == "es2"
-        prefix: basePath + "/opengl/"
-        files: [
-            "qopenglfunctions_es2.cpp",
-        ]
-    }
-
-    Group {
-        name: "opengl_desktop"
-        condition: QtHost.config.opengl == "desktop"
-        prefix: basePath + "/opengl/"
-        files: [
-            "qopenglfunctions_1_0.cpp",
-            "qopenglfunctions_1_1.cpp",
-            "qopenglfunctions_1_2.cpp",
-            "qopenglfunctions_1_3.cpp",
-            "qopenglfunctions_1_4.cpp",
-            "qopenglfunctions_1_5.cpp",
-            "qopenglfunctions_2_0.cpp",
-            "qopenglfunctions_2_1.cpp",
-            "qopenglfunctions_3_0.cpp",
-            "qopenglfunctions_3_1.cpp",
-            "qopenglfunctions_3_2_compatibility.cpp",
-            "qopenglfunctions_3_2_core.cpp",
-            "qopenglfunctions_3_3_compatibility.cpp",
-            "qopenglfunctions_3_3_core.cpp",
-            "qopenglfunctions_4_0_compatibility.cpp",
-            "qopenglfunctions_4_0_core.cpp",
-            "qopenglfunctions_4_1_compatibility.cpp",
-            "qopenglfunctions_4_1_core.cpp",
-            "qopenglfunctions_4_2_compatibility.cpp",
-            "qopenglfunctions_4_2_core.cpp",
-            "qopenglfunctions_4_3_compatibility.cpp",
-            "qopenglfunctions_4_3_core.cpp",
-            "qopengltimerquery.cpp",
-        ]
-    }
-
-    Group {
-        name: "painting"
-        prefix: basePath + "/painting/"
-        files: [
-            "qbezier.cpp",
-            "qblendfunctions.cpp",
-            "qblittable.cpp",
-            "qbrush.cpp",
-            "qcolor.cpp",
-            "qcolor_p.cpp",
-            "qcosmeticstroker.cpp",
-            "qcssutil.cpp",
-            "qdrawhelper.cpp",
-            //"qdrawhelper_mips_dsp.cpp",       // ## mips
-            //"qdrawhelper_mips_dsp_asm.S",
-            //"qdrawhelper_mips_dspr2_asm.S",
-            "qdrawhelper_sse2.cpp",
-            "qdrawhelper_ssse3.cpp",
-            "qemulationpaintengine.cpp",
-            "qgammatables.cpp",
-            "qgrayraster.c",
-            "qimagescale.cpp",
-            "qmatrix.cpp",
-            "qmemrotate.cpp",
-            "qoutlinemapper.cpp",
-            "qpagedpaintdevice.cpp",
-            "qpagelayout.cpp",
-            "qpagesize.cpp",
-            "qpaintdevice.cpp",
-            "qpaintengine.cpp",
-            "qpaintengine_blitter.cpp",
-            "qpaintengine_raster.cpp",
-            "qpaintengineex.cpp",
-            "qpainter.cpp",
-            "qpainterpath.cpp",
-            "qpathclipper.cpp",
-            "qpathsimplifier.cpp",
-            "qpdf.cpp",
-            "qpdfwriter.cpp",
-            "qpen.cpp",
-            "qplatformbackingstore.cpp",
-            "qpolygon.cpp",
-            "qrasterizer.cpp",
-            "qregion.cpp",
-            "qstroker.cpp",
-            "qtextureglyphcache.cpp",
-            "qtransform.cpp",
-            "qbackingstore.cpp",
-        ]
-    }
-
-    Group {
-        name: "opengl_arm"
-        condition: qbs.architecture == "arm"
-        prefix: basePath + "/painting/"
-        files: [
-            "qdrawhelper_neon.cpp",
-            "qdrawhelper_neon_asm.S",
-        ]
-    }
-
-    Group {
-        name: "text"
-        prefix: basePath + "/text/"
-        files: [
-            "qabstracttextdocumentlayout.cpp",
-            "qcssparser.cpp",
-            //"qcssscanner.cpp",
-            "qdistancefield.cpp",
-            "qfont.cpp",
-            "qfontdatabase.cpp",
-            "qfontengine.cpp",
-            "qfontengine_ft.cpp",
-            "qfontengine_qpf2.cpp",
-            "qfontmetrics.cpp",
-            "qfontsubset.cpp",
-            "qfontsubset_agl.cpp",
-            "qfragmentmap.cpp",
-            "qglyphrun.cpp",
-            //"qharfbuzzng.cpp",            // ### hb-ng
-            "qplatformfontdatabase.cpp",
-            "qrawfont.cpp",
-            "qstatictext.cpp",
-            "qsyntaxhighlighter.cpp",
-            "qtextcursor.cpp",
-            "qtextdocument.cpp",
-            "qtextdocument_p.cpp",
-            "qtextdocumentfragment.cpp",
-            "qtextdocumentlayout.cpp",
-            "qtextdocumentwriter.cpp",
-            "qtextengine.cpp",
-            "qtextformat.cpp",
-            "qtexthtmlparser.cpp",
-            "qtextimagehandler.cpp",
-            "qtextlayout.cpp",
-            "qtextlist.cpp",
-            "qtextobject.cpp",
-            "qtextodfwriter.cpp",
-            "qtextoption.cpp",
-            "qtexttable.cpp",
-            "qzip.cpp",
-        ]
-    }
-
-    Group {
-        name: "util"
-        prefix: basePath + "/util/"
-        files: [
-            "qabstractlayoutstyleinfo.cpp",
-            "qgridlayoutengine.cpp",
-            "qlayoutpolicy.cpp",
-            "qvalidator.cpp",
-        ]
+            return excludeFiles.concat(sources_moc.files);
+        }
     }
 
     Export {
+        Depends { name: "cpp" }
+        cpp.defines: product.defines
+
         Depends { name: "QtHost.includes" }
         QtHost.includes.modules: ["gui", "gui-private"]
     }

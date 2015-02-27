@@ -13,6 +13,7 @@ QtModule {
 
     cpp.defines: {
         var defines = [
+            "QT_BUILD_QML_LIB",
             "WTF_EXPORT_PRIVATE=",
             "JS_EXPORT_PRIVATE=",
             "WTFReportAssertionFailure=qmlWTFReportAssertionFailure",
@@ -52,6 +53,7 @@ QtModule {
 
     cpp.includePaths: {
         var includePaths = [
+            product.buildDirectory,
             masmPath,
             masmPath + "/assembler",
             masmPath + "/disassembler",
@@ -144,7 +146,6 @@ QtModule {
             "assembler/ARMv7Assembler.cpp",
             "assembler/LinkBuffer.cpp",
             "disassembler/Disassembler.cpp",
-            "disassembler/UDis86Disassembler.cpp",
             "wtf/*.cpp",
             "stubs/*.cpp",
             "yarr/*.cpp",
@@ -154,11 +155,12 @@ QtModule {
     Group {
         condition: product.disassembler
         name: "sources (masm disassembler)"
-        prefix: masmPath + "/disassembler"
+        prefix: masmPath + "/disassembler/"
         files: [
-            "*.cpp",
-            "udis86/*.c",
             "ARMv7/*.cpp",
+            "udis86/*.c",
+            "UDis86Disassembler.cpp",
+            "udis86/optable.xml",
         ]
     }
 
@@ -167,33 +169,19 @@ QtModule {
         inputs: product.masmPath + "/disassembler/udis86/optable.xml"
         Artifact {
             filePath: "udis86_itab.c"
-            fileTags: "c"
+            fileTags: "hpp"
         }
-        prepare: {
-            var cmd = new Command("python", ["itab.py"]);
-            cmd.workingDirectory = product.basePath + "/disassembler/udis86";
-            return cmd;
-        }
-    }
-
-    Transformer {
         Artifact {
-            filePath: project.buildDirectory + "/include/QtQml/RegExpJitTables.h"
+            filePath: "udis86_itab.h"
             fileTags: "hpp"
         }
         prepare: {
-            var cmd = new JavaScriptCommand();
-            cmd.description = "generating " + output.fileName;
-            cmd.masmPath = product.masmPath;
-            cmd.sourceCode = function() {
-                var process = new Process();
-                process.setWorkingDirectory(masmPath);
-                var exitCode = process.exec("python", ["create_regex_tables"], true);
-                var file = new TextFile(output.filePath, TextFile.WriteOnly);
-                file.write(process.readStdOut());
-                process.close();
-                file.close();
-            };
+            var cmd = new Command("python", [
+                product.masmPath + "/disassembler/udis86/itab.py",
+                input.filePath
+            ]);
+            cmd.description = "generating itab";
+            cmd.workingDirectory = product.buildDirectory;
             return cmd;
         }
     }

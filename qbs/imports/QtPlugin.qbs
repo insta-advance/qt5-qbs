@@ -1,7 +1,6 @@
 import qbs
 
 QtLibrary {
-    property path includeDirectory: project.buildDirectory + "/include"
     property string category
 
     destinationDirectory: project.buildDirectory + "/plugins/" + category

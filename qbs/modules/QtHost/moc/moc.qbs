@@ -6,17 +6,20 @@ Module {
     ]
     property stringList arguments: [
         "--no-warnings",
-        "-I", project.buildDirectory + "/include",
     ]
-    property stringList includePaths: []
+    property stringList includePaths: [
+        project.buildDirectory + "/include",
+    ]
 
     Depends { name: "cpp" }
+
     cpp.includePaths: [
         product.buildDirectory + "/.moc",
     ]
 
     Rule {
         inputs: ["moc_hpp_p", "moc_hpp", "moc_cpp"]
+        explicitlyDependsOn: "qconfig"
         outputFileTags: ["cpp", "hpp"]
         outputArtifacts: {
             var artifacts = [];

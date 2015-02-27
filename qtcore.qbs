@@ -120,177 +120,152 @@ QtModule {
     }
 
     Group {
-        name: "animation"
-        prefix: basePath + "/animation/"
-        files: "*.cpp"
+        name: "mimetypes.qrc"
+        files: basePath + "/mimetypes/mimetypes.qrc"
+        fileTags: "qrc"
     }
 
     Group {
-        name: "codecs"
-        prefix: basePath + "/codecs/"
+        name: "sources"
+        prefix: basePath + "/"
         files: [
-            "qbig5codec.cpp",
-            "qeucjpcodec.cpp",
-            "qeuckrcodec.cpp",
-            "qgb18030codec.cpp",
-            //"qiconvcodec.cpp", // ### iconv
-            //"qicucodec.cpp",   // ### icu
-            "qisciicodec.cpp",
-            "qjiscodec.cpp",
-            "qjpunicode.cpp",
-            "qlatincodec.cpp",
-            "qsimplecodec.cpp",
-            "qsjiscodec.cpp",
-            "qtextcodec.cpp",
-            "qtsciicodec.cpp",
-            "qutfcodec.cpp",
+            "animation/*.cpp",
+            "codecs/*.cpp",
+            "global/*.cpp",
+            "io/*.cpp",
+            "itemmodels/*.cpp",
+            "json/*.cpp",
+            "kernel/*.cpp",
+            "mimetypes/*.cpp",
+            "plugin/*.cpp",
+            "statemachine/*.cpp",
+            "thread/*.cpp",
+            "tools/*.cpp",
+            "xml/*.cpp",
         ]
+        excludeFiles: {
+            var excludeFiles = [
+                "codecs/qiconvcodec.cpp", // ### iconv
+                "codecs/qicucodec.cpp",   // ### icu
+                "codecs/qwindowscodec.cpp", // ## windows
+                "io/qfilesystemwatcher_kqueue.cpp",  // ### mac
+                "io/qprocess_wince.cpp",             // ### wince
+                "io/qsettings_mac.cpp",              // ### mac
+                "io/qsettings_winrt.cpp",            // ### winrt
+                "io/qstandardpaths_android.cpp",     // ### android
+                "io/qstandardpaths_blackberry.cpp",  // ### blackberry
+                "io/qstandardpaths_winrt.cpp",       // ### winrt
+                "io/qstorageinfo_mac.cpp",           // ### mac
+                "io/qstorageinfo_stub.cpp",          // ### all-else-fails
+                "kernel/qcoreapplication_mac.cpp",   // ### mac
+                "kernel/qcore_mac.cpp",              // ### mac
+                "kernel/qeventdispatcher_blackberry.cpp", // ### bb
+                "kernel/qeventdispatcher_glib.cpp",       // ### glib
+                "kernel/qeventdispatcher_winrt.cpp", // ### winrt
+                "kernel/qfunctions_nacl.cpp",        // ### nacl
+                "kernel/qfunctions_vxworks.cpp",     // ### vxworks
+                "kernel/qfunctions_wince.cpp",       // ### wince
+                "kernel/qfunctions_winrt.cpp",       // ### winrt
+                "kernel/qjni.cpp",                   // ### jni
+                "kernel/qjnihelpers.cpp",            // ### jni
+                "kernel/qjnionload.cpp",             // ### jni
+                "kernel/qppsattribute.cpp",          // ### bb
+                "kernel/qppsobject.cpp",             // ### bb
+                "kernel/qsharedmemory_android.cpp",  // ### android
+                "kernel/qsystemsemaphore_android.cpp",//### android
+                "kernel/qtcore_eval.cpp",            // ### needs to be handled by config, and use licensing
+                "thread/qthread_winrt.cpp",  // ### winrt
+                "tools/qcollator_icu.cpp",     // ### icu
+                "tools/qcollator_macx.cpp",    // ### macx
+                "tools/qelapsedtimer_generic.cpp", // ### !win32
+                "tools/qelapsedtimer_mac.cpp",  // ### mac
+                "tools/qlocale_blackberry.cpp", // ### bb
+                "tools/qlocale_icu.cpp",        // ### icu
+                "tools/qtimezoneprivate_android.cpp", // ### android
+                "tools/qtimezoneprivate_icu.cpp",     // ### icu
+                // included inline
+                "thread/qmutex_linux.cpp",
+                "thread/qmutex_mac.cpp",
+                "thread/qmutex_unix.cpp",
+                "thread/qmutex_win.cpp",
+                "tools/qchar.cpp",
+                "tools/qunicodetables.cpp",
+                "tools/qstringmatcher.cpp",
+            ].concat(sources_moc.files);
+
+            if (!qbs.targetOS.contains("unix")) {
+                Array.prototype.push.apply(excludeFiles, [
+                    "io/forkfd_qt.cpp",
+                    "io/qfilesystemengine_unix.cpp",
+                    "io/qfilesystemiterator_unix.cpp",
+                    "io/qfilesystemwatcher_inotify.cpp",
+                    "io/qfsfileengine_unix.cpp",
+                    "io/qlockfile_unix.cpp",
+                    "io/qprocess_unix.cpp",
+                    "io/qstandardpaths_unix.cpp",
+                    "io/qstorageinfo_unix.cpp",
+                    "kernel/qcore_unix.cpp",
+                    "kernel/qcrashhandler.cpp",
+                    "kernel/qeventdispatcher_unix.cpp",
+                    "kernel/qsharedmemory_posix.cpp",
+                    "kernel/qsharedmemory_systemv.cpp",
+                    "kernel/qsharedmemory_unix.cpp",
+                    "kernel/qsystemsemaphore_posix.cpp",
+                    "kernel/qsystemsemaphore_systemv.cpp",
+                    "kernel/qsystemsemaphore_unix.cpp",
+                    "kernel/qtimerinfo_unix.cpp",
+                    "plugin/qlibrary_unix.cpp",
+                    "tools/qelapsedtimer_unix.cpp",
+                    "tools/qcollator_posix.cpp",
+                    "tools/qlocale_unix.cpp",
+                    "tools/qtimezoneprivate_tz.cpp",
+                ]);
+            }
+
+            if (!qbs.targetOS.contains("windows")) {
+                Array.prototype.push.apply(excludeFiles, [
+                    "io/qfilesystemengine_win.cpp",
+                    "io/qfilesystemiterator_win.cpp",
+                    "io/qfilesystemwatcher_win.cpp",
+                    "io/qfsfileengine_win.cpp",
+                    "io/qlockfile_win.cpp",
+                    "io/qprocess_win.cpp",
+                    "io/qsettings_win.cpp",
+                    "io/qstandardpaths_win.cpp",
+                    "io/qstorageinfo_win.cpp",
+                    "io/qwindowspipereader.cpp",
+                    "io/qwindowspipewriter.cpp",
+                    "io/qwinoverlappedionotifier.cpp",
+                    "kernel/qcoreapplication_win.cpp",
+                    "kernel/qeventdispatcher_win.cpp",
+                    "kernel/qsharedmemory_win.cpp",
+                    "kernel/qsystemsemaphore_win.cpp",
+                    "kernel/qwineventnotifier.cpp",
+                    "plugin/qlibrary_win.cpp",
+                    "plugin/qsystemlibrary.cpp",
+                    "thread/qwaitcondition_win.cpp",
+                    "thread/qmutex_win.cpp",
+                    "thread/qthread_win.cpp",
+                    "tools/qlocale_win.cpp",
+                    "tools/qcollator_win.cpp",
+                    "tools/qelapsedtimer_win.cpp",
+                    "tools/qtimezoneprivate_win.cpp",
+                    "tools/qvector_msvc.cpp",
+                ]);
+            }
+
+            if (!qbs.targetOS.contains("haiku")) {
+                Array.prototype.push.apply(excludeFiles, [
+                    "io/qstandardpaths_haiku.cpp",
+                ]);
+            }
+
+            return excludeFiles;
+        }
     }
 
     Group {
-        name: "codecs_windows"
-        condition: qbs.targetOS.contains("windows")
-        prefix: basePath + "/codecs/"
-        files: [
-            "qwindowscodec.cpp",
-        ]
-    }
-
-    Group {
-        name: "global"
-        prefix: basePath + "/global/"
-        files: [
-            "qnumeric.cpp",
-            "archdetect.cpp",
-            "qglobal.cpp",
-            "qglobalstatic.cpp",
-            "qhooks.cpp",
-            "qlibraryinfo.cpp",
-            "qlogging.cpp",
-            "qmalloc.cpp",
-        ]
-    }
-
-    Group {
-        name: "io"
-        prefix: basePath + "/io/"
-        files: [
-            "qabstractfileengine.cpp",
-            "qbuffer.cpp",
-            "qdatastream.cpp",
-            "qdataurl.cpp",
-            "qdebug.cpp",
-            "qdir.cpp",
-            "qdiriterator.cpp",
-            "qfile.cpp",
-            "qfiledevice.cpp",
-            "qfileinfo.cpp",
-            "qfileselector.cpp",
-            "qfilesystemengine.cpp",
-            "qfilesystementry.cpp",
-            "qfilesystemwatcher.cpp",
-            //"qfilesystemwatcher_kqueue.cpp",  // ### mac (?)
-            "qfilesystemwatcher_polling.cpp",
-            "qfsfileengine.cpp",
-            "qfsfileengine_iterator.cpp",
-            "qiodevice.cpp",
-            "qipaddress.cpp",
-            "qlockfile.cpp",
-            "qloggingcategory.cpp",
-            "qloggingregistry.cpp",
-            "qnoncontiguousbytedevice.cpp",
-            "qprocess.cpp",
-            //"qprocess_wince.cpp",             // ### wince
-            "qresource.cpp",
-            "qresource_iterator.cpp",
-            "qsavefile.cpp",
-            "qsettings.cpp",
-            //"qsettings_mac.cpp",              // ### mac
-            //"qsettings_winrt.cpp",            // ### winrt
-            "qstandardpaths.cpp",
-            //"qstandardpaths_android.cpp",     // ### android
-            //"qstandardpaths_blackberry.cpp",  // ### blackberry
-            //"qstandardpaths_winrt.cpp",       // ### winrt
-            "qstorageinfo.cpp",
-            //"qstorageinfo_mac.cpp",           // ### mac
-            //"qstorageinfo_stub.cpp",          // ### all-else-fails
-            "qtemporarydir.cpp",
-            "qtemporaryfile.cpp",
-            "qtextstream.cpp",
-            "qtldurl.cpp",
-            "qurl.cpp",
-            "qurlidna.cpp",
-            "qurlquery.cpp",
-            "qurlrecode.cpp",
-        ]
-    }
-
-    Group {
-        name: "io_unix"
-        condition: qbs.targetOS.contains("unix")
-        prefix: basePath + "/io/"
-        files: [
-            "forkfd_qt.cpp",
-            "qfilesystemengine_unix.cpp",
-            "qfilesystemiterator_unix.cpp",
-            "qfilesystemwatcher_inotify.cpp",
-            //"qfilesystemwatcher_kqueue.cpp",
-            "qfsfileengine_unix.cpp",
-            "qlockfile_unix.cpp",
-            "qprocess_unix.cpp",
-            "qstandardpaths_unix.cpp",
-            "qstorageinfo_unix.cpp",
-        ]
-    }
-
-    Group {
-        name: "io_windows"
-        condition: qbs.targetOS.contains("windows")
-        prefix: basePath + "/io/"
-        files: [
-            "qwinoverlappedionotifier.cpp",
-            "qfilesystemengine_win.cpp",
-            "qfilesystemwatcher_win.cpp",
-            "qstandardpaths_win.cpp",
-            "qsettings_win.cpp",
-            "qfsfileengine_win.cpp",
-            "qwindowspipereader.cpp",
-            "qwindowspipewriter.cpp",
-            "qfilesystemiterator_win.cpp",
-            "qlockfile_win.cpp",
-            "qstorageinfo_win.cpp",
-            "qprocess_win.cpp",
-        ]
-    }
-
-    Group {
-        name: "itemmodels"
-        prefix: basePath + "/itemmodels/"
-        files: [
-            "qabstractitemmodel.cpp",
-            "qabstractproxymodel.cpp",
-            "qidentityproxymodel.cpp",
-            "qitemselectionmodel.cpp",
-            "qsortfilterproxymodel.cpp",
-            "qstringlistmodel.cpp",
-        ]
-    }
-
-    Group {
-        name: "json"
-        prefix: basePath + "/json/"
-        files: [
-            "qjson.cpp",
-            "qjsonarray.cpp",
-            "qjsondocument.cpp",
-            "qjsonobject.cpp",
-            "qjsonparser.cpp",
-            "qjsonvalue.cpp",
-            "qjsonwriter.cpp",
-        ]
-    }
-
-    Group {
+        id: sources_moc
         name: "sources (moc)"
         prefix: basePath + "/"
         files: [
@@ -301,280 +276,12 @@ QtModule {
         overrideTags: false
     }
 
-    Group {
-        name: "kernel"
-        prefix: basePath + "/kernel/"
-        files: [
-            //"qeventdispatcher_winrt.cpp", // ### winrt
-            "qeventloop.cpp",
-            //"qfunctions_nacl.cpp",        // ### nacl
-            //"qfunctions_vxworks.cpp",     // ### vxworks
-            //"qfunctions_wince.cpp",       // ### wince
-            //"qfunctions_winrt.cpp",       // ### winrt
-            //"qjni.cpp",                   // ### jni
-            //"qjnihelpers.cpp",            // ### jni
-            //"qjnionload.cpp",             // ### jni
-            "qmath.cpp",
-            "qmetaobject.cpp",
-            "qmetaobjectbuilder.cpp",
-            "qmetatype.cpp",
-            "qmimedata.cpp",
-            "qobject.cpp",
-            "qobjectcleanuphandler.cpp",
-            "qpointer.cpp",
-            //"qppsattribute.cpp",          // ### bb
-            //"qppsobject.cpp",             // ### bb
-            "qsharedmemory.cpp",
-            //"qsharedmemory_android.cpp",  // ### android
-            "qsignalmapper.cpp",
-            "qsocketnotifier.cpp",
-            "qsystemerror.cpp",
-            "qsystemsemaphore.cpp",
-            //"qsystemsemaphore_android.cpp",//### android
-            //"qtcore_eval.cpp",            // ### needs to be handled by config, and use licensing
-
-            "qtranslator.cpp",
-            "qvariant.cpp",
-            "qabstracteventdispatcher.cpp",
-            "qabstractnativeeventfilter.cpp",
-            "qbasictimer.cpp",
-            //"qcore_mac.cpp",              // ### mac
-            "qcoreapplication.cpp",
-            //"qcoreapplication_mac.cpp",   // ### mac
-            "qcoreevent.cpp",
-            "qcoreglobaldata.cpp",
-            //"qeventdispatcher_blackberry.cpp", // ### bb
-            //"qeventdispatcher_glib.cpp",       // ### glib
-        ]
-    }
-
-    Group {
-        name: "kernel_unix"
-        condition: qbs.targetOS.contains("unix")
-        prefix: basePath + "/kernel/"
-        files: [
-            "qcore_unix.cpp",
-            "qcrashhandler.cpp",
-            "qeventdispatcher_unix.cpp",
-            "qtimerinfo_unix.cpp",
-            "qsystemsemaphore_posix.cpp",
-            "qsystemsemaphore_systemv.cpp",
-            "qsystemsemaphore_unix.cpp",
-            "qsharedmemory_posix.cpp",
-            "qsharedmemory_systemv.cpp",
-            "qsharedmemory_unix.cpp",
-        ]
-    }
-
-    Group {
-        name: "kernel_windows"
-        condition: qbs.targetOS.contains("windows")
-        prefix: basePath + "/kernel/"
-        files: [
-            "qcoreapplication_win.cpp",
-            "qeventdispatcher_win.cpp",
-            "qsystemsemaphore_win.cpp",
-            "qsharedmemory_win.cpp",
-            "qwineventnotifier.cpp",
-        ]
-    }
-
-    Group {
-        name: "mimetypes"
-        prefix: basePath + "/mimetypes/"
-        files: [
-            "mimetypes.qrc",
-            "qmimedatabase.cpp",
-            "qmimeglobpattern.cpp",
-            "qmimemagicrule.cpp",
-            "qmimemagicrulematcher.cpp",
-            "qmimeprovider.cpp",
-            "qmimetype.cpp",
-            "qmimetypeparser.cpp",
-        ]
-    }
-
-    Group {
-        name: "plugin"
-        prefix: basePath + "/plugin/"
-        files: [
-            "qelfparser_p.cpp",
-            "qfactoryloader.cpp",
-            "qlibrary.cpp",
-            "qmachparser.cpp",
-            "qpluginloader.cpp",
-            "quuid.cpp",
-        ]
-    }
-
-    Group {
-        name: "plugin_unix"
-        prefix: basePath + "/plugin/"
-        files: [
-            "qlibrary_unix.cpp",
-        ]
-    }
-
-    Group {
-        name: "plugin_windows"
-        condition: qbs.targetOS.contains("windows")
-        prefix: basePath + "/plugin/"
-        files: [
-            "qlibrary_win.cpp",
-            "qsystemlibrary.cpp",
-        ]
-    }
-
-    Group {
-        name: "statemachine"
-        prefix: basePath + "/statemachine/"
-        files: [
-            "qabstractstate.cpp",
-            "qabstracttransition.cpp",
-            "qeventtransition.cpp",
-            "qfinalstate.cpp",
-            "qhistorystate.cpp",
-            "qsignaltransition.cpp",
-            "qstate.cpp",
-        ]
-    }
-
-    Group {
-        name: "thread"
-        prefix: basePath + "/thread/"
-        files: [
-            "qatomic.cpp",
-            "qexception.cpp",
-            "qfutureinterface.cpp",
-            "qfuturewatcher.cpp",
-            "qmutex.cpp",
-            "qmutexpool.cpp",
-            "qreadwritelock.cpp",
-            "qresultstore.cpp",
-            "qrunnable.cpp",
-            "qsemaphore.cpp",
-            "qthread.cpp",
-            //"qthread_winrt.cpp",  // ### winrt
-            "qthreadpool.cpp",
-            "qthreadstorage.cpp",
-            "qthread_unix.cpp",
-            "qwaitcondition_unix.cpp",
-        ]
-    }
-
-    Group {
-        name: "thread_windows"
-        condition: qbs.targetOS.contains("windows")
-        prefix: basePath + "/thread/"
-        files: [
-            "qwaitcondition_win.cpp",
-            "qthread_win.cpp",
-        ]
-    }
-
-    Group {
-        name: "tools"
-        prefix: basePath + "/tools/"
-        files: [
-            "qarraydata.cpp",
-            "qbitarray.cpp",
-            "qbytearray.cpp",
-            "qbytearraylist.cpp",
-            "qbytearraymatcher.cpp",
-            "qcollator.cpp",
-            //"qcollator_icu.cpp",     // ### icu
-            //"qcollator_macx.cpp",    // ### macx
-            "qcommandlineoption.cpp",
-            "qcommandlineparser.cpp",
-            "qcontiguouscache.cpp",
-            "qcryptographichash.cpp",
-            "qdatetime.cpp",
-            "qdatetimeparser.cpp",
-            "qeasingcurve.cpp",
-            "qelapsedtimer.cpp",
-            //"qelapsedtimer_generic.cpp", // ### !win32
-            //"qelapsedtimer_mac.cpp",  // ### mac
-            "qfreelist.cpp",
-            "qharfbuzz.cpp",
-            "qhash.cpp",
-            "qline.cpp",
-            "qlinkedlist.cpp",
-            "qlist.cpp",
-            "qlocale.cpp",
-            //"qlocale_blackberry.cpp", // ### bb
-            //"qlocale_icu.cpp",        // ### icu
-            "qlocale_tools.cpp",
-            "qmap.cpp",
-            "qmargins.cpp",
-            "qmessageauthenticationcode.cpp",
-            "qpoint.cpp",
-            "qqueue.cpp",
-            "qrect.cpp",
-            "qrefcount.cpp",
-            "qregexp.cpp",
-            "qregularexpression.cpp",
-            "qscopedpointer.cpp",
-            "qscopedvaluerollback.cpp",
-            "qshareddata.cpp",
-            "qsharedpointer.cpp",
-            "qsimd.cpp",
-            "qsize.cpp",
-            "qstack.cpp",
-            "qstring.cpp",
-            "qstring_compat.cpp",
-            "qstringbuilder.cpp",
-            "qstringlist.cpp",
-            "qtextboundaryfinder.cpp",
-            "qtimeline.cpp",
-            "qtimezone.cpp",
-            "qtimezoneprivate.cpp",
-            //"qtimezoneprivate_android.cpp", // ### android
-            //"qtimezoneprivate_icu.cpp",     // ### icu
-            "qunicodetools.cpp",
-            "qvector.cpp",
-            "qversionnumber.cpp",
-            "qvsnprintf.cpp",
-        ]
-    }
-
-    Group {
-        name: "tools_unix"
-        condition: qbs.targetOS.contains("unix")
-        prefix: basePath + "/tools/"
-        files: [
-            "qelapsedtimer_unix.cpp",
-            "qcollator_posix.cpp",
-            "qlocale_unix.cpp",
-            "qtimezoneprivate_tz.cpp",
-        ]
-    }
-
-    Group {
-        name: "tools_windows"
-        condition: qbs.targetOS.contains("windows")
-        prefix: basePath + "/tools/"
-        files: [
-            "qlocale_win.cpp",
-            "qcollator_win.cpp",
-            "qelapsedtimer_win.cpp",
-            "qtimezoneprivate_win.cpp",
-            "qvector_msvc.cpp",
-        ]
-    }
-
-    Group {
-        name: "xml"
-        prefix: basePath + "/xml/"
-        files: [
-            "qxmlstream.cpp",
-            "qxmlutils.cpp",
-        ]
-    }
-
+    // ### This should all be moved to QtCoreHeaders to trigger rebuilds of the whole project.
+    // ### or maybe, only use a dummy qfeatures.h and pass everything via defines when building
     Transformer {
         Artifact {
-            fileTags: [ "hpp" ]
             filePath: project.buildDirectory + "/include/QtCore/qfeatures.h"
+            fileTags: ["hpp", "qconfig"]
         }
         prepare: {
             var cmd = new JavaScriptCommand();
@@ -583,9 +290,6 @@ QtModule {
                 var outputFile = new TextFile(output.filePath, TextFile.WriteOnly);
                 outputFile.writeLine("#ifndef QFEATURES_H");
                 outputFile.writeLine("#define QFEATURES_H");
-
-                // Untested macros
-                //outputFile.writeLine("#define QT_NO_COMPRESS");
 
                 if (!product.moduleProperty("QtHost.config", "evdev"))
                     outputFile.writeLine("#define QT_NO_EVDEV");
@@ -602,13 +306,11 @@ QtModule {
                 if (!product.moduleProperty("QtHost.config", "iconv"))
                     outputFile.writeLine("#define QT_NO_ICONV");
 
-                //if (!product.moduleProperty("QtHost.config", "ssl"))
-                //    outputFile.writeLine("#define QT_NO_SSL");
-
                 if (!product.moduleProperty("QtHost.config", "glib"))
                     outputFile.writeLine("#define QT_NO_GLIB");
 
-                if (!product.moduleProperty("QtHost.config", "opengl"))
+                var opengl = product.moduleProperty("QtHost.config", "opengl");
+                if (!opengl)
                     outputFile.writeLine("#define QT_NO_OPENGL");
 
                 outputFile.writeLine("#endif // QFEATURES_H");
@@ -621,7 +323,7 @@ QtModule {
     Transformer {
         Artifact {
             filePath: project.buildDirectory + "/include/QtCore/qconfig.h"
-            fileTags: "hpp"
+            fileTags: ["hpp", "qconfig"]
         }
         prepare: {
             var cmd = new JavaScriptCommand();
@@ -652,7 +354,7 @@ QtModule {
                     outputFile.writeLine("#define QT_OPENGL_ES");
                     outputFile.writeLine("#define QT_OPENGL_ES_2");
                 } else if (opengl == "dynamic") {
-                    outputFile.writeLIne("#define QT_OPENGL_DYNAMIC");
+                    outputFile.writeLine("#define QT_OPENGL_DYNAMIC");
                 }
 
                 // ### handle qreal
@@ -689,7 +391,8 @@ QtModule {
                 outputFile.writeLine("/* Licensed */");
                 outputFile.writeLine("static const char qt_configure_licensee_str          [512 + 12] = \"qt_lcnsuser=Open Source\";");
                 outputFile.writeLine("static const char qt_configure_licensed_products_str [512 + 12] = \"qt_lcnsprod=OpenSource\";");
-                outputFile.writeLine("static const char qt_configure_installation          [11  + 12] = \"qt_instdate=0123456789\";"); // ### (new Date()).toISOString().slice(10) if this is needed
+                // ### todo: create date from the last commit; (new Date()).toISOString().slice(10)
+                outputFile.writeLine("static const char qt_configure_installation          [11  + 12] = \"qt_instdate=0123456789\";");
                 outputFile.writeLine("/* Installation Info */");
                 outputFile.writeLine("static const char qt_configure_prefix_path_str       [512 + 12] = \"qt_prfxpath=" + prefix + "\";");
                 outputFile.writeLine("");

@@ -21,16 +21,6 @@ Project {
             fileTags: "moc_cpp"
             overrideTags: false
         }
-
-        Group {
-            name: "sources_cursor"
-            condition: QtHost.config.cursor
-            prefix: project.sourceDirectory + "/qtbase/src/"
-            files: [
-                "platformsupport/eglconvenience/qeglplatformcursor.cpp",
-                "plugins/platforms/eglfs/cursor.qrc",
-            ]
-        }
     }
 
     SubProject {

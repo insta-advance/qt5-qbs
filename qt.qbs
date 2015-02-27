@@ -61,6 +61,8 @@ Project {
 
         "qtqml.qbs",
         "qtquick.qbs",
+
+        "imports/imports.qbs",
     ]
 
     /*Project {

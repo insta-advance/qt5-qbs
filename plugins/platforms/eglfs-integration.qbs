@@ -67,7 +67,6 @@ QtModule {
             "plugins/platforms/eglfs/qeglfsoffscreenwindow.cpp",
             "plugins/platforms/eglfs/qeglfsscreen.cpp",
             "plugins/platforms/eglfs/qeglfswindow.cpp",
-            "plugins/platforms/eglfs/cursor.qrc", // ### QT_NO_CURSOR
             "platformsupport/eglconvenience/qeglconvenience.cpp",
             "platformsupport/eglconvenience/qeglpbuffer.cpp",
             "platformsupport/eglconvenience/qeglplatformcursor.cpp", // ### QT_NO_CURSOR
@@ -84,5 +83,12 @@ QtModule {
             "platformsupport/services/genericunix/qgenericunixservices.cpp",
             "platformsupport/devicediscovery/qdevicediscovery_udev.cpp",
         ]
+    }
+
+    Group {
+        //condition: QtHost.config.cursor ### QT_NO_CURSOR
+        name: "cursor.qrc"
+        files: project.sourceDirectory + "/qtbase/src/plugins/platforms/eglfs/cursor.qrc"
+        fileTags: "qrc"
     }
 }
