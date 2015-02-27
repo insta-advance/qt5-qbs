@@ -17,7 +17,7 @@ Module {
             var module = product.moduleProperty("QtHost.sync", "module");
             var basePath = project.buildDirectory + "/include/" + module + "/";
 
-            var fileTags = ["hpp", "hpp_synced"];
+            var fileTags = ["hpp"];
 
             // Simply copy private headers without parsing
             if (module == "QtGui" && (input.fileName.startsWith("qplatform")
@@ -25,7 +25,7 @@ Module {
                 return [{
                     filePath: basePath + project.qtVersion + "/" + module
                               + "/qpa/" + input.fileName,
-                    fileTags: fileTags
+                    fileTags: fileTags.concat(["hpp_qpa"])
                 }];
             }
 
@@ -33,9 +33,12 @@ Module {
                 return [{
                     filePath: basePath + project.qtVersion + "/" + module
                               + "/private/" + input.fileName,
-                    fileTags: fileTags
+                    fileTags: fileTags.concat(["hpp_private"])
                 }];
             }
+
+            // Everything else is public
+            fileTags.push("hpp_public");
 
             var artifacts = [];
 

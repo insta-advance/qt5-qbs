@@ -64,11 +64,4 @@ Project {
 
         "imports/imports.qbs",
     ]
-
-    /*Project {
-        name: "qtwayland"
-        references: [
-            "qbs/qtwayland/"
-        ]
-    }*/
 }

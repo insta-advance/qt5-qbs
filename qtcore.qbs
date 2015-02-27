@@ -276,8 +276,8 @@ QtModule {
         overrideTags: false
     }
 
-    // ### This should all be moved to QtCoreHeaders to trigger rebuilds of the whole project.
-    // ### or maybe, only use a dummy qfeatures.h and pass everything via defines when building
+    // ### All of the below should move to a separate "host" or "sdk" product
+    // which everything else depends on, to make sure header changes trigger rebuilds
     Transformer {
         Artifact {
             filePath: project.buildDirectory + "/include/QtCore/qfeatures.h"
@@ -429,6 +429,55 @@ QtModule {
             };
             return cmd;
         }
+    }
+
+    // Script to pass qmake commands to qhost (###todo: add .bat version)
+    Group {
+        name: "bin"
+        files: "bin/qmake"
+        qbs.install: true
+        qbs.installDir: "bin"
+    }
+
+    Group {
+        name: "mkspecs"
+        files: "qtbase/mkspecs/"
+        fileTags: []
+        qbs.install: true
+    }
+
+    // ### make all this configurable
+    Transformer {
+        Artifact {
+            filePath: "qhost.json"
+            fileTags: "qhost.json"
+        }
+        prepare: {
+            var cmd = new JavaScriptCommand();
+            cmd.description = "creating qhost JSON configuration file"
+            cmd.sourceCode = function() {
+                var file = new TextFile(output.filePath, TextFile.WriteOnly);
+                file.writeLine('{');
+                file.writeLine('    "QMAKE_XSPEC": "' + project.target + '",');
+                file.writeLine('    "QT_HOST_BINS": "../bin",');
+                file.writeLine('    "QT_HOST_DATA": "..",');
+                file.writeLine('    "QT_HOST_LIBS": "../lib",');
+                file.writeLine('    "QT_HOST_PREFIX": "..",');
+                file.writeLine('    "QT_INSTALL_BINS": "../bin",');
+                file.writeLine('    "QT_INSTALL_HEADERS": "../include",');
+                file.writeLine('    "QT_INSTALL_LIBS": "../lib",');
+                file.writeLine('    "QT_INSTALL_PLUGINS": "../plugins",');
+                file.writeLine('    "QT_VERSION": "' + project.qtVersion + '"');
+                file.writeLine('}');
+            };
+            return cmd;
+        }
+    }
+
+    Group {
+        fileTagsFilter: "qhost.json"
+        qbs.install: true
+        qbs.installDir: "bin"
     }
 
     Export {

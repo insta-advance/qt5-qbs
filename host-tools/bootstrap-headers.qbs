@@ -10,7 +10,7 @@ Project {
         QtHost.sync.module: "QtCore"
 
         Group {
-            name: "_headers"
+            name: "headers (QtCore)"
             fileTags: "header_sync"
             prefix: project.sourceDirectory + "/qtbase/src/corelib/"
             files: [
@@ -167,7 +167,7 @@ Project {
         QtHost.sync.module: "QtXml"
 
         Group {
-            name: "xml_headers"
+            name: "headers (QtXml)"
             fileTags: "header_sync"
             prefix: project.sourceDirectory + "/qtbase/src/xml/"
             files: [

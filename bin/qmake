@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# This script runs the qhost binary currently in the path. You may safely
+# replace this file with a copy (or symlink) of your choice.
+
+qhost --config-file $(dirname $(realpath $0))/qhost.json $@

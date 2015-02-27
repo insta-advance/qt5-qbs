@@ -7,8 +7,9 @@ Project {
         "freetype.qbs",
         "harfbuzz.qbs",
         "jpeg.qbs",
+        "masm.qbs",
+        "pcre.qbs",
         "png.qbs",
         "zlib.qbs",
-        "pcre.qbs",
     ]
 }
