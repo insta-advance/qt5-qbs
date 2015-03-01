@@ -9,6 +9,7 @@ QtModule {
     cpp.defines: [
         "QT_BUILD_EGL_DEVICE_LIB",
         "MESA_EGL_NO_X11_HEADERS",
+        "QT_NO_EVDEV", // ### build the evdev plugins separately
     ]
 
     cpp.dynamicLibraries: {
@@ -82,6 +83,11 @@ QtModule {
             "platformsupport/platformcompositor/qopenglcompositor.cpp",
             "platformsupport/services/genericunix/qgenericunixservices.cpp",
             "platformsupport/devicediscovery/qdevicediscovery_udev.cpp",
+            // ### QT_NO_EVDEV
+            /*"platformsupport/input/evdevmouse/*.cpp",
+            "platformsupport/input/evdevkeyboard/*.cpp",
+            "platformsupport/input/evdevtouch/*.cpp",
+            "platformsupport/input/tslib/*.cpp",*/
         ]
     }
 

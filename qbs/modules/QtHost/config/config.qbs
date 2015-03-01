@@ -2,7 +2,7 @@ import qbs
 
 Module {
     property bool cursor: true
-    property bool evdev: false      // ### default: true
+    property bool evdev: true
     property bool glib: false       // ### package probe for glib
     property bool kqueue: false     // ### package probe for kqueue
     property bool pcre: true        // ### package probe for pcre

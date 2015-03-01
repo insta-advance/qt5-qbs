@@ -129,9 +129,6 @@ Module {
                 var openingBraces = line.match(/\{/g) || [];
                 var closingBraces = line.match(/\}/g) || [];
                 braceDepth += openingBraces.length - closingBraces.length;
-                /*if (braceDepth < 0 && (openingBraces.length || closingBraces.length))
-                    throw "At " + lineCount + ", braceDepth is " + braceDepth + " and opening/closing for the current line are "
-                            + openingBraces.length + "/" + closingBraces.length;*/
                 if (braceDepth < 0)
                     throw "Error in parsing header " + input.filePath + ", line " + lineCount + ": brace depth fell below 0.";
 
@@ -256,7 +253,7 @@ Module {
                     var header = outputs.hpp[i];
 
                     // uncomment to aid duplicate finding
-                    /*if (File.exists(header.filePath)) { // Helpful for debugging duplicates
+                    if (File.exists(header.filePath)) { // Helpful for debugging duplicates
                         var file = new TextFile(header.filePath, TextFile.ReadOnly);
                         var contents = file.readAll();
                         file.close();
@@ -265,7 +262,7 @@ Module {
                               + 'The new forwarding header is "' + input.fileName
                               + '" and the current content is "' + contents + '"';
                         return;
-                    }*/
+                    }
 
                     var file = new TextFile(header.filePath, TextFile.WriteOnly);
                     file.writeLine("#include \"" + input.filePath + "\"");

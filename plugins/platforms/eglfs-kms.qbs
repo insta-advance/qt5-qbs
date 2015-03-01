@@ -51,6 +51,16 @@ QtPlugin {
     }
 
     Group {
+        name: "sources (moc)"
+        prefix: project.sourceDirectory + "/qtbase/src/plugins/platforms/eglfs/deviceintegration/eglfs_kms/"
+        files: [
+            "qeglfskmsmain.cpp",
+        ]
+        fileTags: "moc_cpp"
+        overrideTags: false
+    }
+
+    Group {
         name: "sources"
         prefix: project.sourceDirectory + "/qtbase/src/plugins/platforms/eglfs/deviceintegration/eglfs_kms/"
         files: [
@@ -61,12 +71,11 @@ QtPlugin {
             "qeglfskmsintegration.h",
             "qeglfskmsscreen.cpp",
             "qeglfskmsscreen.h",
-            "qeglfskmsmain.cpp",
         ]
     }
 
     Group {
-        name: "sources_platformsupport"
+        name: "sources (platform support)"
         prefix: project.sourceDirectory + "/qtbase/src/platformsupport/"
         files: [
             "devicediscovery/qdevicediscovery_p.h",

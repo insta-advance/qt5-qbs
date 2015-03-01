@@ -51,8 +51,9 @@ Project {
     qbsSearchPaths: ["qbs", "headers"]
 
     references: [
-        "headers/headers.qbs",
         "3rdparty/3rdparty.qbs",
+        "configure.qbs",
+        "headers/headers.qbs",
         "qtcore.qbs",
         "qtgui.qbs",
         "qtnetwork.qbs",
