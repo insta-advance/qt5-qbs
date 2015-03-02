@@ -277,6 +277,59 @@ QtModule {
         overrideTags: false
     }
 
+    // ### make these paths configurable
+    Transformer {
+        Artifact {
+            filePath: project.buildDirectory + "/include/QtCore/qconfig.cpp"
+            fileTags: "hpp" // included by qlibraryinfo.cpp
+        }
+        prepare: {
+            var cmd = new JavaScriptCommand();
+            cmd.description = "Preparing qconfig.cpp";
+            cmd.sourceCode = function() {
+                var outputFile = new TextFile(output.filePath, TextFile.WriteOnly);
+                // ### todo: support enterprise licensing
+                outputFile.writeLine('/* License Info */');
+                outputFile.writeLine('static const char qt_configure_licensee_str          [256 + 12] = "qt_lcnsuser=Open Source";'); //### qhost could even patch these
+                outputFile.writeLine('static const char qt_configure_licensed_products_str [256 + 12] = "qt_lcnsprod=OpenSource";');
+                outputFile.writeLine('');
+                outputFile.writeLine('/* Installation date */');
+                outputFile.writeLine('static const char qt_configure_installation          [11 + 12]    = "qt_instdate=2012-12-20";'); //### qhost could patch this, too
+                outputFile.writeLine('');
+                outputFile.writeLine('/* Installation Info */');
+                outputFile.writeLine('static const char qt_configure_prefix_path_str       [256 + 12] = "qt_prfxpath=/opt/Qt/5.5.0-qbs";'); // ###FIXME: qhost must be able to patch this; like an -install option.
+                outputFile.writeLine('');
+                outputFile.writeLine("static const short qt_configure_str_offsets[] = { 0, 4, 12, 16, 24, 28, 36, 44, 48, 50, 52, 65, 74 };");
+                outputFile.writeLine('static const char  qt_configure_strs[] =');
+                outputFile.writeLine('    "doc\\0"');
+                outputFile.writeLine('    "include\\0"');
+                outputFile.writeLine('    "lib\\0"');
+                outputFile.writeLine('    "libexec\\0"');
+                outputFile.writeLine('    "bin\\0"');
+                outputFile.writeLine('    "plugins\\0"');
+                outputFile.writeLine('    "imports\\0"');
+                outputFile.writeLine('    "qml\\0"');
+                outputFile.writeLine('    ".\\0"');
+                outputFile.writeLine('    ".\\0"');
+                outputFile.writeLine('    "translations\\0"');
+                outputFile.writeLine('    "examples\\0"');
+                outputFile.writeLine('    "tests\\0"');
+                outputFile.writeLine(';');
+                outputFile.writeLine('');
+                if (!project.target.contains("win")) {
+                    outputFile.writeLine('#define QT_CONFIGURE_SETTINGS_PATH "/etc/xdg";'); // ### QtHost.config
+                }
+                outputFile.writeLine('');
+                outputFile.writeLine('/* strlen( "qt_lcnsxxxx" ) == 12 */');
+                outputFile.writeLine('#define QT_CONFIGURE_LICENSEE qt_configure_licensee_str + 12');
+                outputFile.writeLine('#define QT_CONFIGURE_LICENSED_PRODUCTS qt_configure_licensed_products_str + 12');
+                outputFile.writeLine('#define QT_CONFIGURE_PREFIX_PATH qt_configure_prefix_path_str + 12');
+                outputFile.close();
+            };
+            return cmd;
+        }
+    }
+
     Export {
         Depends { name: "QtHost.includes" }
         QtHost.includes.modules: ["core", "core-private"]

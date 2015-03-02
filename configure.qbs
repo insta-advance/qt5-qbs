@@ -4,7 +4,6 @@ import qbs.TextFile
 // This Product attempts to handle only installation-time files.
 // ### TODO: replace all build-time artifacts (qfeatures, qconfig, etc.) with static files and rename this product to install
 Product {
-
     type: "hpp"
 
     Depends { name: "cpp" }
@@ -108,65 +107,11 @@ Product {
         }
     }
 
-    Transformer {
-        Artifact {
-            filePath: project.buildDirectory + "/include/QtCore/qconfig.cpp"
-            fileTags: "hpp" // included by qlibraryinfo.cpp
-        }
-        prepare: {
-            var cmd = new JavaScriptCommand();
-            cmd.description = "Preparing qconfig.cpp";
-            cmd.sourceCode = function() {
-                var prefix = project.buildDirectory; // This should be patched at install time
-                var outputFile = new TextFile(output.filePath, TextFile.WriteOnly);
-                // ### todo: support enterprise licensing
-                outputFile.writeLine("/* Licensed */");
-                outputFile.writeLine("static const char qt_configure_licensee_str          [512 + 12] = \"qt_lcnsuser=Open Source\";");
-                outputFile.writeLine("static const char qt_configure_licensed_products_str [512 + 12] = \"qt_lcnsprod=OpenSource\";");
-                // ### todo: create date from the last commit; (new Date()).toISOString().slice(10)
-                outputFile.writeLine("static const char qt_configure_installation          [11  + 12] = \"qt_instdate=0123456789\";");
-                outputFile.writeLine("/* Installation Info */");
-                outputFile.writeLine("static const char qt_configure_prefix_path_str       [512 + 12] = \"qt_prfxpath=" + prefix + "\";");
-                outputFile.writeLine("");
-                outputFile.writeLine("static const short qt_configure_str_offsets[] = { };");
-                outputFile.writeLine("static const char  qt_configure_strs[] = { };");
-                outputFile.writeLine("static const char qt_configure_prefix_path_strs[][12 + 512] = {");
-                outputFile.writeLine("    \"qt_prfxpath=" + prefix + "\",");
-                outputFile.writeLine("    \"qt_docspath=" + prefix + "/doc\",");
-                outputFile.writeLine("    \"qt_hdrspath=" + prefix + "/include\",");
-                outputFile.writeLine("    \"qt_libspath=" + prefix + "/lib\",");
-                outputFile.writeLine("    \"qt_lbexpath=" + prefix + "/bin\",");
-                outputFile.writeLine("    \"qt_binspath=" + prefix + "/bin\",");
-                outputFile.writeLine("    \"qt_plugpath=" + prefix + "/plugins\",");
-                outputFile.writeLine("    \"qt_impspath=" + prefix + "/imports\",");
-                outputFile.writeLine("    \"qt_qml2path=" + prefix + "/qml\",");
-                outputFile.writeLine("    \"qt_adatpath=" + prefix + "\",");
-                outputFile.writeLine("    \"qt_datapath=" + prefix + "\",");
-                outputFile.writeLine("    \"qt_trnspath=" + prefix + "/translations\",");
-                outputFile.writeLine("    \"qt_xmplpath=" + prefix + "/examples\",");
-                outputFile.writeLine("    \"qt_tstspath=" + prefix + "/tests\",");
-                outputFile.writeLine("};");
-                outputFile.writeLine("");
-                outputFile.writeLine("/* strlen( \"qt_lcnsxxxx\") == 12 */");
-                outputFile.writeLine("#define QT_CONFIGURE_LICENSEE qt_configure_licensee_str + 12;");
-                outputFile.writeLine("#define QT_CONFIGURE_LICENSED_PRODUCTS qt_configure_licensed_products_str + 12;");
-                if (!project.target.contains("win")) {
-                    var configureSettingsPath = "/etc/xdg"; // ### make accessible from configure
-                    outputFile.writeLine("static const char qt_configure_settings_path_str [256 + 12] = \"qt_stngpath="
-                                          + configureSettingsPath + "\";");
-                    outputFile.writeLine("#define QT_CONFIGURE_SETTINGS_PATH qt_configure_settings_path_str + 12;");
-                }
-                outputFile.writeLine("#define QT_CONFIGURE_PREFIX_PATH qt_configure_prefix_path_str + 12\n");
-                outputFile.close();
-            };
-            return cmd;
-        }
-    }
-
-    // Script to pass qmake commands to qhost (###todo: add .bat version)
     Group {
         name: "bin"
-        files: "bin/qmake"
+        files: [
+            "bin/qmake", // Script to pass qmake commands to qhost (###todo: add .bat version)
+        ]
         qbs.install: true
         qbs.installDir: "bin"
     }
@@ -176,6 +121,14 @@ Product {
         files: "qtbase/mkspecs/"
         fileTags: []
         qbs.install: true
+    }
+
+    // While these are part of QtCore, they are part of the install more than the build
+    Group {
+        name: "configuration headers"
+        fileTagsFilter: "qconfig"
+        qbs.install: true
+        qbs.installDir: "include/QtCore"
     }
 
     // ### make all this configurable
@@ -188,14 +141,15 @@ Product {
             var cmd = new JavaScriptCommand();
             cmd.description = "creating qhost JSON configuration file"
             cmd.sourceCode = function() {
+                var binPath = product.moduleProperty("QtHost.config", "qhostBinPath");
                 var file = new TextFile(output.filePath, TextFile.WriteOnly);
                 file.writeLine('{');
                 file.writeLine('    "QMAKE_XSPEC": "' + project.target + '",');
-                file.writeLine('    "QT_HOST_BINS": "../bin",');
+                file.writeLine('    "QT_HOST_BINS": "' + binPath + '",');
                 file.writeLine('    "QT_HOST_DATA": "..",');
                 file.writeLine('    "QT_HOST_LIBS": "../lib",');
                 file.writeLine('    "QT_HOST_PREFIX": "..",');
-                file.writeLine('    "QT_INSTALL_BINS": "../bin",');
+                file.writeLine('    "QT_INSTALL_BINS": "' + binPath + '",');
                 file.writeLine('    "QT_INSTALL_HEADERS": "../include",');
                 file.writeLine('    "QT_INSTALL_LIBS": "../lib",');
                 file.writeLine('    "QT_INSTALL_PLUGINS": "../plugins",');
@@ -210,5 +164,35 @@ Product {
         fileTagsFilter: "qhost.json"
         qbs.install: true
         qbs.installDir: "bin"
+    }
+
+    Transformer {
+        Artifact {
+            filePath: "qconfig.pri"
+            fileTags: "qconfig.pri"
+        }
+        prepare: {
+            var cmd = new JavaScriptCommand();
+            cmd.description = "generating qconfig.pri";
+            cmd.sourceCode = function() {
+                var file = new TextFile(output.filePath, TextFile.WriteOnly);
+                file.writeLine("QT_MAJOR_VERSION = 5"); // ### get from project.version
+                file.writeLine("QT_MINOR_VERSION = 5");
+                file.writeLine("QT_PATCH_VERSION = 0");
+                file.writeLine("QT_NAMESPACE = "); // ### namespace
+                file.writeLine("QT_LIBINFIX = "); // ### libinfix
+                file.writeLine("QT_TARGET_ARCH = " + product.moduleProperty("qbs", "architecture"));
+                file.writeLine("CONFIG = shared qpa debug"); // ### static, debug, qt_no_framework...
+                file.writeLine("QT_CONFIG = egl opengl opengles2"); // ### QtHost.config
+                file.close();
+            }
+            return cmd;
+        }
+    }
+
+    Group {
+        fileTagsFilter: "qconfig.pri"
+        qbs.install: true
+        qbs.installDir: "mkspecs"
     }
 }

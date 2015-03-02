@@ -17,6 +17,9 @@ QtModule {
             defines.push("QT_NO_DRAGANDDROP");
         }
 
+        if (project.target.startsWith("linux"))
+            defines.push("QT_QPA_DEFAULT_PLATFORM_NAME=\"eglfs\""); // ### embedded flag to toggle between xcb and eglfs?
+
         return defines;
     }
 

@@ -53,6 +53,7 @@ StaticLibrary {
 
     QtHost.includes.modules: ["core", "qml", "qml-private"]
 
+    Depends { name: "QtQmlHeaders" }
     Depends { name: "cpp" }
     Depends { name: "QtHost.includes" }
 
@@ -97,7 +98,7 @@ StaticLibrary {
 
     Group {
         condition: product.disassembler
-        name: "sources (masm disassembler)"
+        name: "sources (disassembler)"
         prefix: basePath + "/disassembler/"
         files: [
             "ARMv7/*.cpp",

@@ -1,4 +1,5 @@
 import qbs
+import qbs.File
 
 Module {
     property bool cursor: true
@@ -18,4 +19,18 @@ Module {
     property bool kms: true         // ### probe for kms
     property bool spdy: false       // ### probe for spdy
     property bool ssl: false        // ### probe for ssl
+
+    property string qhostBinPath: {
+        var qhostBinPath;
+        var paths = qbs.getEnv("PATH").split(qbs.pathListSeparator);
+        for (var i in paths) {
+            if (File.exists(paths[i] + "/qhost")) {
+                qhostBinPath = paths[i];
+                break;
+            }
+        }
+        if (!qhostBinPath)
+            throw "The path to qhost was not found.";
+        return qhostBinPath;
+    }
 }

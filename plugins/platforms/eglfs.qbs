@@ -4,6 +4,7 @@ import qbs.Probes
 Project {
     QtPlugin {
         category: "platforms"
+        targetName: "qeglfs"
 
         QtHost.includes.modules: [ "core-private", "gui-private", "platformsupport-private" ]
 

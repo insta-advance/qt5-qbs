@@ -10,12 +10,12 @@ Module {
             includeDirectory,
             project.sourceDirectory + "/qtbase/mkspecs/" + project.target,
         ];
-        var moduleMap = Object({
+        var moduleMap = {
             core: "QtCore",
             gui: "QtGui",
             platformheaders: "QtPlatformHeaders",
             platformsupport: "QtPlatformSupport",
-        });
+        };
         for (var i in modules) {
             var baseName = modules[i];
             var isPrivate = baseName.endsWith("-private");
