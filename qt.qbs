@@ -57,6 +57,7 @@ Project {
         "qtcore.qbs",
         "qtgui.qbs",
         "qtnetwork.qbs",
+        "qtmultimedia.qbs",
 
         "plugins/platforms/platforms.qbs",
 

@@ -44,4 +44,10 @@ Project {
         module: "QtQuick"
         QtQuickHeaders { fileTags: "header_sync" }
     }
+
+    QtHeaders {
+        name: "QtMultimediaHeaders"
+        module: "QtMultimedia"
+        QtMultimediaHeaders { fileTags: "header_sync" }
+    }
 }
