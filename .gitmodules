@@ -7,3 +7,6 @@
 [submodule "qttools"]
 	path = qttools
 	url = https://github.com/qtproject/qttools
+[submodule "qtmultimedia"]
+	path = qtmultimedia
+	url = https://github.com/qtproject/qtmultimedia
