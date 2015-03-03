@@ -29,6 +29,8 @@ QtModule {
     }
 
     Depends { name: "QtMultimediaHeaders" }
+    Depends { name: "QtCore" }
+    Depends { name: "QtNetwork" }
     Depends { name: "QtGui" }
     Depends { name: "QtQml" }
     Depends { name: "QtQuick" }

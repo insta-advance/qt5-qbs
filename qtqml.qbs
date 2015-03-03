@@ -33,6 +33,7 @@ QtModule {
 
     Depends { name: "double-conversion" }
     Depends { name: "masm" }
+    Depends { name: "QtCore" }
     Depends { name: "QtGui" }
     Depends { name: "QtNetwork" }
     Depends { name: "QtQmlHeaders" }
