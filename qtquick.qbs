@@ -5,6 +5,14 @@ QtModule {
     readonly property path basePath: project.sourceDirectory
                                      + "/qtdeclarative/src/quick"
 
+    includeDependencies: [
+        "QtCore", "QtCore-private",
+        "QtGui", "QtGui-private",
+        "QtQml", "QtQml-private",
+        "QtNetwork",
+        "QtQuick", "QtQuick-private"
+    ]
+
     cpp.defines: base.concat([
         "QT_BUILD_QUICK_LIB",
     ])
@@ -13,13 +21,11 @@ QtModule {
         "GLESv2",
     ]
 
-    QtHost.includes.modules: ["qml", "qml-private", "quick", "quick-private"]
-
-    Depends { name: "QtQuickHeaders" }
     Depends { name: "QtCore" }
     Depends { name: "QtGui" }
     Depends { name: "QtNetwork" }
     Depends { name: "QtQml" }
+    Depends { name: "QtQuickHeaders" }
 
     Group {
         id: headers_moc_p
@@ -100,10 +106,5 @@ QtModule {
             "scenegraph/scenegraph.qrc",
         ]
         fileTags: "qrc"
-    }
-
-    Export {
-        Depends { name: "QtHost.includes" }
-        QtHost.includes.modules: ["quick", "quick-private"]
     }
 }

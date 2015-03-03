@@ -1,13 +1,13 @@
 import qbs
 
-CppApplication {
-    name: "rcc"
+QtProduct {
+    type: "application"
 
     destinationDirectory: project.buildDirectory + "/bin"
 
+    includeDependencies: ["QtCore"]
+
     Depends { name: "QtBootstrap" }
-    Depends { name: "QtHost.includes" }
-    QtHost.includes.modules: [ "core" ]
 
     cpp.includePaths: base.concat([
         project.sourceDirectory + "/qtbase/src/tools/rcc",

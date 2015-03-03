@@ -3,7 +3,8 @@ import qbs.File
 import qbs.Process
 import qbs.TextFile
 
-StaticLibrary {
+QtProduct {
+    type: "staticlibrary"
     readonly property path basePath: project.sourceDirectory
                                      + "/qtdeclarative/src/3rdparty/masm"
 
@@ -49,13 +50,13 @@ StaticLibrary {
         basePath + "/wtf",
     ];
 
-    cpp.includePaths: product.includePaths.concat([product.buildDirectory])
+    includeDependencies: ["QtCore", "QtQml-private"]
 
-    QtHost.includes.modules: ["core", "qml", "qml-private"]
+    cpp.includePaths: base.concat(product.includePaths.concat([product.buildDirectory]))
 
+    Depends { name: "QtCoreHeaders" }
     Depends { name: "QtQmlHeaders" }
     Depends { name: "cpp" }
-    Depends { name: "QtHost.includes" }
 
     Group {
         name: "sources"

@@ -1,14 +1,12 @@
 import qbs
 
-
-CppApplication {
+QtProduct {
     name: "lrelease"
 
     destinationDirectory: project.buildDirectory + "/bin"
 
     Depends { name: "QtBootstrap" }
-    Depends { name: "QtHost.includes" }
-    QtHost.includes.modules: [ "core", "core-private" ]
+    includeDependencies: ["QtCore", "QtCore-private"]
 
     cpp.includePaths: base.concat([
         project.sourceDirectory + "/qttools/src/linguist/lrelease",

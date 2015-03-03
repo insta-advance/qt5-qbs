@@ -4,6 +4,8 @@ import qbs.Probes
 QtModule {
     name: "QtEglDeviceIntegration"
 
+    includeDependencies: ["QtCore-private", "QtGui-private", "QtPlatformSupport-private"]
+
     cpp.cxxFlags: udevProbe.cflags
 
     cpp.defines: [
@@ -23,17 +25,17 @@ QtModule {
         project.sourceDirectory + "/qtbase/src/3rdparty/freetype/include", // ### use Probe for system freetype
     ])
 
-    QtHost.includes.modules: [ "core-private", "gui-private", "platformheaders", "platformsupport-private" ]
-
     Probes.PkgConfigProbe {
         id: udevProbe
         name: "libudev"
     }
 
-    Depends { name: "QtCore" }
-    Depends { name: "QtGui" }
+    Depends { name: "QtCoreHeaders" }
+    Depends { name: "QtGuiHeaders" }
     Depends { name: "QtPlatformHeaders" }
     Depends { name: "QtPlatformSupport" }
+    Depends { name: "QtCore" }
+    Depends { name: "QtGui" }
 
     Group {
         name: "headers"

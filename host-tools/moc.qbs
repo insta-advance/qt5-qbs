@@ -1,13 +1,12 @@
 import qbs
 
-CppApplication {
-    name: "moc"
+QtProduct {
+    type: "application"
 
     destinationDirectory: project.buildDirectory + "/bin"
+    includeDependencies: ["QtCore", "QtCore-private"]
 
     Depends { name: "QtBootstrap" }
-    Depends { name: "QtHost.includes" }
-    QtHost.includes.modules: [ "core", "core-private" ]
 
     Group {
         fileTagsFilter: "application"

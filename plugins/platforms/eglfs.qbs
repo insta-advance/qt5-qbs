@@ -6,14 +6,14 @@ Project {
         category: "platforms"
         targetName: "qeglfs"
 
-        QtHost.includes.modules: [ "core-private", "gui-private", "platformsupport-private" ]
+        includeDependencies: ["QtCore", "QtGui-private", "QtPlatformSupport-private"]
+
+        cpp.dynamicLibraries: [ "EGL", "GLESv2" ]
+        cpp.defines: [ "MESA_EGL_NO_X11_HEADERS" ]
 
         Depends { name: "QtCore" }
         Depends { name: "QtGui" }
         Depends { name: "QtEglDeviceIntegration" }
-
-        cpp.dynamicLibraries: [ "EGL", "GLESv2" ]
-        cpp.defines: [ "MESA_EGL_NO_X11_HEADERS" ]
 
         Group {
             name: "sources"

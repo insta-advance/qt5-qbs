@@ -5,37 +5,37 @@ QtModule {
     name: "QtGui"
     readonly property path basePath: project.sourceDirectory + "/qtbase/src/gui"
 
-    readonly property stringList defines: {
+    readonly property stringList inheritedDefines: {
         var defines = [];
 
-        // ### find out why these still aren't passed to moc in dependencies
-        // ### we may need to move this type of stuff into config.qbs
-        // ### that would make sense anyway, as it would allow us to change stuff on a module level
         if (!QtHost.config.cursor) {
             defines.push("QT_NO_CURSOR");
             defines.push("QT_NO_WHEELEVENT");
             defines.push("QT_NO_DRAGANDDROP");
         }
 
+        return defines;
+    }
+
+    includeDependencies: ["QtCore", "QtCore-private", "QtGui", "QtGui-private"]
+
+    cpp.defines: {
+        var defines = product.inheritedDefines;
+        defines.push("QT_BUILD_GUI_LIB");
+
+        // ### QtHost.config.defaultPlatformName
         if (project.target.startsWith("linux"))
-            defines.push("QT_QPA_DEFAULT_PLATFORM_NAME=\"eglfs\""); // ### embedded flag to toggle between xcb and eglfs?
+            defines.push('QT_QPA_DEFAULT_PLATFORM_NAME="eglfs"');
 
         return defines;
     }
 
-    QtHost.includes.modules: ["gui", "gui-private"]
-    //QtHost.config.cursor: false // to test the define propagation
-
-    cpp.defines: base.concat([
-        "QT_BUILD_GUI_LIB",
-    ]).concat(product.defines)
-
-    Depends { name: "QtGuiHeaders" }
-    Depends { name: "zlib" }
+    Depends { name: "freetype" }
     Depends { name: "jpeg" }
     Depends { name: "png" }
-    Depends { name: "freetype" }
     Depends { name: "QtCore" }
+    Depends { name: "QtGuiHeaders" }
+    Depends { name: "zlib" }
 
     Properties {
         condition: QtHost.config.opengl == "desktop" && qbs.targetOS.contains("unix")
@@ -161,13 +161,5 @@ QtModule {
 
             return excludeFiles.concat(sources_moc.files);
         }
-    }
-
-    Export {
-        Depends { name: "cpp" }
-        cpp.defines: product.defines
-
-        Depends { name: "QtHost.includes" }
-        QtHost.includes.modules: ["gui", "gui-private"]
     }
 }

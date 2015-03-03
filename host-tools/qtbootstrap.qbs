@@ -2,7 +2,8 @@ import qbs
 import qbs.File
 import qbs.FileInfo
 
-StaticLibrary {
+QtProduct {
+    type: "staticlibrary"
     name: "QtBootstrap"
 
     property stringList bootstrapDefines: [
@@ -30,11 +31,7 @@ StaticLibrary {
         project.sourceDirectory + "/qtbase/mkspecs/" + project.host,
     ]
 
-    Depends { name: "cpp" }
-    Depends { name: "bootstrap-headers-core" }
-    Depends { name: "bootstrap-headers-xml" }
-    Depends { name: "QtHost"; submodules: ["config", "includes"] }
-    QtHost.includes.modules: [ "core", "core-private", "xml", "xml-private" ]
+    includeDependencies: ["QtCore", "QtCore-private", "QtXml", "QtXml-private"]
 
     cpp.defines: bootstrapDefines.concat([
         "QT_BUILD_BOOTSTRAP_LIB",
@@ -52,6 +49,10 @@ StaticLibrary {
             "shell32",
         ]
     }
+
+    Depends { name: "cpp" }
+    Depends { name: "bootstrap-headers-core" }
+    Depends { name: "bootstrap-headers-xml" }
 
     Group {
         name: "sources"

@@ -9,6 +9,8 @@ QtModule {
 
     property bool disassembler: false
 
+    includeDependencies: ["QtCore", "QtCore-private", "QtGui", "QtNetwork", "QtQml", "QtQml-private"]
+
     cpp.defines: base.concat(["QT_BUILD_QML_LIB"])
 
     cpp.dynamicLibraries: {
@@ -29,14 +31,11 @@ QtModule {
         return includePaths;
     }
 
-    QtHost.includes.modules: ["qml", "qml-private"]
-
     Depends { name: "double-conversion" }
     Depends { name: "masm" }
-    Depends { name: "QtQmlHeaders" }
-    Depends { name: "QtCore" }
     Depends { name: "QtGui" }
     Depends { name: "QtNetwork" }
+    Depends { name: "QtQmlHeaders" }
 
     Group {
         id: sources_moc
@@ -96,10 +95,5 @@ QtModule {
             // Class declaration lacks Q_OBJECT macro
             "qml/qqmlabstracturlinterceptor.h",
         ].concat(headers_moc_p.files)
-    }
-
-    Export {
-        Depends { name: "QtHost.includes" }
-        QtHost.includes.modules: ["qml", "qml-private"]
     }
 }

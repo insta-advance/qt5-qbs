@@ -1,9 +1,9 @@
 import qbs
 import qbs.File
+import qbs.Probes
 
 Module {
-    property bool cursor: true
-    property bool evdev: true
+    // QtCore
     property bool glib: false       // ### package probe for glib
     property bool kqueue: false     // ### package probe for kqueue
     property bool pcre: true        // ### package probe for pcre
@@ -14,11 +14,20 @@ Module {
     property bool sse4_2: true      // ### probe for sse4_2
     property bool avx: true         // ### probe for avx
     property bool avx2: true        // ### probe for avx2
-    property string opengl: "es2"   // ### probe for desktop, es2, es3, dynamic
-    property bool xcb: false        // ### probe for xcb
-    property bool kms: true         // ### probe for kms
+
+    // QtNetwork
     property bool spdy: false       // ### probe for spdy
     property bool ssl: false        // ### probe for ssl
+
+    // QtGui
+    property bool cursor: true
+    property bool evdev: true
+    property bool xcb: false        // ### probe for xcb
+    property bool kms: true         // ### probe for kms
+    property string opengl: "es2"   // ### probe for desktop, es2, es3, dynamic
+
+    // QtMultimedia
+    property bool gstreamer: _gstreamerProbe.found && _gstreamerVideoProbe.found
 
     property string qhostBinPath: {
         var qhostBinPath;
@@ -32,5 +41,17 @@ Module {
         if (!qhostBinPath)
             throw "The path to qhost was not found.";
         return qhostBinPath;
+    }
+
+    readonly property var gstreamerProbe: _gstreamerProbe
+    Probes.PkgConfigProbe {
+        id: _gstreamerProbe
+        name: "gstreamer-1.0"
+    }
+
+    readonly property var gstreamerVideoProbe: _gstreamerVideoProbe
+    Probes.PkgConfigProbe {
+        id: _gstreamerVideoProbe
+        name: "gstreamer-video-1.0"
     }
 }

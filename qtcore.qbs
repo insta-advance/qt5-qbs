@@ -5,12 +5,7 @@ QtModule {
     name: "QtCore"
     property path basePath: project.sourceDirectory + "/qtbase/src/corelib"
 
-    Depends { name: "configure" }
-    Depends { name: "QtCoreHeaders" }
-    Depends { name: "harfbuzz" }
-    Depends { name: "pcre" }
-    Depends { name: "zlib" }
-    QtHost.includes.modules: [ "core-private" ]
+    includeDependencies: ["QtCore-private"]
 
     cpp.defines: base.concat([
         "QT_BUILD_CORE_LIB",
@@ -19,6 +14,12 @@ QtModule {
     cpp.includePaths: base.concat([
         project.sourceDirectory + "/qtbase/src/3rdparty/forkfd"
     ])
+
+    Depends { name: "configure" }
+    Depends { name: "harfbuzz" }
+    Depends { name: "pcre" }
+    Depends { name: "QtCoreHeaders" }
+    Depends { name: "zlib" }
 
     Properties {
         condition: qbs.targetOS.contains("unix")
@@ -328,10 +329,5 @@ QtModule {
             };
             return cmd;
         }
-    }
-
-    Export {
-        Depends { name: "QtHost.includes" }
-        QtHost.includes.modules: ["core", "core-private"]
     }
 }

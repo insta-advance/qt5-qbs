@@ -20,8 +20,6 @@ QtPlugin {
         project.sourceDirectory + "/qtbase/src/plugins/platforms/eglfs",
     ]
 
-    QtHost.includes.modules: [ "core-private", "gui-private", "platformsupport-private" ]
-
     Depends { name: "QtCore" }
     Depends { name: "QtGui" }
     Depends { name: "QtEglDeviceIntegration" }

@@ -2,6 +2,8 @@ import qbs
 
 Product {
     type: "hpp"
+    property string module
+    QtHost.sync.module: product.module
 
     Depends { name: "cpp" }
     Depends { name: "QtHost.sync" }
@@ -9,14 +11,14 @@ Product {
     Group {
         fileTagsFilter: "hpp_public"
         qbs.install: true
-        qbs.installDir: "include/" + QtHost.sync.module
+        qbs.installDir: "include/" + product.module
     }
 
     Group {
         fileTagsFilter: "hpp_private"
         qbs.install: true
-        qbs.installDir: "include/" + QtHost.sync.module + "/"
-                        + project.qtVersion + "/" + QtHost.sync.module
+        qbs.installDir: "include/" + product.module + "/"
+                        + project.qtVersion + "/" + product.module
                         + "/private"
     }
 

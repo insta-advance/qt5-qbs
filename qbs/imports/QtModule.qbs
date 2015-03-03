@@ -57,7 +57,7 @@ QtLibrary {
             var cmd = new JavaScriptCommand();
             cmd.description = "generating " + output.fileName;
             cmd.modulePrefix = "QT." + output.baseName.slice(7) + '.';
-            cmd.includes = "$$QT_MODULE_INCLUDE_BASE $$QT_MODULE_INCLUDE_BASE/" + product.name;// ### QtHost.includes
+            cmd.includes = "$$QT_MODULE_INCLUDE_BASE $$QT_MODULE_INCLUDE_BASE/" + product.name;// ### includeDependencies
             cmd.sourceCode = function() {
                 var file = new TextFile(output.filePath, TextFile.WriteOnly);
                 file.writeLine(modulePrefix + "name = " + product.name);
