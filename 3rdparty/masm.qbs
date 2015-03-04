@@ -126,6 +126,7 @@ QtProduct {
                 input.filePath
             ]);
             cmd.description = "generating itab";
+            cmd.highlight = "codegen";
             cmd.workingDirectory = product.buildDirectory;
             return cmd;
         }

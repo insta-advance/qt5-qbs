@@ -18,7 +18,8 @@ Module {
                 "-o", output.filePath,
             ]);
             cmd.environment = product.moduleProperty("QtHost.rcc", "environment");
-            cmd.silent = true;
+            cmd.description = "rcc " + input.fileName;
+            cmd.highlight = "codegen";
             return cmd;
         }
     }
