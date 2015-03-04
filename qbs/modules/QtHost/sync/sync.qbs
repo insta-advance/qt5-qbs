@@ -274,7 +274,7 @@ Module {
     }
 
     Rule {
-        inputs: "hpp_" + module
+        inputs: "hpp_" + product.moduleProperty("QtHost.sync", "module")
         multiplex: true
         Artifact {
             filePath: {

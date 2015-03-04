@@ -41,20 +41,11 @@ QtPlugin {
 
     Group {
         name: "headers"
-        fileTags: "moc_hpp"
         prefix: project.sourceDirectory + "/qtbase/src/plugins/platforms/eglfs/deviceintegration/eglfs_kms/"
         files: [
             "qeglfskmscursor.h", // ### QT_NO_CURSOR
         ]
-    }
-
-    Group {
-        name: "sources (moc)"
-        prefix: project.sourceDirectory + "/qtbase/src/plugins/platforms/eglfs/deviceintegration/eglfs_kms/"
-        files: [
-            "qeglfskmsmain.cpp",
-        ]
-        fileTags: "moc_cpp"
+        fileTags: "moc"
         overrideTags: false
     }
 
@@ -67,9 +58,12 @@ QtPlugin {
             "qeglfskmsdevice.h",
             "qeglfskmsintegration.cpp",
             "qeglfskmsintegration.h",
+            "qeglfskmsmain.cpp",
             "qeglfskmsscreen.cpp",
             "qeglfskmsscreen.h",
         ]
+        fileTags: "moc"
+        overrideTags: false
     }
 
     Group {

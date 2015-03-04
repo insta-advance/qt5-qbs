@@ -41,51 +41,10 @@ QtModule {
         ]
     }
 
-    Group {
-        id: headers_moc_p
-        name: "headers (delayed moc)"
-        prefix: basePath + "/"
-        files: [
-            "animation/qparallelanimationgroup.h",
-            "animation/qsequentialanimationgroup.h",
-            "animation/qabstractanimation.h",
-            "animation/qanimationgroup.h",
-            "animation/qpropertyanimation.h",
-            "animation/qvariantanimation.h",
-            "animation/qpauseanimation.h",
-
-            "kernel/qobject.h",
-            "kernel/qsignalmapper.h",
-
-            "io/qbuffer.h",
-            "io/qfilesystemwatcher.h",
-            "io/qprocess.h",
-            "io/qfileselector.h",
-            "io/qwinoverlappedionotifier_p.h",
-
-            "itemmodels/qabstractproxymodel.h",
-            "itemmodels/qitemselectionmodel.h",
-            "itemmodels/qsortfilterproxymodel.h",
-            "itemmodels/qidentityproxymodel.h",
-
-            "statemachine/qstatemachine.h",
-        ]
-        fileTags: "moc_hpp_p"
-    }
-
-    Group {
-        id: headers_moc_qtimer
-        name: "headers (QTimer)"
-        fileTags: ["moc_hpp_p", "moc_hpp"]
-        prefix: basePath + "/"
-        files: "kernel/qtimer.h"
-    }
-
     QtCoreHeaders {
-        name: "headers (moc)"
-        fileTags: "moc_hpp"
+        name: "headers"
         excludeFiles: {
-            var files = headers_moc_p.files.concat(headers_moc_qtimer.files);
+            var files = [];
 
             // Don't sync specific platform headers
             if (!qbs.targetOS.contains("osx")) {
@@ -96,6 +55,7 @@ QtModule {
                 files.push("io/qwindowspipereader_p.h");
                 files.push("io/qwindowspipewriter_p.h");
                 files.push("io/qfilesystemwatcher_win_p.h");
+                files.push("io/qwinoverlappedionotifier_p.h");
                 files.push("kernel/qeventdispatcher_win_p.h");
             }
 
@@ -119,12 +79,8 @@ QtModule {
 
             return files;
         }
-    }
-
-    Group {
-        name: "mimetypes.qrc"
-        files: basePath + "/mimetypes/mimetypes.qrc"
-        fileTags: "qrc"
+        fileTags: "moc"
+        overrideTags: false
     }
 
     Group {
@@ -193,7 +149,7 @@ QtModule {
                 "tools/qchar.cpp",
                 "tools/qunicodetables.cpp",
                 "tools/qstringmatcher.cpp",
-            ].concat(sources_moc.files);
+            ];
 
             if (!qbs.targetOS.contains("unix")) {
                 Array.prototype.push.apply(excludeFiles, [
@@ -264,18 +220,14 @@ QtModule {
 
             return excludeFiles;
         }
+        fileTags: "moc"
+        overrideTags: false
     }
 
     Group {
-        id: sources_moc
-        name: "sources (moc)"
-        prefix: basePath + "/"
-        files: [
-            "kernel/qtimer.cpp",
-            "statemachine/qstatemachine.cpp",
-        ]
-        fileTags: "moc_cpp"
-        overrideTags: false
+        name: "mimetypes.qrc"
+        files: basePath + "/mimetypes/mimetypes.qrc"
+        fileTags: "qrc"
     }
 
     // ### make these paths configurable

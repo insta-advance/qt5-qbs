@@ -27,30 +27,12 @@ QtModule {
     Depends { name: "QtQml" }
     Depends { name: "QtQuickHeaders" }
 
-    Group {
-        id: headers_moc_p
-        name: "headers (delayed moc)"
-        prefix: basePath + "/"
-        files: [
-            "items/qquickitem.h",
-            "items/qquickwindow.h",
-            "items/qquickanchors_p.h",
-            "items/qquickloader_p.h",
-            "items/qquickstateoperations_p.h",
-            "items/qquicktextcontrol_p.h",
-            "util/qquickstatechangescript_p.h",
-        ]
-        fileTags: "moc_hpp_p"
-        overrideTags: true
-    }
-
     QtQuickHeaders {
-        name: "headers (moc)"
-        fileTags: "moc_hpp"
+        name: "headers"
         excludeFiles: {
             var excludeFiles = [
                 "scenegraph/coreapi/qsgmaterial.h", // "Meta object features not supported for nested classes"
-            ].concat(headers_moc_p.files);
+            ];
 
             if (!QtHost.config.cursor) {
                 excludeFiles.push("items/qquickdroparea_p.h");
@@ -58,26 +40,7 @@ QtModule {
 
             return excludeFiles;
         }
-    }
-
-    Group {
-        id: sources_moc
-        name: "sources (moc)"
-        prefix: basePath + "/"
-        files: [
-            "items/qquickimage.cpp",
-            "items/qquickflipable.cpp",
-            "items/qquickframebufferobject.cpp",
-            "items/qquickwindow.cpp",
-            "items/qquickshadereffectsource.cpp",
-            "scenegraph/qsgcontext.cpp",
-            "scenegraph/qsgrenderloop.cpp",
-            "scenegraph/qsgthreadedrenderloop.cpp",
-            "util/qquickfontloader.cpp",
-            "util/qquickpixmapcache.cpp",
-            "util/qquickprofiler.cpp",
-        ]
-        fileTags: "moc_cpp"
+        fileTags: "moc"
         overrideTags: false
     }
 
@@ -95,7 +58,8 @@ QtModule {
             "scenegraph/util/*.cpp",
             "util/*.cpp",
         ]
-        excludeFiles: sources_moc.files
+        fileTags: "moc"
+        overrideTags: false
     }
 
     Group {

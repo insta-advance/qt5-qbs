@@ -38,19 +38,9 @@ QtModule {
     Depends { name: "QtNetwork" }
     Depends { name: "QtQmlHeaders" }
 
-    Group {
-        id: sources_moc
-        name: "sources (moc)"
-        prefix: basePath + "/"
-        files: [
-            "qml/qqmlfile.cpp",
-            "qml/qqmltypeloader.cpp",
-            "qml/qqmlwatcher.cpp",
-            "qml/qqmlxmlhttprequest.cpp",
-            "types/qquickworkerscript.cpp",
-            "util/qqmladaptormodel.cpp",
-        ]
-        fileTags: "moc_cpp"
+    QtQmlHeaders {
+        name: "headers"
+        fileTags: "moc"
         overrideTags: false
     }
 
@@ -71,30 +61,7 @@ QtModule {
             "types/*.cpp",
             "util/*.cpp",
         ]
-        excludeFiles: sources_moc.files
-    }
-
-    Group {
-        id: headers_moc_p
-        name: "headers (delayed moc)"
-        prefix: basePath + "/"
-        files: [
-            "debugger/qqmldebugserver_p.h",
-            "jsapi/qjsengine.h",
-            "qml/qqmlapplicationengine.h",
-            "qml/qqmlapplicationengine_p.h",
-            "qml/qqmlexpression.h",
-            "types/qqmlinstantiator_p.h",
-        ]
-        fileTags: "moc_hpp_p"
-    }
-
-    QtQmlHeaders {
-        name: "headers (moc)"
-        fileTags: "moc_hpp"
-        excludeFiles: [
-            // Class declaration lacks Q_OBJECT macro
-            "qml/qqmlabstracturlinterceptor.h",
-        ].concat(headers_moc_p.files)
+        fileTags: "moc"
+        overrideTags: false
     }
 }

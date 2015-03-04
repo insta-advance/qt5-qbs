@@ -4,10 +4,11 @@ QtModule {
     name: "QtMultimedia"
     readonly property path basePath: project.sourceDirectory + "/qtmultimedia/src/multimedia"
 
-    includeDependencies: ["QtCore", "QtNetwork", "QtQuick", "QtMultimedia-private"]
+    includeDependencies: ["QtCore-private", "QtNetwork", "QtGui", "QtQuick", "QtMultimedia-private"]
 
     cpp.defines: base.concat([
         "QT_BUILD_MULTIMEDIA_LIB",
+        "QT_MULTIMEDIA_QAUDIO",
     ])
 
     cpp.cxxFlags: {
@@ -35,33 +36,10 @@ QtModule {
     Depends { name: "QtQml" }
     Depends { name: "QtQuick" }
 
-    Group {
-        id: headers_moc_p
-        name: "headers (delayed moc)"
-        prefix: basePath + "/"
-        fileTags: "moc_hpp_p"
-        files: [
-            "qmediaobject.h",
-            "audio/qaudiodecoder.h",
-            "camera/qcameraexposure.h",
-            "camera/qcamera.h",
-            "camera/qcameraimagecapture.h",
-            "playback/qmedianetworkplaylistprovider_p.h",
-            "playback/qmediaplayer.h",
-            "playback/qmediaplaylist.h",
-            "playback/qmediaplaylistnavigator_p.h",
-            "playback/qmediaplaylistprovider_p.h",
-            "playback/playlistfileparser_p.h",
-            "radio/qradiodata.h",
-            "recording/qmediarecorder.h",
-        ]
-    }
-
     QtMultimediaHeaders {
-        name: "headers (moc)"
-        fileTags: "moc_hpp"
+        name: "headers"
         excludeFiles: {
-            var excludeFiles = headers_moc_p.files;
+            var excludeFiles = [];
 
             if (QtHost.config.gstreamer) {
                 excludeFiles.push("gsttools_headers/qgstreamervideowidget_p.h"); // widgets
@@ -78,15 +56,7 @@ QtModule {
 
             return excludeFiles;
         }
-    }
-
-    Group {
-        id: sources_moc
-        name: "sources (moc)"
-        prefix: basePath + "/"
-        files: [
-        ]
-        fileTags: "moc_cpp"
+        fileTags: "moc"
         overrideTags: false
     }
 
@@ -94,6 +64,25 @@ QtModule {
         name: "sources"
         prefix: basePath + "/"
         files: [
+            "*.cpp",
+            "audio/*.cpp",
+            "camera/*.cpp",
+            "controls/*.cpp",
+            "playback/*.cpp",
+            "qtmultimediaquicktools_headers/*.cpp",
+            "radio/*.cpp",
+            "video/*.cpp",
+            "recording/*.cpp",
         ]
+        excludeFiles: {
+            var excludeFiles = [];
+
+            if (!QtHost.config.pulseaudio)
+                excludeFiles.push("audio/qsoundeffect_pulse_p.cpp");
+
+            return excludeFiles;
+        }
+        fileTags: "moc"
+        overrideTags: false
     }
 }

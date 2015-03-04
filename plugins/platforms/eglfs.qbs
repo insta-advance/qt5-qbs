@@ -19,7 +19,7 @@ Project {
             name: "sources"
             prefix: project.sourceDirectory + "/qtbase/src/plugins/platforms/eglfs/"
             files: "qeglfsmain.cpp"
-            fileTags: "moc_cpp"
+            fileTags: "moc"
             overrideTags: false
         }
     }

@@ -39,7 +39,6 @@ QtModule {
 
     Group {
         name: "headers"
-        fileTags: "moc_hpp"
         prefix: project.sourceDirectory + "/qtbase/src/"
         files: [
             "plugins/platforms/eglfs/qeglfscontext.h",
@@ -57,6 +56,8 @@ QtModule {
             "platformsupport/devicediscovery/qdevicediscovery_p.h", // ### udev
             "platformsupport/devicediscovery/qdevicediscovery_udev_p.h",
         ]
+        fileTags: "moc"
+        overrideTags: false
     }
 
     Group {

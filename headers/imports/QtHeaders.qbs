@@ -5,7 +5,6 @@ Product {
     property string module
     QtHost.sync.module: product.module
 
-    Depends { name: "cpp" }
     Depends { name: "QtHost.sync" }
 
     Group {

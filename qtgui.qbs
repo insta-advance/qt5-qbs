@@ -60,47 +60,9 @@ QtModule {
         ])
     }
 
-    Group {
-        id: headers_moc_p
-        name: "headers (delayed moc)"
-        prefix: basePath + "/"
-        fileTags: "moc_hpp_p"
-        files: [
-            "image/qmovie.h",
-            "itemmodels/qstandarditemmodel.h",
-            "kernel/qguiapplication.h",
-            "kernel/qinputmethod.h",
-            "kernel/qwindow.h",
-            "kernel/qplatformsystemtrayicon.h",
-            "opengl/qopengldebug.h",
-            "opengl/qopenglvertexarrayobject.h",
-            "text/qabstracttextdocumentlayout.h",
-            "text/qsyntaxhighlighter.h",
-            "text/qtextdocumentlayout_p.h",
-        ]
-    }
-
     QtGuiHeaders {
-        name: "headers (moc)"
-        fileTags: "moc_hpp"
-        excludeFiles: {
-            var files = [
-                "util/qlayoutpolicy_p.h", // "Class declaration lacks Q_OBJECT macro."
-            ].concat(headers_moc_p.files);
-
-            return files;
-        }
-    }
-
-    Group {
-        id: sources_moc
-        name: "sources (moc)"
-        prefix: basePath + "/"
-        files: [
-            "image/qpixmapcache.cpp",
-            "util/qdesktopservices.cpp",
-        ]
-        fileTags: "moc_cpp"
+        name: "headers"
+        fileTags: "moc"
         overrideTags: false
     }
 
@@ -159,7 +121,9 @@ QtModule {
                 ]);
             }
 
-            return excludeFiles.concat(sources_moc.files);
+            return excludeFiles;
         }
+        fileTags: "moc"
+        overrideTags: false
     }
 }

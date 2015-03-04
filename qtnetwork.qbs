@@ -24,37 +24,9 @@ QtModule {
         ]
     }
 
-    Group {
-        id: headers_moc_p
-        name: "headers (delayed moc)"
-        prefix: basePath + "/"
-        fileTags: "moc_hpp_p"
-        files: [
-            "access/qftp_p.h",
-            "access/qnetworkreplydataimpl_p.h",
-            "access/qhttpnetworkconnectionchannel_p.h",
-            "access/qnetworkaccessmanager.h",
-            "access/qhttpnetworkconnection_p.h",
-            "access/qnetworkreplyimpl_p.h",
-            "access/qnetworkreplyfileimpl_p.h",
-
-            "bearer/qnetworksession.h",
-            "bearer/qnetworkconfigmanager.h",
-            "bearer/qbearerengine_p.h",
-
-            "kernel/qdnslookup.h",
-
-            "socket/qlocalserver.h",
-            "socket/qabstractsocket.h",
-            "socket/qlocalsocket.h",
-            "socket/qtcpserver.h",
-        ]
-    }
-
     QtNetworkHeaders {
-        fileTags: "moc_hpp"
         excludeFiles: {
-            var excludeFiles = headers_moc_p.files;
+            var excludeFiles = [];
 
             if (!qbs.targetOS.contains("winrt"))
                 excludeFiles.push("socket/qnativesocketengine_winrt_p.h");
@@ -70,16 +42,7 @@ QtModule {
 
             return excludeFiles;
         }
-    }
-
-    Group {
-        id: sources_moc
-        name: "sources (moc)"
-        prefix: basePath + "/"
-        files: [
-            "access/qftp.cpp",
-        ]
-        fileTags: "moc_cpp"
+        fileTags: "moc"
         overrideTags: false
     }
 
@@ -93,7 +56,7 @@ QtModule {
             "socket/*.cpp",
         ]
         excludeFiles: {
-            var excludeFiles = sources_moc.files;
+            var excludeFiles = [];
 
             if (!qbs.targetOS.contains("android")) {
                 excludeFiles.push("kernel/qdnslookup_android.cpp");
@@ -142,6 +105,8 @@ QtModule {
 
             return excludeFiles;
         }
+        fileTags: "moc"
+        overrideTags: false
     }
 
     Group {
