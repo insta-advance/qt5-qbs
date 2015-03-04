@@ -14,7 +14,7 @@ QtModule {
     cpp.defines: base.concat(["QT_BUILD_QML_LIB"])
 
     cpp.dynamicLibraries: {
-        var dynamicLibraries = [];
+        var dynamicLibraries = base;
 
         if (qbs.targetOS.contains("unix"))
             dynamicLibraries.push("pthread");

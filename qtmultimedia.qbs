@@ -12,7 +12,7 @@ QtModule {
     ])
 
     cpp.cxxFlags: {
-        var cxxFlags = [];
+        var cxxFlags = base;
 
         if (QtHost.config.gstreamer)
             Array.prototype.push.apply(cxxFlags, QtHost.config.gstreamerProbe.cflags);

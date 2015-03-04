@@ -6,7 +6,7 @@ QtModule {
     readonly property path basePath: project.sourceDirectory + "/qtbase/src/gui"
 
     readonly property stringList inheritedDefines: {
-        var defines = [];
+        var defines = base;
 
         if (!QtHost.config.cursor) {
             defines.push("QT_NO_CURSOR");
@@ -77,8 +77,8 @@ QtModule {
             "kernel/*.cpp",
             "math3d/*.cpp",
             "opengl/*.cpp",
-            "painting/*.cpp",
             "painting/*.c",
+            "painting/*.cpp",
             "text/*.cpp",
             "util/*.cpp",
         ]
@@ -89,14 +89,18 @@ QtModule {
                 "painting/qdrawhelper_mips_dsp.cpp",       // ## mips
                 "painting/qdrawhelper_mips_dsp_asm.S",
                 "painting/qdrawhelper_mips_dspr2_asm.S",
-                "painting/qdrawhelper_neon.cpp", // ## neon
-                "painting/qdrawhelper_neon_asm.S",
 
                 "text/qharfbuzzng.cpp", // ### hb-ng?
 
                 // included inline
                 "text/qcssscanner.cpp",
             ];
+
+            if (!qbs.architecture == "arm") {
+                Array.prototype.push.apply(excludeFiles, [
+                   "painting/qdrawhelper_neon.cpp",
+                ]);
+            }
 
             if (!qbs.targetOS.contains("windows")) {
                 Array.prototype.push.apply(excludeFiles, [
@@ -125,5 +129,20 @@ QtModule {
         }
         fileTags: "moc"
         overrideTags: false
+    }
+
+    Group {
+        name: "sources (pixman neon)"
+        condition: qbs.architecture == "arm"
+        prefix: project.sourceDirectory + "/qtbase/src/"
+        files: [
+            "3rdparty/pixman/pixman-arm-neon-asm.S",
+            "gui/painting/qdrawhelper_neon_asm.S",
+        ]
+    }
+
+    Export {
+        Depends { name: "cpp" }
+        cpp.dynamicLibraries: product.cpp.dynamicLibraries
     }
 }
