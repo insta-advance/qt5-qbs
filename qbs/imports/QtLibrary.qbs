@@ -25,11 +25,6 @@ QtProduct {
         ])
     }
 
-    Properties {
-        condition: qbs.toolchain.contains("gcc")
-        cpp.cxxFlags: base.concat(["-Wno-psabi"])
-    }
-
     Depends { name: "cpp" }
     Depends { name: "QtHost"; submodules: ["config", "rcc"] }
 }

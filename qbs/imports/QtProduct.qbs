@@ -30,6 +30,11 @@ Product {
 
     Depends { name: "cpp" }
 
+    Properties {
+        condition: qbs.toolchain.contains("gcc")
+        cpp.cxxFlags: base.concat(["-Wno-psabi"])
+    }
+
     Rule {
         name: "QtCoreMocRule"
         inputs: "moc"
