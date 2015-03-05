@@ -11,25 +11,8 @@ QtModule {
         "QT_MULTIMEDIA_QAUDIO",
     ])
 
-    cpp.cxxFlags: {
-        var cxxFlags = base;
-
-        if (QtHost.config.gstreamer)
-            Array.prototype.push.apply(cxxFlags, QtHost.config.gstreamerProbe.cflags);
-
-        return cxxFlags;
-    }
-
-    cpp.includePaths: {
-        var includePaths = base;
-
-        if (QtHost.config.gstreamer)
-            includePaths.push(basePath + "/gsttools_headers");
-
-        return includePaths;
-    }
-
     Depends { name: "QtMultimediaHeaders" }
+    Depends { name: "QtNetworkHeaders" }
     Depends { name: "QtCore" }
     Depends { name: "QtNetwork" }
     Depends { name: "QtGui" }
@@ -39,17 +22,10 @@ QtModule {
     QtMultimediaHeaders {
         name: "headers"
         excludeFiles: {
-            var excludeFiles = [];
-
-            if (QtHost.config.gstreamer) {
-                excludeFiles.push("gsttools_headers/qgstreamervideowidget_p.h"); // widgets
-                excludeFiles.push("gsttools_headers/qvideosurfacegstsink_p.h"); // gst 0.1
-
-                if (!QtHost.config.x11)
-                    excludeFiles.push("gsttools_headers/qgstreamergltexturerenderer_p.h");
-            } else {
-                excludeFiles.push("gsttools_headers/*.h");
-            }
+            var excludeFiles = [
+                "qtmultimediaquicktools_headers/*.h", // moc'd by QtMultimediaTools
+                "gsttools_headers/*.h",               // moc'd by QtGstTools
+            ];
 
             if (!QtHost.config.pulseaudio)
                 excludeFiles.push("audio/qsoundeffect_pulse_p.h");
