@@ -8,7 +8,7 @@ Product {
     Depends { name: "QtHost.sync" }
 
     Group {
-        fileTagsFilter: "hpp_public"
+        fileTagsFilter: ["hpp_public", "hpp_" + product.module]
         qbs.install: true
         qbs.installDir: "include/" + product.module
     }
