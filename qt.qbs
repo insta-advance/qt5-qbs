@@ -59,11 +59,17 @@ Project {
         "qtnetwork.qbs",
         "qtmultimedia.qbs",
 
-        "plugins/platforms/platforms.qbs",
-
         "qtqml.qbs",
         "qtquick.qbs",
 
         "imports/imports.qbs",
     ]
+
+    Project {
+        name: "plugins"
+        references: [
+            "plugins/platforms/platforms.qbs",
+            "plugins/multimedia/multimedia.qbs",
+        ]
+    }
 }
