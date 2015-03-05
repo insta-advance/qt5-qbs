@@ -2,7 +2,6 @@ import qbs
 import qbs.Probes
 
 QtEglfsDeviceIntegrationPlugin {
-    condition: kmsDynamicLibraries.length > 1 // ### Creator workaround
     cpp.defines: [
         "MESA_EGL_NO_X11_HEADERS",
     ]

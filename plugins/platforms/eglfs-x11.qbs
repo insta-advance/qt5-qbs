@@ -1,9 +1,9 @@
 import qbs
 
 QtEglfsDeviceIntegrationPlugin {
-    condition: x11DynamicLibraries.length // ### Creator workaround
     cpp.defines: [
-        "EGL_API_FB",
+        "MESA_EGL_NO_X11_HEADERS", // for Mesa
+        "EGL_API_FB",              // for Vivante
     ]
 
     cpp.dynamicLibraries: base.concat(x11DynamicLibraries)

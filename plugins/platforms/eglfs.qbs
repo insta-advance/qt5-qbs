@@ -2,6 +2,7 @@ import qbs
 import qbs.Probes
 
 Project {
+    id: eglfs
     readonly property stringList eglDynamicLibraries: {
         var dynamicLibraries = [];
 
@@ -146,20 +147,17 @@ Project {
     }
 
     SubProject {
-        condition: eglDynamicLibraries.contains("GAL")
+        Properties { condition: eglfs.eglDynamicLibraries.contains("GAL") }
         filePath: "eglfs-imx6.qbs"
-        inheritProperties: true
     }
 
     SubProject {
-        condition: drmProbe.found && gbmProbe.found
+        Properties { condition: drmProbe.found && gbmProbe.found }
         filePath: "eglfs-kms.qbs"
-        inheritProperties: true
     }
 
     SubProject {
-        condition: x11Probe.found
+        Properties { condition: x11Probe.found }
         filePath: "eglfs-x11.qbs"
-        inheritProperties: true
     }
 }

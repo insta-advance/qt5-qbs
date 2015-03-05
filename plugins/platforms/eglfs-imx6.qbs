@@ -1,7 +1,6 @@
 import qbs
 
 QtEglfsDeviceIntegrationPlugin {
-    condition: eglDynamicLibraries.contains("GAL") // ### Creator workaround
     cpp.defines: [
         "EGL_API_FB",
     ]
