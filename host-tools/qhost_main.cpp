@@ -13,7 +13,7 @@ int main(int argc, char **argv)
     QCoreApplication app(argc, argv);
 
     QCommandLineParser parser;
-    parser.setApplicationDescription(QStringLiteral(
+    parser.setApplicationDescription(QLatin1String(
         "qhost is a utility for managing Qt installations built using QBS.\r\n"
         "It replaces specific functions of qmake to provide compatibility with "
         "tools such as qbs-setup-qt."));

@@ -17,11 +17,11 @@ QtModule {
 
     Properties {
         condition: qbs.targetOS.contains("windows")
-        files: [
+        cpp.dynamicLibraries: base.concat([
             "advapi32",
             "dnsapi",
             "ws2_32",
-        ]
+        ])
     }
 
     QtNetworkHeaders {

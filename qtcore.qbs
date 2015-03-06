@@ -23,22 +23,22 @@ QtModule {
 
     Properties {
         condition: qbs.targetOS.contains("unix")
-        cpp.dynamicLibraries: [
+        cpp.dynamicLibraries: base.concat([
             "pthread",
             "dl",
-        ]
+        ])
     }
 
     Properties {
         condition: qbs.targetOS.contains("windows")
-        cpp.dynamicLibraries: [
+        cpp.dynamicLibraries: base.concat([
             "shell32",
             "user32",
             "ole32",
             "advapi32",
             "ws2_32",
             "mpr",
-        ]
+        ])
     }
 
     QtCoreHeaders {
@@ -85,7 +85,7 @@ QtModule {
 
     Group {
         name: "sources"
-        prefix: basePath + "/"
+        prefix: product.basePath + "/"
         files: [
             "animation/*.cpp",
             "codecs/*.cpp",

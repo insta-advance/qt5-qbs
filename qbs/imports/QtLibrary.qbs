@@ -18,13 +18,6 @@ QtProduct {
         product.buildDirectory + "/.moc",
     ])
 
-    Properties {
-        condition: qbs.targetOS.contains("windows") && qbs.toolchain.contains("msvc")
-        cpp.defines: base.concat([
-            "_SCL_SECURE_NO_WARNINGS",
-        ])
-    }
-
     Depends { name: "cpp" }
     Depends { name: "QtHost"; submodules: ["config", "rcc"] }
 }

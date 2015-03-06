@@ -26,14 +26,12 @@ Module {
     property bool kms: true         // ### probe for kms
     property string opengl: "es2"   // ### probe for desktop, es2, es3, dynamic
 
-    // QtMultimedia
-    property bool gstreamer: _gstreamerProbe.found && _gstreamerVideoProbe.found
-
-    property string qhostBinPath: {
+    property string qhostBinPath: { // ### FIXME: don't really rely/use this. just have qhost patch it up
         var qhostBinPath;
         var paths = qbs.getEnv("PATH").split(qbs.pathListSeparator);
+        var qhostName = "qhost" + (qbs.hostOS.contains("windows") ? ".exe" : "");
         for (var i in paths) {
-            if (File.exists(paths[i] + "/qhost")) {
+            if (File.exists(paths[i] + '/' + qhostName)) {
                 qhostBinPath = paths[i];
                 break;
             }
@@ -41,17 +39,5 @@ Module {
         if (!qhostBinPath)
             throw "The path to qhost was not found.";
         return qhostBinPath;
-    }
-
-    readonly property var gstreamerProbe: _gstreamerProbe
-    Probes.PkgConfigProbe {
-        id: _gstreamerProbe
-        name: "gstreamer-1.0"
-    }
-
-    readonly property var gstreamerVideoProbe: _gstreamerVideoProbe
-    Probes.PkgConfigProbe {
-        id: _gstreamerVideoProbe
-        name: "gstreamer-video-1.0"
     }
 }

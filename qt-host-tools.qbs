@@ -4,8 +4,6 @@ import qbs.File
 Project {
     id: root
 
-    property string qtVersion: "5.5.0" // ### Can we get this from a file?
-
     property string host: {
         var host;
         if (qbs.targetOS.contains("linux")) {

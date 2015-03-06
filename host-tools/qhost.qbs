@@ -3,13 +3,25 @@ import qbs
 QtProduct {
     type: "application"
     destinationDirectory: project.buildDirectory + "/bin"
-    files: "qhost_main.cpp"
-
-    cpp.cxxFlags: "-std=c++11"
 
     includeDependencies: ["QtCore"]
 
+    files: "qhost_main.cpp"
+
     Depends { name: "QtBootstrap" }
+
+    Properties {
+        condition: qbs.targetOS.contains("gcc")
+        cpp.cxxFlags: base.concat(["-std=c++11"])
+    }
+
+    Properties {
+        condition: qbs.targetOS.contains("windows")
+        cpp.dynamicLibraries: base.concat([
+            "shell32",
+            "ole32",
+        ])
+    }
 
     Group {
         fileTagsFilter: "application"

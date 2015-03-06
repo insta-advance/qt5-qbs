@@ -31,8 +31,15 @@ Product {
     Depends { name: "cpp" }
 
     Properties {
-        condition: qbs.toolchain.contains("gcc")
+        condition: qbs.toolchain.contains("gcc") && !qbs.toolchain.contains("clang")
         cpp.cxxFlags: base.concat(["-Wno-psabi"])
+    }
+
+    Properties {
+        condition: qbs.targetOS.contains("windows") && qbs.toolchain.contains("msvc")
+        cpp.defines: base.concat([
+            "_SCL_SECURE_NO_WARNINGS",
+        ])
     }
 
     Rule {
