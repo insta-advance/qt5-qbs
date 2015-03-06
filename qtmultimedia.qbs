@@ -12,7 +12,6 @@ QtModule {
     ])
 
     Depends { name: "QtMultimediaHeaders" }
-    Depends { name: "QtNetworkHeaders" }
     Depends { name: "QtCore" }
     Depends { name: "QtNetwork" }
     Depends { name: "QtGui" }

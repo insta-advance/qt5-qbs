@@ -1,7 +1,7 @@
 import qbs
 import qbs.Probes
 
-QtEglfsDeviceIntegrationPlugin {
+QtEglDeviceIntegrationPlugin {
     cpp.defines: [
         "MESA_EGL_NO_X11_HEADERS",
     ]

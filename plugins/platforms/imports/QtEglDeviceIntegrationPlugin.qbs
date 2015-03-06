@@ -1,9 +1,10 @@
 import qbs
 
 QtPlugin {
+    targetName: name + "-integration"
     readonly property string basePath: project.sourceDirectory + "/qtbase/src/plugins/platforms/eglfs/deviceintegration"
 
-    category: "platforms"
+    category: "egldeviceintegrations"
 
     cpp.cxxFlags: base.concat(cxxFlags)
     cpp.dynamicLibraries: base.concat(eglDynamicLibraries)

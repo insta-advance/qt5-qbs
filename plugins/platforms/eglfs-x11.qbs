@@ -1,6 +1,6 @@
 import qbs
 
-QtEglfsDeviceIntegrationPlugin {
+QtEglDeviceIntegrationPlugin {
     cpp.defines: [
         "MESA_EGL_NO_X11_HEADERS", // for Mesa
         "EGL_API_FB",              // for Vivante

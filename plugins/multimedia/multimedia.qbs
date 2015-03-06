@@ -33,6 +33,7 @@ Project {
     }
 
     QtModule {
+        id: gsttools
         name: "QtGstTools"
         condition: gstreamerProbe.found && gstreamerVideoProbe.found
 
@@ -41,7 +42,7 @@ Project {
         cpp.cxxFlags: {
             var cxxFlags = base;
 
-            if (QtHost.config.gstreamer)
+            if (gstreamerProbe.found)
                 Array.prototype.push.apply(cxxFlags, gstreamerProbe.cflags);
 
             return cxxFlags;
@@ -88,15 +89,5 @@ Project {
             fileTags: "moc"
             overrideTags: false
         }
-    }
-
-    SubProject {
-        Properties { condition: true/*fixme*/ }
-        filePath: "videonode-imx6.qbs"
-    }
-
-    SubProject {
-        Properties { condition: true/*fixme*/ }
-        filePath: "videonode-egl.qbs"
     }
 }

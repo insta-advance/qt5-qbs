@@ -1,6 +1,6 @@
 import qbs
 
-QtEglfsDeviceIntegrationPlugin {
+QtEglDeviceIntegrationPlugin {
     cpp.defines: [
         "EGL_API_FB",
     ]

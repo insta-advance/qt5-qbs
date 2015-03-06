@@ -68,8 +68,23 @@ Project {
     Project {
         name: "plugins"
         references: [
-            "plugins/platforms/platforms.qbs",
-            "plugins/multimedia/multimedia.qbs",
+            "plugins/platforms/platforms.qbs", // ### the contents of this file could come up here
+            "plugins/multimedia/multimedia.qbs", // ### This isn't really a plugin, but where else can we put it?
         ]
+
+        Project {
+            name: "mediaservice"
+            references: [
+                "plugins/mediaservice/gstreamer-camerabin.qbs",
+            ]
+        }
+
+        Project {
+            name: "video"
+            references: [
+                "plugins/video/videonode-egl.qbs",
+                "plugins/video/videonode-imx6.qbs",
+            ]
+        }
     }
 }
