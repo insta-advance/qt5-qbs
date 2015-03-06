@@ -1,4 +1,5 @@
 import qbs
+import qbs.Probes
 
 Project {
     QtModule {
@@ -33,6 +34,7 @@ Project {
 
     QtModule {
         name: "QtGstTools"
+        condition: gstreamerProbe.found && gstreamerVideoProbe.found
 
         includeDependencies: ["QtCore-private", "QtNetwork", "QtGui", "QtQuick", "QtMultimedia-private"]
 
@@ -40,12 +42,22 @@ Project {
             var cxxFlags = base;
 
             if (QtHost.config.gstreamer)
-                Array.prototype.push.apply(cxxFlags, QtHost.config.gstreamerProbe.cflags);
+                Array.prototype.push.apply(cxxFlags, gstreamerProbe.cflags);
 
             return cxxFlags;
         }
 
         Depends { name: "QtMultimedia" }
+
+        Probes.PkgConfigProbe {
+            id: gstreamerProbe
+            name: "gstreamer-1.0"
+        }
+
+        Probes.PkgConfigProbe {
+            id: gstreamerVideoProbe
+            name: "gstreamer-video-1.0"
+        }
 
         Group {
             name: "headers"
@@ -57,6 +69,7 @@ Project {
                 "qgstreamergltexturerenderer_p.h", // ### fixme: includes an x header which needs a probe
                 "qgstreamervideowidget_p.h",       // ### fixme: requires QtMultmediaWidgetsHeaders
                 "qvideosurfacegstsink_p.h", // gst 0.1
+                "qgstreamermirtexturerenderer_p.h", // mir
             ]
             fileTags: "moc"
             overrideTags: false
@@ -76,7 +89,6 @@ Project {
             overrideTags: false
         }
     }
-
 
     SubProject {
         Properties { condition: true/*fixme*/ }

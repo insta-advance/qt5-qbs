@@ -110,9 +110,6 @@ Project {
 
         includeDependencies: ["QtCore", "QtGui-private", "QtPlatformSupport-private"]
 
-        cpp.dynamicLibraries: [ "EGL", "GLESv2" ]
-        cpp.defines: [ "MESA_EGL_NO_X11_HEADERS" ]
-
         Depends { name: "QtCore" }
         Depends { name: "QtGui" }
         Depends { name: "QtEglDeviceIntegration" }
