@@ -26,7 +26,7 @@ QtModule {
                 "gsttools_headers/*.h",               // moc'd by QtGstTools
             ];
 
-            if (!QtHost.config.pulseaudio)
+            if (!configure.pulseaudio)
                 excludeFiles.push("audio/qsoundeffect_pulse_p.h");
 
             return excludeFiles;
@@ -52,7 +52,7 @@ QtModule {
         excludeFiles: {
             var excludeFiles = [];
 
-            if (!QtHost.config.pulseaudio)
+            if (!configure.pulseaudio)
                 excludeFiles.push("audio/qsoundeffect_pulse_p.cpp");
 
             return excludeFiles;

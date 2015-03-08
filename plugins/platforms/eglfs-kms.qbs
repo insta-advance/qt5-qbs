@@ -2,9 +2,9 @@ import qbs
 import qbs.Probes
 
 QtEglDeviceIntegrationPlugin {
-    cpp.defines: [
+    cpp.defines: base.concat([
         "MESA_EGL_NO_X11_HEADERS",
-    ]
+    ])
 
     cpp.dynamicLibraries: base.concat(kmsDynamicLibraries)
 

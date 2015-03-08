@@ -1,5 +1,6 @@
 import qbs
 import qbs.Probes
+import "../../qbs/utils.js" as Utils
 
 QtModule {
     name: "QtEglDeviceIntegration"
@@ -9,8 +10,11 @@ QtModule {
     cpp.cxxFlags: {
         var cxxFlags = base;
 
-        if (udevProbe.found)
-            Array.prototype.push.apply(cxxFlags, udevProbe.cflags);
+        if (configure.glib)
+            cxxFlags = cxxFlags.concat(glibProbe.cflags);
+
+        if (configure.udev)
+            cxxFlags = cxxFlags.concat(udevProbe.cflags);
 
         return cxxFlags;
     }
@@ -19,7 +23,7 @@ QtModule {
         "QT_BUILD_EGL_DEVICE_LIB",
         "MESA_EGL_NO_X11_HEADERS",
         "QT_NO_EVDEV", // ### build the evdev plugins separately
-        "EGL_API_FB", // ### not sure if this is compatible. we want to build an ARM binary that works with multiple boards
+        "EGL_API_FB", // ### from imx6, not sure if this is compatible. we want to build an ARM binary that works with multiple boards
     ])
 
     cpp.dynamicLibraries: {
@@ -27,10 +31,11 @@ QtModule {
             "EGL",
         ]);
 
-        if (udevProbe.found) {
-            for (var i in udevProbe.libs)
-                libs.push(udevProbe.libs[i].slice(2));
-        }
+        if (configure.glib)
+            libs = libs.concat(Utils.dynamicLibraries(glibProbe.libs));
+
+        if (configure.udev)
+            libs = libs.concat(Utils.dynamicLibraries(udevProbe.libs));
 
         return libs;
     }
@@ -39,16 +44,29 @@ QtModule {
         project.sourceDirectory + "/qtbase/src/3rdparty/freetype/include", // ### use Probe for system freetype
     ])
 
-    Depends { name: "QtCoreHeaders" }
-    Depends { name: "QtGuiHeaders" }
     Depends { name: "QtPlatformHeaders" }
     Depends { name: "QtPlatformSupport" }
     Depends { name: "QtCore" }
     Depends { name: "QtGui" }
 
+    Properties {
+        condition: configure.properties.glib === undefined
+        configure.glib: glibProbe.found
+    }
+
+    Properties {
+        condition: configure.properties.udev === undefined
+        configure.udev: udevProbe.found
+    }
+
     Probes.PkgConfigProbe {
         id: udevProbe
         name: "libudev"
+    }
+
+    Probes.PkgConfigProbe {
+        id: glibProbe
+        name: "glib-2.0"
     }
 
     Group {
@@ -68,10 +86,13 @@ QtModule {
                 "platformsupport/fbconvenience/qfbvthandler_p.h",
                 "platformsupport/platformcompositor/qopenglcompositorbackingstore_p.h",
                 "platformsupport/platformcompositor/qopenglcompositor_p.h",
-
             ];
 
-            if (udevProbe.found) {
+            if (configure.glib) {
+                files.push("platformsupport/eventdispatchers/qeventdispatcher_glib_p.h");
+            }
+
+            if (configure.udev) {
                 files.push("platformsupport/devicediscovery/qdevicediscovery_p.h");
                 files.push("platformsupport/devicediscovery/qdevicediscovery_udev_p.h");
             }
@@ -114,6 +135,10 @@ QtModule {
                 files.push("platformsupport/devicediscovery/qdevicediscovery_udev.cpp");
             }
 
+            if (configure.glib !== false && glibProbe.found) {
+                files.push("platformsupport/eventdispatchers/qeventdispatcher_glib.cpp");
+            }
+
             // ### QT_NO_EVDEV
             /*"platformsupport/input/evdevmouse/*.cpp",
             "platformsupport/input/evdevkeyboard/*.cpp",
@@ -127,7 +152,7 @@ QtModule {
     }
 
     Group {
-        //condition: QtHost.config.cursor ### QT_NO_CURSOR
+        condition: configure.cursor
         name: "cursor.qrc"
         files: project.sourceDirectory + "/qtbase/src/plugins/platforms/eglfs/cursor.qrc"
         fileTags: "qrc"

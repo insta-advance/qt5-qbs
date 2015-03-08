@@ -1,17 +1,28 @@
 import qbs
+import qbs.File
+import qbs.FileInfo
+import qbs.Probes
 import qbs.TextFile
 
 // This Product attempts to handle only installation-time files.
 // ### TODO: replace all build-time artifacts (qfeatures, qconfig, etc.) with static files and rename this product to install
+// ### TODO: configuration should be done as follows:
+// - a base configuration file is checked. this file is gitignored and included and user customizable.
+// - for anything not found, a probe is run
+// - an output is created which is read here.
+
+// the configuration type stuff should be moved to the configuration module, and this project
+// only creates the installation files. the module itself is responsible for choosing the configuration.
+// that would imply that this product has an optional dependency on every module that contributes to the global configuration.
+
 Product {
-    type: "hpp"
-
     Depends { name: "cpp" }
-    Depends { name: "QtHost.config" }
+    Depends { name: "configure" }
 
+    // ### each module exports defines instead, or maybe QtCore just installs this.
     Transformer {
         Artifact {
-            filePath: project.buildDirectory + "/include/QtCore/qfeatures.h"
+            filePath: "qfeatures.h"
             fileTags: ["hpp", "qconfig"]
         }
         prepare: {
@@ -22,27 +33,7 @@ Product {
                 outputFile.writeLine("#ifndef QFEATURES_H");
                 outputFile.writeLine("#define QFEATURES_H");
 
-                if (!product.moduleProperty("QtHost.config", "evdev"))
-                    outputFile.writeLine("#define QT_NO_EVDEV");
-
-                if (!product.moduleProperty("QtHost.config", "cursor")) {
-                    outputFile.writeLine("#define QT_NO_CURSOR");
-                    outputFile.writeLine("#define QT_NO_WHEELEVENT");
-                    outputFile.writeLine("#define QT_NO_DRAGANDDROP");
-                }
-
-                if (!product.moduleProperty("QtHost.config", "pcre"))
-                    outputFile.writeLine("#define QT_NO_REGULAREXPRESSION");
-
-                if (!product.moduleProperty("QtHost.config", "iconv"))
-                    outputFile.writeLine("#define QT_NO_ICONV");
-
-                if (!product.moduleProperty("QtHost.config", "glib"))
-                    outputFile.writeLine("#define QT_NO_GLIB");
-
-                var opengl = product.moduleProperty("QtHost.config", "opengl");
-                if (!opengl)
-                    outputFile.writeLine("#define QT_NO_OPENGL");
+                //###todo: for each define in configure.defines, only QT_NO_XXX
 
                 outputFile.writeLine("#endif // QFEATURES_H");
                 outputFile.close();
@@ -51,9 +42,10 @@ Product {
         }
     }
 
+    // This definitely feels like something which should be combined + installed, not used at build time
     Transformer {
         Artifact {
-            filePath: project.buildDirectory + "/include/QtCore/qconfig.h"
+            filePath: "qconfig.h"
             fileTags: ["hpp", "qconfig"]
         }
         prepare: {
@@ -64,42 +56,14 @@ Product {
                 outputFile.writeLine("#ifndef QCONFIG_H");
                 outputFile.writeLine("#define QCONFIG_H");
 
-                outputFile.writeLine("// Compiler sub-arch support");
-                if (product.moduleProperty("QtHost.config", "sse2"))
-                    outputFile.writeLine("#define QT_COMPILER_SUPPORTS_SSE2 1");
-                if (product.moduleProperty("QtHost.config", "sse3"))
-                    outputFile.writeLine("#define QT_COMPILER_SUPPORTS_SSE3 1");
-                if (product.moduleProperty("QtHost.config", "ssse3"))
-                    outputFile.writeLine("#define QT_COMPILER_SUPPORTS_SSSE3 1");
-                if (product.moduleProperty("QtHost.config", "sse4_1"))
-                    outputFile.writeLine("#define QT_COMPILER_SUPPORTS_SSE4_1 1");
-                if (product.moduleProperty("QtHost.config", "sse4_2"))
-                    outputFile.writeLine("#define QT_COMPILER_SUPPORTS_SSE4_2 1");
-                if (product.moduleProperty("QtHost.config", "avx"))
-                    outputFile.writeLine("#define QT_COMPILER_SUPPORTS_AVX 1");
-                if (product.moduleProperty("QtHost.config", "avx2"))
-                    outputFile.writeLine("#define QT_COMPILER_SUPPORTS_AVX2 1");
+                //###todo: for each define in configure.defines, only non-QT_NO_XXX
 
-                var opengl = product.moduleProperty("QtHost.config", "opengl");
-                if (opengl == "es2") {
-                    outputFile.writeLine("#define QT_OPENGL_ES");
-                    outputFile.writeLine("#define QT_OPENGL_ES_2");
-                } else if (opengl == "dynamic") {
-                    outputFile.writeLine("#define QT_OPENGL_DYNAMIC");
-                }
-
-                // ### handle qreal
-                /*if (project.qreal != undefined) {
-                    outputFile.writeLine("#define QT_COORD_TYPE " + project.qreal);
-                    outputFile.writeLine("#define QT_COORD_TYPE_STRING " + project.qreal);
+                //###move to configure
+                /*if (configure.qreal !== undefined) {
+                    outputFile.writeLine("#define QT_COORD_TYPE " + product.configuration.qreal);
+                    outputFile.writeLine("#define QT_COORD_TYPE_STRING " + product.configuration.qreal);
                 }*/
-                outputFile.writeLine("#define QT_USE_BUNDLED_LIBPNG");
-                outputFile.writeLine("#define QT_POINTER_SIZE " + project.pointerSize);
 
-                // Qt currently doesn't build without this
-                outputFile.writeLine("#define QT_USE_QSTRINGBUILDER");
-
-                // ###
                 outputFile.writeLine("#endif // QCONFIG_H");
                 outputFile.close();
             };
@@ -141,15 +105,14 @@ Product {
             var cmd = new JavaScriptCommand();
             cmd.description = "creating qhost JSON configuration file"
             cmd.sourceCode = function() {
-                var binPath = product.moduleProperty("QtHost.config", "qhostBinPath");
                 var file = new TextFile(output.filePath, TextFile.WriteOnly);
                 file.writeLine('{');
                 file.writeLine('    "QMAKE_XSPEC": "' + project.target + '",');
-                file.writeLine('    "QT_HOST_BINS": "' + binPath + '",');
+                file.writeLine('    "QT_HOST_BINS": "../bin",');
                 file.writeLine('    "QT_HOST_DATA": "..",');
                 file.writeLine('    "QT_HOST_LIBS": "../lib",');
                 file.writeLine('    "QT_HOST_PREFIX": "..",');
-                file.writeLine('    "QT_INSTALL_BINS": "' + binPath + '",');
+                file.writeLine('    "QT_INSTALL_BINS": "../bin",');
                 file.writeLine('    "QT_INSTALL_HEADERS": "../include",');
                 file.writeLine('    "QT_INSTALL_LIBS": "../lib",');
                 file.writeLine('    "QT_INSTALL_PLUGINS": "../plugins",');
@@ -183,7 +146,7 @@ Product {
                 file.writeLine("QT_LIBINFIX = "); // ### libinfix
                 file.writeLine("QT_TARGET_ARCH = " + product.moduleProperty("qbs", "architecture"));
                 file.writeLine("CONFIG = shared qpa debug"); // ### static, debug, qt_no_framework...
-                file.writeLine("QT_CONFIG = egl opengl opengles2"); // ### QtHost.config
+                //file.writeLine("QT_CONFIG = " + configure.properties.join(' ')); // ### get the real combined configure properties
                 file.close();
             }
             return cmd;

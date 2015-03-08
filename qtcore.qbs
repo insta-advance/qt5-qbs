@@ -1,5 +1,7 @@
 import qbs
+import qbs.Probes
 import qbs.TextFile
+import "qbs/utils.js" as Utils
 
 QtModule {
     name: "QtCore"
@@ -7,26 +9,54 @@ QtModule {
 
     includeDependencies: ["QtCore-private"]
 
+    cpp.cxxFlags: {
+        var cxxFlags = base;
+
+        if (configure.glib)
+            cxxFlags = cxxFlags.concat(glibProbe.cflags);
+
+        return cxxFlags;
+    }
+
     cpp.defines: base.concat([
         "QT_BUILD_CORE_LIB",
-    ])
+    ]);
+
+    cpp.dynamicLibraries: {
+        var dynamicLibraries = base;
+
+        if (qbs.targetOS.contains("unix")) {
+            dynamicLibraries.push("pthread");
+            dynamicLibraries.push("dl");
+        }
+
+        if (configure.glib)
+            dynamicLibraries = dynamicLibraries.concat(Utils.dynamicLibraries(glibProbe.libs));
+
+        return dynamicLibraries;
+    }
+
+    cpp.libraryPaths: {
+        var libraryPaths = base;
+
+        if (configure.glib)
+            libraryPaths = libraryPaths.concat(Utils.libraryPaths(glibProbe.libs));
+
+        return libraryPaths;
+    }
 
     cpp.includePaths: base.concat([
         project.sourceDirectory + "/qtbase/src/3rdparty/forkfd"
     ])
 
-    Depends { name: "configure" }
     Depends { name: "harfbuzz" }
     Depends { name: "pcre" }
     Depends { name: "QtCoreHeaders" }
     Depends { name: "zlib" }
 
     Properties {
-        condition: qbs.targetOS.contains("unix")
-        cpp.dynamicLibraries: base.concat([
-            "pthread",
-            "dl",
-        ])
+        condition: configure.properties.glib === undefined
+        configure.glib: glibProbe.found
     }
 
     Properties {
@@ -39,6 +69,11 @@ QtModule {
             "ws2_32",
             "mpr",
         ])
+    }
+
+    Probes.PkgConfigProbe {
+        id: glibProbe
+        name: "glib-2.0"
     }
 
     QtCoreHeaders {
@@ -69,11 +104,11 @@ QtModule {
                 files.push("tools/qlocale_blackberry.h");
             }
 
-            if (!QtHost.config.glib) {
+            if (!configure.glib) {
                 files.push("kernel/qeventdispatcher_glib_p.h");
             }
 
-            if (!QtHost.config.kqueue) {
+            if (!configure.kqueue) {
                 files.push("io/qfilesystemwatcher_kqueue_p.h");
             }
 
@@ -118,7 +153,6 @@ QtModule {
                 "kernel/qcoreapplication_mac.cpp",   // ### mac
                 "kernel/qcore_mac.cpp",              // ### mac
                 "kernel/qeventdispatcher_blackberry.cpp", // ### bb
-                "kernel/qeventdispatcher_glib.cpp",       // ### glib
                 "kernel/qeventdispatcher_winrt.cpp", // ### winrt
                 "kernel/qfunctions_nacl.cpp",        // ### nacl
                 "kernel/qfunctions_vxworks.cpp",     // ### vxworks
@@ -218,6 +252,12 @@ QtModule {
                 ]);
             }
 
+            if (!configure.glib) {
+                Array.prototype.push.apply(excludeFiles, [
+                    "kernel/qeventdispatcher_glib.cpp",
+                ]);
+            }
+
             return excludeFiles;
         }
         fileTags: "moc"
@@ -270,7 +310,7 @@ QtModule {
                 outputFile.writeLine(';');
                 outputFile.writeLine('');
                 if (!project.target.contains("win")) {
-                    outputFile.writeLine('#define QT_CONFIGURE_SETTINGS_PATH "/etc/xdg";'); // ### QtHost.config
+                    outputFile.writeLine('#define QT_CONFIGURE_SETTINGS_PATH "/etc/xdg";');
                 }
                 outputFile.writeLine('');
                 outputFile.writeLine('/* strlen( "qt_lcnsxxxx" ) == 12 */');
@@ -281,5 +321,11 @@ QtModule {
             };
             return cmd;
         }
+    }
+
+    Export {
+        Depends { name: "configure" }
+        configure.glib: true
+        configure.iconv: product.configure.iconv // ### create a probe for this
     }
 }

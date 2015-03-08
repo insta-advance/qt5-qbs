@@ -1,81 +1,50 @@
 import qbs
 import qbs.Probes
+import "../../qbs/utils.js" as Utils
 
 Project {
     id: eglfs
     readonly property stringList eglDynamicLibraries: {
-        var dynamicLibraries = [];
+        var libs = [];
 
-        if (eglProbe.found) {
-            for (var i in eglProbe.libs) {
-                if (eglProbe.libs[i].startsWith("-l"))
-                    dynamicLibraries.push(eglProbe.libs[i].slice(2));
-            }
-        }
+        if (eglProbe.found)
+            libs = libs.concat(Utils.dynamicLibraries(eglProbe.libs));
 
-        return dynamicLibraries;
+        return libs;
     }
     readonly property stringList kmsDynamicLibraries: {
-        var dynamicLibraries = [];
+        var libs = [];
 
-        if (drmProbe.found) {
-            for (var i in drmProbe.libs) {
-                if (drmProbe.libs[i].startsWith("-l"))
-                    dynamicLibraries.push(drmProbe.libs[i].slice(2));
-            }
-        }
+        if (drmProbe.found)
+            libs = libs.concat(Utils.dynamicLibraries(drmProbe.libs));
 
-        if (gbmProbe.found) {
-            for (var i in gbmProbe.libs) {
-                if (gbmProbe.libs[i].startsWith("-l"))
-                    dynamicLibraries.push(gbmProbe.libs[i].slice(2));
-            }
-        }
+        if (gbmProbe.found)
+            libs = libs.concat(Utils.dynamicLibraries(gbmProbe.libs));
 
-        return dynamicLibraries;
+        return libs;
     }
     readonly property stringList x11DynamicLibraries: {
-        var dynamicLibraries = [];
+        var libs = [];
 
-        if (x11Probe.found) {
-            for (var i in x11Probe.libs) {
-                if (x11Probe.libs[i].startsWith("-l"))
-                    dynamicLibraries.push(x11Probe.libs[i].slice(2));
-            }
-        }
+        if (x11Probe.found)
+            libs = libs.concat(Utils.dynamicLibraries(x11Probe.libs));
 
-        return dynamicLibraries;
+        return libs;
     }
     readonly property stringList libraryPaths: {
         var libraryPaths = [];
 
-        if (eglProbe.found) {
-            for (var i in eglProbe.libs) {
-                if (eglProbe.libs[i].startsWith("-L"))
-                    libraryPaths.push(eglProbe.libs[i].slice(2));
-            }
-        }
+        if (eglProbe.found)
+            libraryPaths = libraryPaths.concat(Utils.libraryPaths(eglProbe.libs));
 
-        if (x11Probe.found) {
-            for (var i in x11Probe.libs) {
-                if (x11Probe.libs[i].startsWith("-L"))
-                    libraryPaths.push(x11Probe.libs[i].slice(2));
-            }
-        }
+        if (x11Probe.found)
+            libraryPaths = libraryPaths.concat(Utils.libraryPaths(x11Probe.libs));
 
-        if (drmProbe.found) {
-            for (var i in drmProbe.libs) {
-                if (drmProbe.libs[i].startsWith("-L"))
-                    libraryPaths.push(drmProbe.libs[i].slice(2));
-            }
-        }
+        if (drmProbe.found)
+            libraryPaths = libraryPaths.concat(Utils.libraryPaths(drmProbe.libs));
 
-        if (gbmProbe.found) {
-            for (var i in gbmProbe.libs) {
-                if (gbmProbe.libs[i].startsWith("-L"))
-                    libraryPaths.push(gbmProbe.libs[i].slice(2));
-            }
-        }
+        if (gbmProbe.found)
+            libraryPaths = libraryPaths.concat(Utils.libraryPaths(gbmProbe.libs));
 
         return libraryPaths;
     }

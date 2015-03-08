@@ -33,7 +33,7 @@ QtProduct {
 
     includeDependencies: ["QtCore", "QtCore-private", "QtXml", "QtXml-private"]
 
-    cpp.defines: bootstrapDefines.concat([
+    cpp.defines: base.concat(bootstrapDefines).concat([
         "QT_BUILD_BOOTSTRAP_LIB",
     ])
 

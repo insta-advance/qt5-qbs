@@ -3,6 +3,7 @@ import qbs
 QtPlugin {
     readonly property string basePath: project.sourceDirectory + "/qtmultimedia/src/plugins/gstreamer/camerabin"
 
+    condition: QtGstTools.present
     targetName: "gstcamerabin"
     category: "video"
 
@@ -10,7 +11,7 @@ QtPlugin {
 
     Depends { name: "QtCore" }
     Depends { name: "QtGui" }
-    Depends { name: "QtGstTools" }
+    Depends { name: "QtGstTools"; required: false }
     Depends { name: "QtMultimediaQuickTools" }
 
     Group {

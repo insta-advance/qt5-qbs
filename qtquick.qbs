@@ -15,6 +15,8 @@ QtModule {
 
     cpp.defines: base.concat([
         "QT_BUILD_QUICK_LIB",
+        "QT_OPENGL_ES",
+        "QT_OPENGL_ES_2", // ###fixme: configure.opengl is not getting inherited (?)
     ])
 
     cpp.dynamicLibraries: [
@@ -30,14 +32,9 @@ QtModule {
     QtQuickHeaders {
         name: "headers"
         excludeFiles: {
-            var excludeFiles = [
-                "scenegraph/coreapi/qsgmaterial.h", // "Meta object features not supported for nested classes"
-            ];
-
-            if (!QtHost.config.cursor) {
+            var excludeFiles = [];
+            if (!configure.cursor)
                 excludeFiles.push("items/qquickdroparea_p.h");
-            }
-
             return excludeFiles;
         }
         fileTags: "moc"

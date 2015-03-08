@@ -1,34 +1,16 @@
 import qbs
 import qbs.File
+import qbs.Probes
 
 QtModule {
     name: "QtGui"
     readonly property path basePath: project.sourceDirectory + "/qtbase/src/gui"
 
-    readonly property stringList inheritedDefines: {
-        var defines = base;
-
-        if (!QtHost.config.cursor) {
-            defines.push("QT_NO_CURSOR");
-            defines.push("QT_NO_WHEELEVENT");
-            defines.push("QT_NO_DRAGANDDROP");
-        }
-
-        return defines;
-    }
-
     includeDependencies: ["QtCore", "QtCore-private", "QtGui", "QtGui-private"]
 
-    cpp.defines: {
-        var defines = product.inheritedDefines;
-        defines.push("QT_BUILD_GUI_LIB");
-
-        // ### QtHost.config.defaultPlatformName
-        if (project.target.startsWith("linux"))
-            defines.push('QT_QPA_DEFAULT_PLATFORM_NAME="eglfs"');
-
-        return defines;
-    }
+    cpp.defines: base.concat([
+        "QT_BUILD_GUI_LIB",
+    ])
 
     Depends { name: "freetype" }
     Depends { name: "jpeg" }
@@ -38,14 +20,24 @@ QtModule {
     Depends { name: "zlib" }
 
     Properties {
-        condition: QtHost.config.opengl == "desktop" && qbs.targetOS.contains("unix")
+        condition: configure.properties.opengl === undefined
+        configure.opengl: "es2" // ### perform detection
+    }
+
+    Properties {
+        condition: configure.properties.qpa === undefined
+        configure.qpa: "xcb" // ### make this smarter
+    }
+
+    Properties {
+        condition: configure.opengl == "desktop" && qbs.targetOS.contains("unix")
         cpp.dynamicLibraries: base.concat([
             "GL",
         ])
     }
 
     Properties {
-        condition: QtHost.config.opengl == "es2"
+        condition: configure.opengl == "es2"
         cpp.dynamicLibraries: base.concat([
             "GLESv2",
         ])
@@ -58,6 +50,31 @@ QtModule {
             "user32",
             "gdi32",
         ])
+    }
+
+    Properties {
+        condition: qbs.toolchain.contains("gcc")
+        cpp.cxxFlags: {
+            var cxxFlags = base;
+            // ### move these lower, like QtProduct
+            if (configure.sse2)
+                cxxFlags.push("-msse2");
+            if (configure.sse3)
+                cxxFlags.push("-msse3");
+            if (configure.ssse3)
+                cxxFlags.push("-mssse3");
+            if (configure.sse4_1)
+                cxxFlags.push("-msse4.1");
+            if (configure.sse4_2);
+                cxxFlags.push("-msse4.2");
+            if (configure.avx)
+                cxxFlags.push("-mavx");
+            if (configure.avx2)
+                cxxFlags.push("-mavx2");
+            if (configure.neon)
+                cxxFlags.push("-mfpu=neon");
+            return cxxFlags;
+        }
     }
 
     QtGuiHeaders {
@@ -108,13 +125,13 @@ QtModule {
                 ]);
             }
 
-            if (QtHost.config.opengl != "es2") {
+            if (configure.opengl != "es2") {
                 Array.prototype.push.apply(excludeFiles, [
                     "opengl/qopenglfunctions_es2.cpp",
                 ]);
             }
 
-            if (QtHost.config.opengl != "desktop") {
+            if (configure.opengl != "desktop") {
                 Array.prototype.push.apply(excludeFiles, [
                     "opengl/qopengltimerquery.cpp",
                     "opengl/qopenglfunctions_1*.cpp",
@@ -144,5 +161,10 @@ QtModule {
     Export {
         Depends { name: "cpp" }
         cpp.dynamicLibraries: product.cpp.dynamicLibraries
+
+        Depends { name: "configure" }
+        configure.qpa: product.configure.qpa
+        configure.png: product.configure.png
+        configure.opengl: product.configure.opengl
     }
 }

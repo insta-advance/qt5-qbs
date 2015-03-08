@@ -8,7 +8,9 @@ QmlPlugin {
     includeDependencies: ["QtCore", "QtQml", "QtMultimedia-private"]
 
     Depends { name: "QtCore" }
+    Depends { name: "QtGui" }
     Depends { name: "QtQml" }
+    Depends { name: "QtQuick" }
     Depends { name: "QtMultimedia" }
     Depends { name: "QtMultimediaQuickTools" }
 

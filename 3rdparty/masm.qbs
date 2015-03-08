@@ -9,7 +9,7 @@ QtProduct {
                                      + "/qtdeclarative/src/3rdparty/masm"
 
     cpp.defines: {
-        var defines = [
+        var defines = base.concat([
             "WTF_EXPORT_PRIVATE=",
             "JS_EXPORT_PRIVATE=",
             "WTFReportAssertionFailure=qmlWTFReportAssertionFailure",
@@ -21,7 +21,7 @@ QtProduct {
             "ENABLE_DFG_JIT_UTILITY_METHODS=1",
             "ENABLE_JIT_CONSTANT_BLINDING=0",
             "BUILDING_QT__",
-        ];
+        ]);
 
         if (qbs.enableDebugCode)
             defines.push("NDEBUG");

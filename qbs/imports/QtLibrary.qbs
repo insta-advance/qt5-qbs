@@ -3,7 +3,6 @@ import qbs
 // Base type for QtModule and QtPlugin
 QtProduct {
     type: "dynamiclibrary" // ### food for thought: delay linking for another step, making headers the only dependency
-    property bool moc: true
 
     cpp.defines: base.concat([
         "QT_BUILDING_QT",
@@ -19,5 +18,5 @@ QtProduct {
     ])
 
     Depends { name: "cpp" }
-    Depends { name: "QtHost"; submodules: ["config", "rcc"] }
+    Depends { name: "QtHost"; submodules: ["rcc"] }
 }

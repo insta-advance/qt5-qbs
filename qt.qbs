@@ -46,13 +46,12 @@ Project {
     }
 
     property string qtVersion: "5.5.0"
-    property int pointerSize: qbs.architecture == "x86_64" ? 8 : 4
 
     qbsSearchPaths: ["qbs", "headers"]
 
     references: [
         "3rdparty/3rdparty.qbs",
-        "configure.qbs",
+        "install.qbs",
         "headers/headers.qbs",
         "qtcore.qbs",
         "qtgui.qbs",

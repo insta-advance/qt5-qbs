@@ -4,6 +4,8 @@ Product {
     readonly property path includeDirectory: project.buildDirectory + "/include"
     property stringList includeDependencies: []
 
+    cpp.defines: configure.defines
+
     cpp.includePaths: {
         var includes = [
             includeDirectory,
@@ -28,6 +30,7 @@ Product {
         return includes;
     }
 
+    Depends { name: "configure" }
     Depends { name: "cpp" }
 
     Properties {

@@ -6,10 +6,16 @@ QtModule {
 
     includeDependencies: ["QtCore", "QtCore-private", "QtNetwork", "QtNetwork-private"]
 
-    cpp.defines: base.concat([
-        "QT_BUILD_NETWORK_LIB",
-        "QT_NO_SSL", // ### tie to QtHost.config
-    ])
+    cpp.defines: {
+        var defines = base;
+
+        defines.push("QT_BULD_NETWORK_LIB");
+
+        if (!configure.ssl)
+            defines.push("QT_NO_SSL");
+
+        return defines;
+    }
 
     Depends { name: "QtCore" }
     Depends { name: "QtNetworkHeaders" }
@@ -34,10 +40,10 @@ QtModule {
             if (!qbs.targetOS.contains("osx"))
                 excludeFiles.push("access/qnetworkreplynsurlconnectionimpl_p.h");
 
-            if (!QtHost.config.spdy)
+            if (!configure.spdy)
                 excludeFiles.push("access/qspdyprotocolhandler*.h");
 
-            if (!QtHost.config.ssl)
+            if (!configure.ssl)
                 excludeFiles.push("ssl/*.h");
 
             return excludeFiles;
@@ -54,6 +60,7 @@ QtModule {
             "bearer/*.cpp",
             "kernel/*.cpp",
             "socket/*.cpp",
+            "ssl/*.cpp",
         ]
         excludeFiles: {
             var excludeFiles = [];
@@ -94,27 +101,22 @@ QtModule {
                 excludeFiles.push("socket/qnativesocketengine_win.cpp");
             }
 
-            if (!QtHost.config.localSocketTcp) {
+            if (!configure.localSocketTcp) {
                 excludeFiles.push("socket/qlocalsocket_tcp.cpp");
                 excludeFiles.push("socket/qlocalserver_tcp.cpp");
             }
 
-            if (!QtHost.config.libProxy) {
+            if (!configure.libProxy) {
                 excludeFiles.push("kernel/qnetworkproxy_libproxy.cpp");
+            }
+
+            if (!configure.ssl) {
+                excludeFiles.push("ssl/*.cpp");
             }
 
             return excludeFiles;
         }
         fileTags: "moc"
         overrideTags: false
-    }
-
-    Group {
-        name: "ssl"
-        prefix: basePath + "/ssl/"
-        condition: QtHost.config.ssl
-        files: [
-            "*.cpp",
-        ]
     }
 }
