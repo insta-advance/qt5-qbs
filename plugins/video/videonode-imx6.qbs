@@ -1,11 +1,19 @@
 import qbs
+import qbs.Probes
 
 QtPlugin {
     readonly property string basePath: project.sourceDirectory + "/qtmultimedia/src/plugins/videonode/imx6"
 
     category: "video"
+    condition: configure.imx6
 
-    includeDependencies: ["QtCore-private", "QtGui-private", "QtPlatformSupport-private"]
+    includeDependencies: [
+        "QtCore-private",
+        "QtGui-private",
+        "QtMultimedia-private",
+        "QtPlatformSupport-private",
+        "QtQuick-private",
+    ]
 
     Depends { name: "QtCore" }
     Depends { name: "QtGui" }
@@ -18,7 +26,7 @@ QtPlugin {
             "*.h",
         ]
         fileTags: "moc"
-        overrideTags: true
+        overrideTags: false
     }
 
     Group {
@@ -28,6 +36,6 @@ QtPlugin {
             "*.cpp",
         ]
         fileTags: "moc"
-        overrideTags: true
+        overrideTags: false
     }
 }

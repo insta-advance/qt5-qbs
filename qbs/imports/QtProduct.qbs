@@ -1,4 +1,5 @@
 import qbs
+import qbs.FileInfo
 
 Product {
     readonly property path includeDirectory: project.buildDirectory + "/include"
@@ -107,8 +108,9 @@ Product {
             var commands = [];
             for (var i in allOutputs) {
                 var cmd = new Command("moc", arguments.concat([
-                    input.filePath, "-o", allOutputs[i].filePath,
+                    input.fileName, "-o", allOutputs[i].filePath,
                 ]));
+                cmd.workingDirectory = FileInfo.path(input.filePath);
                 cmd.environment = [
                     "QT_SELECT=qhost",
                 ];

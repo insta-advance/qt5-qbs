@@ -6,7 +6,7 @@ QtModule {
     name: "QtGui"
     readonly property path basePath: project.sourceDirectory + "/qtbase/src/gui"
 
-    includeDependencies: ["QtCore", "QtCore-private", "QtGui", "QtGui-private"]
+    includeDependencies: ["QtCore-private", "QtGui", "QtGui-private"]
 
     cpp.defines: base.concat([
         "QT_BUILD_GUI_LIB",

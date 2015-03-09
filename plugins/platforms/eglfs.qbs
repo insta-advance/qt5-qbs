@@ -113,7 +113,6 @@ Project {
     }
 
     SubProject {
-        Properties { condition: eglfs.eglDynamicLibraries.contains("GAL") }
         filePath: "eglfs-imx6.qbs"
     }
 

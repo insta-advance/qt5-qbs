@@ -3,15 +3,15 @@ import qbs
 QtPlugin {
     readonly property string basePath: project.sourceDirectory + "/qtmultimedia/src/plugins/gstreamer/camerabin"
 
-    condition: QtGstTools.present
+    condition: configure.gstreamer
     targetName: "gstcamerabin"
-    category: "video"
+    category: "mediaservice"
 
     includeDependencies: ["QtCore-private", "QtGui-private", "QtMultimedia-private"]
 
     Depends { name: "QtCore" }
     Depends { name: "QtGui" }
-    Depends { name: "QtGstTools"; required: false }
+    Depends { name: "QtGstTools" }
     Depends { name: "QtMultimediaQuickTools" }
 
     Group {
@@ -21,7 +21,7 @@ QtPlugin {
             "*.h",
         ]
         fileTags: "moc"
-        overrideTags: true
+        overrideTags: false
     }
 
     Group {
@@ -31,6 +31,6 @@ QtPlugin {
             "*.cpp",
         ]
         fileTags: "moc"
-        overrideTags: true
+        overrideTags: false
     }
 }

@@ -4,7 +4,7 @@ QtModule {
     name: "QtNetwork"
     readonly property path basePath: project.sourceDirectory + "/qtbase/src/network"
 
-    includeDependencies: ["QtCore", "QtCore-private", "QtNetwork", "QtNetwork-private"]
+    includeDependencies: ["QtCore-private", "QtNetwork", "QtNetwork-private"]
 
     cpp.defines: {
         var defines = base;

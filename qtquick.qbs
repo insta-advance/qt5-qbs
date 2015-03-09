@@ -6,11 +6,11 @@ QtModule {
                                      + "/qtdeclarative/src/quick"
 
     includeDependencies: [
-        "QtCore", "QtCore-private",
-        "QtGui", "QtGui-private",
-        "QtQml", "QtQml-private",
+        "QtCore-private",
+        "QtGui-private",
+        "QtQml-private",
         "QtNetwork",
-        "QtQuick", "QtQuick-private"
+        "QtQuick-private",
     ]
 
     cpp.defines: base.concat([

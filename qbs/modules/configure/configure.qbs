@@ -2,6 +2,7 @@ import qbs
 import qbs.File
 import qbs.FileInfo
 import qbs.TextFile
+import qbs.Probes
 
 Module {
     // configuration options -- use var also for boolean values which are initially undefined
@@ -23,10 +24,17 @@ Module {
 
     // QtGui
     property bool cursor: properties.cursor !== undefined ? properties.cursor : true
+    property bool egl: properties.egl !== undefined ? properties.egl : eglProbe.found
     property var png: properties.png !== undefined ? properties.png : "qt"
     property var opengl: properties.opengl
     property var qpa: properties.qpa
     property var udev: properties.udev
+    property bool imx6: properties.imx6 !== undefined
+                        ? properties.imx6 : (eglProbe.found && eglProbe.libs.contains("-lGAL"))
+
+    // QtMultimedia
+    property bool gstreamer: properties.gstreamer !== undefined
+                             ? properties.gstreamer : (gstreamerProbe.found && gstreamerVideoProbe.found)
 
     // input from user
     property path propertiesFile: "qtconfig.json"
@@ -150,5 +158,27 @@ Module {
             defines.push('QT_QPA_DEFAULT_PLATFORM_NAME="' + qpa + '"');
 
         return defines;
+    }
+
+    // Probes we can't live without
+    readonly property var probes: ({
+        egl: eglProbe,
+        gstreamer: gstreamerProbe,
+        gstreamerVideo: gstreamerVideoProbe,
+    })
+
+    Probes.PkgConfigProbe {
+        id: eglProbe
+        name: "egl"
+    }
+
+    Probes.PkgConfigProbe {
+        id: gstreamerProbe
+        name: "gstreamer-1.0"
+    }
+
+    Probes.PkgConfigProbe {
+        id: gstreamerVideoProbe
+        name: "gstreamer-video-1.0"
     }
 }

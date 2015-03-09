@@ -5,7 +5,12 @@ QtPlugin {
 
     category: "video"
 
-    includeDependencies: ["QtCore-private", "QtGui-private", "QtPlatformSupport-private"]
+    includeDependencies: [
+        "QtCore-private",
+        "QtGui-private",
+        "QtPlatformSupport-private",
+        "QtQuick-private",
+    ]
 
     Depends { name: "QtCore" }
     Depends { name: "QtGui" }
@@ -18,7 +23,7 @@ QtPlugin {
             "*.h",
         ]
         fileTags: "moc"
-        overrideTags: true
+        overrideTags: false
     }
 
     Group {
@@ -28,6 +33,6 @@ QtPlugin {
             "*.cpp",
         ]
         fileTags: "moc"
-        overrideTags: true
+        overrideTags: false
     }
 }

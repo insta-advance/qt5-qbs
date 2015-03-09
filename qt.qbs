@@ -56,10 +56,12 @@ Project {
         "qtcore.qbs",
         "qtgui.qbs",
         "qtnetwork.qbs",
-        "qtmultimedia.qbs",
 
         "qtqml.qbs",
         "qtquick.qbs",
+
+        "qtmultimedia.qbs",
+        "multimedia-support.qbs",
 
         "imports/imports.qbs",
     ]
@@ -67,8 +69,7 @@ Project {
     Project {
         name: "plugins"
         references: [
-            "plugins/platforms/platforms.qbs", // ### the contents of this file could come up here
-            "plugins/multimedia/multimedia.qbs", // ### This isn't really a plugin, but where else can we put it?
+            "plugins/platforms/eglfs.qbs",
         ]
 
         Project {

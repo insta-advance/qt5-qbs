@@ -9,7 +9,7 @@ QtModule {
 
     property bool disassembler: false
 
-    includeDependencies: ["QtCore", "QtCore-private", "QtGui", "QtNetwork", "QtQml", "QtQml-private"]
+    includeDependencies: ["QtCore-private", "QtGui", "QtNetwork", "QtQml", "QtQml-private"]
 
     cpp.defines: base.concat(["QT_BUILD_QML_LIB"])
 

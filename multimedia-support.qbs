@@ -35,30 +35,13 @@ Project {
     QtModule {
         id: gsttools
         name: "QtGstTools"
-        condition: gstreamerProbe.found && gstreamerVideoProbe.found
+        condition: configure.gstreamer
 
         includeDependencies: ["QtCore-private", "QtNetwork", "QtGui", "QtQuick", "QtMultimedia-private"]
 
-        cpp.cxxFlags: {
-            var cxxFlags = base;
-
-            if (gstreamerProbe.found)
-                Array.prototype.push.apply(cxxFlags, gstreamerProbe.cflags);
-
-            return cxxFlags;
-        }
+        cpp.cxxFlags: base.concat(configure.probes.gstreamer.cflags)
 
         Depends { name: "QtMultimedia" }
-
-        Probes.PkgConfigProbe {
-            id: gstreamerProbe
-            name: "gstreamer-1.0"
-        }
-
-        Probes.PkgConfigProbe {
-            id: gstreamerVideoProbe
-            name: "gstreamer-video-1.0"
-        }
 
         Group {
             name: "headers"
