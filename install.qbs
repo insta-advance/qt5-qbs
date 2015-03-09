@@ -18,6 +18,12 @@ import qbs.TextFile
 Product {
     Depends { name: "cpp" }
     Depends { name: "configure" }
+    Depends { name: "QtCore" }
+    Depends { name: "QtGui" }
+    Depends { name: "QtMultimedia" }
+    Depends { name: "QtNetwork" }
+    Depends { name: "QtQml" }
+    Depends { name: "QtQuick" }
 
     // ### each module exports defines instead, or maybe QtCore just installs this.
     Transformer {
@@ -33,7 +39,12 @@ Product {
                 outputFile.writeLine("#ifndef QFEATURES_H");
                 outputFile.writeLine("#define QFEATURES_H");
 
-                //###todo: for each define in configure.defines, only QT_NO_XXX
+                var defines = product.moduleProperty("configure", "defines");
+                for (var i in defines) {
+                    var define = defines[i];
+                    if (define.startsWith("QT_NO_"))
+                        outputFile.writeLine("#define " + define);
+                }
 
                 outputFile.writeLine("#endif // QFEATURES_H");
                 outputFile.close();
@@ -56,13 +67,12 @@ Product {
                 outputFile.writeLine("#ifndef QCONFIG_H");
                 outputFile.writeLine("#define QCONFIG_H");
 
-                //###todo: for each define in configure.defines, only non-QT_NO_XXX
-
-                //###move to configure
-                /*if (configure.qreal !== undefined) {
-                    outputFile.writeLine("#define QT_COORD_TYPE " + product.configuration.qreal);
-                    outputFile.writeLine("#define QT_COORD_TYPE_STRING " + product.configuration.qreal);
-                }*/
+                var defines = product.moduleProperty("configure", "defines");
+                for (var i in defines) {
+                    var define = defines[i];
+                    if (!define.startsWith("QT_NO_"))
+                        outputFile.writeLine("#define " + define);
+                }
 
                 outputFile.writeLine("#endif // QCONFIG_H");
                 outputFile.close();
@@ -138,6 +148,7 @@ Product {
             var cmd = new JavaScriptCommand();
             cmd.description = "generating qconfig.pri";
             cmd.sourceCode = function() {
+                var config = product.moduleProperty("configure", "config");
                 var file = new TextFile(output.filePath, TextFile.WriteOnly);
                 file.writeLine("QT_MAJOR_VERSION = 5"); // ### get from project.version
                 file.writeLine("QT_MINOR_VERSION = 5");
@@ -145,8 +156,9 @@ Product {
                 file.writeLine("QT_NAMESPACE = "); // ### namespace
                 file.writeLine("QT_LIBINFIX = "); // ### libinfix
                 file.writeLine("QT_TARGET_ARCH = " + product.moduleProperty("qbs", "architecture"));
-                file.writeLine("CONFIG = shared qpa debug"); // ### static, debug, qt_no_framework...
-                //file.writeLine("QT_CONFIG = " + configure.properties.join(' ')); // ### get the real combined configure properties
+                // ### fixme: separate CONFIG and QT_CONFIG
+                file.writeLine("CONFIG = " + config.join(' '));
+                file.writeLine("QT_CONFIG = " + config.join(' '));
                 file.close();
             }
             return cmd;

@@ -4,10 +4,10 @@ import qbs.FileInfo
 import qbs.TextFile
 
 Module {
-    id: configure
-
     // configuration options -- use var also for boolean values which are initially undefined
+    property bool shared: true // ### allow for static builds as well
     property int pointerSize: qbs.architecture == "x86_64" ? 8 : 4
+    property string qreal: properties.qreal !== undefined ? properties.qreal : "double"
     // ### add and fix these in QtCore
     property bool sse2: properties.sse2 !== undefined ? properties.sse2 : true
     property bool sse3: properties.sse3 !== undefined ? properties.sse3 : true
@@ -50,6 +50,44 @@ Module {
         return { };
     }
 
+    readonly property stringList config: {
+        var config = [];
+        for (var i in properties) {
+            if (properties[i])
+                config.push(i);
+        }
+        config.push(shared ? "shared" : "static");
+        config.push(qbs.buildVariant);
+        if (sse2)
+            config.push("sse2");
+        if (sse3)
+            config.push("sse3");
+        if (ssse3)
+            config.push("ssse3");
+        if (sse4_1)
+            config.push("sse4_1");
+        if (sse4_2)
+            config.push("sse4_2");
+        if (avx)
+            config.push("avx");
+        if (avx2)
+            config.push("avx2");
+        if (glib)
+            config.push("glib");
+        if (iconv)
+            config.push("iconv");
+        if (cursor)
+            config.push("cursor");
+        if (png)
+            config.push("png");
+        if (opengl)
+            config.push("opengl"); // ### add opengl type
+        if (qpa)
+            config.push("qpa");
+        if (udev)
+            config.push("udev");
+    }
+
     // ###todo: consider adding cxxFlags/linkerFlags here as well
 
     // Trivial flags which would otherwise trigger a QT_NO_XXX definition should
@@ -59,6 +97,8 @@ Module {
         var defines = [
             "QT_POINTER_SIZE=" + pointerSize,
             "QT_USE_QSTRINGBUILDER", // ### Qt won't build without this
+            "QT_COORD_TYPE=" + qreal,
+            'QT_COORD_TYPE_STRING="' + qreal + '"',
         ];
 
         if (sse2)

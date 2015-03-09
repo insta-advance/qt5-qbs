@@ -10,10 +10,10 @@ QtModule {
     cpp.cxxFlags: {
         var cxxFlags = base;
 
-        if (configure.glib)
+        if (configure.glib && glibProbe.cflags)
             cxxFlags = cxxFlags.concat(glibProbe.cflags);
 
-        if (configure.udev)
+        if (configure.udev && udevProbe.cflags)
             cxxFlags = cxxFlags.concat(udevProbe.cflags);
 
         return cxxFlags;
