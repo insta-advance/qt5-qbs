@@ -83,8 +83,10 @@ Product {
 
     Group {
         name: "bin"
-        files: [
-            "bin/qmake", // Script to pass qmake commands to qhost (###todo: add .bat version)
+        files: [ // Scripts to forward host tools commands
+            "bin/moc",
+            "bin/qmake",
+            "bin/rcc",
         ]
         qbs.install: true
         qbs.installDir: "bin"

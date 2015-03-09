@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# This script runs the tool as selected by qtchooser. You may safely
+# replace this file with a copy/symlink of your choice.
+
+QT_SELECT=qhost qtchooser -run-tool=$(basename $0) $@
