@@ -68,9 +68,14 @@ Project {
 
     Project {
         name: "plugins"
-        references: [
-            "plugins/platforms/eglfs.qbs",
-        ]
+
+        Project {
+            name: "platforms"
+            references: [
+                "plugins/platforms/eglfs.qbs",
+                "plugins/platforms/xcb.qbs",
+            ]
+        }
 
         Project {
             name: "mediaservice"

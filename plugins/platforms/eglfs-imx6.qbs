@@ -1,6 +1,8 @@
 import qbs
 
 QtEglDeviceIntegrationPlugin {
+    condition: configure.imx6
+
     cpp.defines: [
         "EGL_API_FB",
     ]

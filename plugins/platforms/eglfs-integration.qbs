@@ -29,6 +29,7 @@ QtModule {
     cpp.dynamicLibraries: {
         var libs = base.concat([
             "EGL",
+            "pthread",
         ]);
 
         if (configure.glib)

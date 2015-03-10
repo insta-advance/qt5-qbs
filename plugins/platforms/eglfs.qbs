@@ -3,7 +3,6 @@ import qbs.Probes
 import "../../qbs/utils.js" as Utils
 
 Project {
-    id: eglfs
     readonly property stringList eglDynamicLibraries: {
         var libs = [];
 
