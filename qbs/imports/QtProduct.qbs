@@ -5,8 +5,6 @@ Product {
     readonly property path includeDirectory: project.buildDirectory + "/include"
     property stringList includeDependencies: []
 
-    cpp.defines: configure.defines
-
     cpp.includePaths: {
         var includes = [
             includeDirectory,
@@ -31,19 +29,24 @@ Product {
         return includes;
     }
 
+    cpp.defines: {
+        var defines = [];
+
+        if (qbs.targetOS.contains("windows")) {
+            defines.push("_WIN32");
+            if (qbs.toolchain.contains("msvc"))
+                defines.push("_SCL_SECURE_NO_WARNINGS");
+        }
+
+        return defines;
+    }
+
     Depends { name: "configure" }
     Depends { name: "cpp" }
 
     Properties {
         condition: qbs.toolchain.contains("gcc") && !qbs.toolchain.contains("clang")
         cpp.cxxFlags: base.concat(["-Wno-psabi"])
-    }
-
-    Properties {
-        condition: qbs.targetOS.contains("windows") && qbs.toolchain.contains("msvc")
-        cpp.defines: base.concat([
-            "_SCL_SECURE_NO_WARNINGS",
-        ])
     }
 
     Rule {

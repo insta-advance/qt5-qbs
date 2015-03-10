@@ -1,18 +1,19 @@
 import qbs
 
-StaticLibrary {
+QtProduct {
+    type: "staticlibrary"
 
     destinationDirectory: project.buildDirectory + "/lib"
 
     Depends { name: "cpp" }
 
-    cpp.defines: [
+    cpp.defines: base.concat([
         "FT2_BUILD_LIBRARY",
-    ]
+    ])
 
-    cpp.includePaths: [
+    cpp.includePaths: base.concat([
         project.sourceDirectory + "/qtbase/src/3rdparty/freetype/include",
-    ]
+    ])
 
     Group {
         name: "sources"

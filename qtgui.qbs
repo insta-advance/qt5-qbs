@@ -79,6 +79,12 @@ QtModule {
 
     QtGuiHeaders {
         name: "headers"
+        excludeFiles: {
+            var excludeFiles = [];
+            if (configure.opengl == "es2")
+                excludeFiles.push("opengl/qopengltimerquery.h");
+            return excludeFiles;
+        }
         fileTags: "moc"
         overrideTags: false
     }

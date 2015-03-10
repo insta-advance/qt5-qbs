@@ -1,22 +1,22 @@
 import qbs
 
 // ### add PkgConfig here so the host libs can be used instead
-StaticLibrary {
-
+QtProduct {
+    type: "staticlibrary"
     destinationDirectory: project.buildDirectory + "/lib"
 
     Depends { name: "cpp" }
 
-    cpp.includePaths: [
+    cpp.defines: base.concat([
+        "QT_BUILD_CONFIGURE",
+        "QT_POINTER_SIZE=" + (qbs.architecture == "x86_64" ? "8" : "4"),
+    ])
+
+    cpp.includePaths: base.concat([
         project.sourceDirectory + "/include",
         project.sourceDirectory + "/include/QtCore",
         project.sourceDirectory + "/qtbase/src/corelib/global",
-    ]
-
-    cpp.defines: [
-        "QT_BUILD_CONFIGURE",
-        "QT_POINTER_SIZE=" + (qbs.architecture == "x86_64" ? "8" : "4"),
-    ]
+    ])
 
     Group {
         name: "headers"

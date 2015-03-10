@@ -9,6 +9,7 @@ Module {
     property bool shared: true // ### allow for static builds as well
     property int pointerSize: qbs.architecture == "x86_64" ? 8 : 4
     property string qreal: properties.qreal !== undefined ? properties.qreal : "double"
+    property string prefix: properties.prefix !== undefined ? properties.prefix : ("/opt/Qt" + project.qtVersion)
     // ### add and fix these in QtCore
     property bool sse2: properties.sse2 !== undefined ? properties.sse2 : true
     property bool sse3: properties.sse3 !== undefined ? properties.sse3 : true
@@ -101,7 +102,9 @@ Module {
     // Trivial flags which would otherwise trigger a QT_NO_XXX definition should
     // have a default assigned above. Otherwise, a lower module may end up
     // with a conflicting definition in a higher module.
-    readonly property stringList defines: {
+    Depends { name: "cpp" }
+
+    cpp.defines: {
         var defines = [
             "QT_POINTER_SIZE=" + pointerSize,
             "QT_USE_QSTRINGBUILDER", // ### Qt won't build without this

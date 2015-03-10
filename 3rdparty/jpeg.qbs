@@ -1,7 +1,7 @@
 import qbs
 
-StaticLibrary {
-
+QtProduct {
+    type: "staticlibrary"
     destinationDirectory: project.buildDirectory + "/lib"
 
     Depends { name: "cpp" }

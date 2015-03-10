@@ -1,7 +1,7 @@
 import qbs
 
-StaticLibrary {
-    name: "harfbuzz"
+QtProduct {
+    type: "staticlibrary"
 
     destinationDirectory: project.buildDirectory + "/lib"
 

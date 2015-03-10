@@ -4,9 +4,9 @@ import qbs.Process
 import qbs.TextFile
 
 QtProduct {
-    type: "staticlibrary"
     readonly property path basePath: project.sourceDirectory
                                      + "/qtdeclarative/src/3rdparty/masm"
+    type: "staticlibrary"
 
     cpp.defines: {
         var defines = base.concat([
@@ -38,7 +38,7 @@ QtProduct {
         return defines;
     }
 
-    property stringList includePaths: [
+    property stringList includePaths: base.concat([
         basePath,
         basePath + "/assembler",
         basePath + "/disassembler",
@@ -48,7 +48,7 @@ QtProduct {
         basePath + "/stubs",
         basePath + "/stubs/wtf",
         basePath + "/wtf",
-    ];
+    ]);
 
     includeDependencies: ["QtCore", "QtQml-private"]
 

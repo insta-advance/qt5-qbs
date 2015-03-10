@@ -1,17 +1,17 @@
 import qbs
 
-StaticLibrary {
-
+QtProduct {
+    type: "staticlibrary"
     destinationDirectory: project.buildDirectory + "/lib"
 
     Depends { name: "cpp" }
     Depends { name: "zlib" }
 
-    cpp.includePaths: [
+    cpp.includePaths: base.concat([
         project.sourceDirectory + "/include",
         project.sourceDirectory + "/include/QtCore",
         project.sourceDirectory + "/qtbase/src/corelib/global",
-    ]
+    ])
 
     Group {
         name: "sources"

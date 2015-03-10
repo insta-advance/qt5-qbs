@@ -1,8 +1,10 @@
 import qbs
 
-StaticLibrary {
+QtProduct {
     readonly property string basePath: project.sourceDirectory
                                        + "/qtdeclarative/src/3rdparty/double-conversion"
+
+    type: "staticlibrary"
 
     Depends { name: "cpp" }
 

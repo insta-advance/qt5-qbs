@@ -46,11 +46,12 @@ QtModule {
     }
 
     cpp.includePaths: base.concat([
-        project.sourceDirectory + "/qtbase/src/3rdparty/forkfd"
+        project.sourceDirectory + "/qtbase/src/3rdparty/forkfd",
+        project.sourceDirectory + "/qtbase/src/3rdparty/pcre",
     ])
 
     Depends { name: "harfbuzz" }
-    Depends { name: "pcre" }
+    //Depends { name: "pcre" }
     Depends { name: "QtCoreHeaders" }
     Depends { name: "zlib" }
 
@@ -81,9 +82,19 @@ QtModule {
         excludeFiles: {
             var files = [];
 
-            // Don't sync specific platform headers
+            if (!qbs.targetOS.contains("blackberry")) {
+                files.push("kernel/qeventdispatcher_blackberry_p.h");
+                files.push("kernel/qppsobject_p.h");
+                files.push("tools/qlocale_blackberry.h");
+            }
+
             if (!qbs.targetOS.contains("osx")) {
                 files.push("io/qfilesystemwatcher_fsevents_p.h");
+            }
+
+            if (!qbs.targetOS.contains("unix")) {
+                files.push("io/qfilesystemwatcher_inotify_p.h"),
+                files.push("kernel/qeventdispatcher_unix_p.h");
             }
 
             if (!qbs.targetOS.contains("windows")) {
@@ -96,12 +107,6 @@ QtModule {
 
             if (!qbs.targetOS.contains("winrt")) {
                 files.push("kernel/qeventdispatcher_winrt_p.h");
-            }
-
-            if (!qbs.targetOS.contains("blackberry")) {
-                files.push("kernel/qeventdispatcher_blackberry_p.h");
-                files.push("kernel/qppsobject_p.h");
-                files.push("tools/qlocale_blackberry.h");
             }
 
             if (!configure.glib) {
@@ -140,7 +145,6 @@ QtModule {
             var excludeFiles = [
                 "codecs/qiconvcodec.cpp", // ### iconv
                 "codecs/qicucodec.cpp",   // ### icu
-                "codecs/qwindowscodec.cpp", // ## windows
                 "io/qfilesystemwatcher_kqueue.cpp",  // ### mac
                 "io/qprocess_wince.cpp",             // ### wince
                 "io/qsettings_mac.cpp",              // ### mac
@@ -207,6 +211,8 @@ QtModule {
                     "kernel/qsystemsemaphore_unix.cpp",
                     "kernel/qtimerinfo_unix.cpp",
                     "plugin/qlibrary_unix.cpp",
+                    "thread/qthread_unix.cpp",
+                    "thread/qwaitcondition_unix.cpp",
                     "tools/qelapsedtimer_unix.cpp",
                     "tools/qcollator_posix.cpp",
                     "tools/qlocale_unix.cpp",
@@ -216,6 +222,7 @@ QtModule {
 
             if (!qbs.targetOS.contains("windows")) {
                 Array.prototype.push.apply(excludeFiles, [
+                    "codecs/qwindowscodec.cpp",
                     "io/qfilesystemengine_win.cpp",
                     "io/qfilesystemiterator_win.cpp",
                     "io/qfilesystemwatcher_win.cpp",
@@ -265,6 +272,16 @@ QtModule {
     }
 
     Group {
+        //condition: configure.pcre && !pcreProbe.found
+        name: "pcre"
+        files: project.sourceDirectory + "/qtbase/src/3rdparty/pcre/pcre16_*.c"
+        cpp.defines: base.concat([
+            "PCRE_HAVE_CONFIG_H",
+            "PCRE_STATIC",
+        ])
+    }
+
+    Group {
         name: "mimetypes.qrc"
         files: basePath + "/mimetypes/mimetypes.qrc"
         fileTags: "qrc"
@@ -290,7 +307,7 @@ QtModule {
                 outputFile.writeLine('static const char qt_configure_installation          [11 + 12]    = "qt_instdate=2012-12-20";'); //### qhost could patch this, too
                 outputFile.writeLine('');
                 outputFile.writeLine('/* Installation Info */');
-                outputFile.writeLine('static const char qt_configure_prefix_path_str       [256 + 12] = "qt_prfxpath=/opt/Qt/5.5.0-qbs";'); // ###FIXME: qhost must be able to patch this; like an -install option.
+                outputFile.writeLine('static const char qt_configure_prefix_path_str       [256 + 12] = "qt_prfxpath=' + configure.prefix + '";'); // ###FIXME: qhost must be able to patch this; like an -install option.
                 outputFile.writeLine('');
                 outputFile.writeLine("static const short qt_configure_str_offsets[] = { 0, 4, 12, 16, 24, 28, 36, 44, 48, 50, 52, 65, 74 };");
                 outputFile.writeLine('static const char  qt_configure_strs[] =');
