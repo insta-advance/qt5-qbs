@@ -11,10 +11,10 @@ QtModule {
         "QT_MULTIMEDIA_QAUDIO",
     ])
 
-    Depends { name: "QtMultimediaHeaders" }
     Depends { name: "QtCore" }
-    Depends { name: "QtNetwork" }
     Depends { name: "QtGui" }
+    Depends { name: "QtMultimediaHeaders" }
+    Depends { name: "QtNetwork" }
     Depends { name: "QtQml" }
     Depends { name: "QtQuick" }
 

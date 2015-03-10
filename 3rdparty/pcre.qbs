@@ -27,8 +27,6 @@ QtProduct {
 
     Export {
         Depends { name: "cpp" }
-        cpp.includePaths: [
-            project.sourceDirectory + "/qtbase/src/3rdparty/pcre",
-        ]
+        cpp.includePaths: project.sourceDirectory + "/qtbase/src/3rdparty/pcre"
     }
 }

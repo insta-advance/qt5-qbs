@@ -24,13 +24,14 @@ QtModule {
         project.sourceDirectory + "/qtbase/src/3rdparty/freetype/include", // ### use Probe for system freetype
     ])
 
-    Depends { name: "egl"; condition: configure.egl }
+    Depends { name: "egl" }
+    Depends { name: "glib"; condition: configure.glib }
+    Depends { name: "opengl-es2" }
     Depends { name: "udev"; condition: configure.udev }
-    Depends { name: "glib" }
-    Depends { name: "QtPlatformHeaders" }
-    Depends { name: "QtPlatformSupport" }
     Depends { name: "QtCore" }
     Depends { name: "QtGui" }
+    Depends { name: "QtPlatformHeaders" }
+    Depends { name: "QtPlatformSupport" }
 
     Group {
         name: "headers"

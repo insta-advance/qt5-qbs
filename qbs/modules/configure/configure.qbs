@@ -4,43 +4,51 @@ import qbs.FileInfo
 import qbs.TextFile
 
 Module {
-    // configuration options -- use var also for boolean values which are initially undefined
-    readonly property bool shared: true // ### allow for static builds as well
-    readonly property int pointerSize: qbs.architecture == "x86_64" ? 8 : 4
-    readonly property string qreal: properties.qreal !== undefined ? properties.qreal : "double"
-    readonly property string prefix: properties.prefix !== undefined ? properties.prefix : ("/opt/Qt" + project.qtVersion)
-
-    // ### add detections for everything which doesn't default to false
-    readonly property bool sse2: properties.sse2 !== undefined ? properties.sse2 : true
-    readonly property bool sse3: properties.sse3 !== undefined ? properties.sse3 : true
-    readonly property bool ssse3: properties.ssse3 !== undefined ? properties.ssse3 : true
-    readonly property bool sse4_1: properties.sse4_1 !== undefined ? properties.sse4_1 : true
-    readonly property bool sse4_2: properties.sse4_2 !== undefined ? properties.sse4_2 : true
-    readonly property bool avx: properties.avx !== undefined ? properties.avx : true
-    readonly property bool avx2: properties.avx2 !== undefined ? properties.avx2 : true
+    // Common
+    readonly property bool shared: properties.shared
+    readonly property int pointerSize: properties.pointerSize
+    readonly property string qreal: properties.qreal
+    readonly property string prefix: properties.prefix
+    readonly property bool sse2: properties.sse2
+    readonly property bool sse3: properties.sse3
+    readonly property bool ssse3: properties.ssse3
+    readonly property bool sse4_1: properties.sse4_1
+    readonly property bool sse4_2: properties.sse4_2
+    readonly property bool avx: properties.avx
+    readonly property bool avx2: properties.avx2
+    readonly property bool neon: properties.neon
 
     // QtCore
     readonly property bool glib: properties.glib
     readonly property bool iconv: properties.iconv
 
     // QtGui
-    readonly property bool cursor: properties.cursor !== undefined ? properties.cursor : true
+    readonly property bool cursor: properties.cursor
     readonly property bool egl: properties.egl
     readonly property bool opengl: properties.opengl
     readonly property bool udev: properties.udev
     readonly property bool imx6: properties.imx6
     readonly property bool kms: properties.kms
     readonly property bool x11: properties.x11
-
-    readonly property string png: properties.png !== undefined ? properties.png : "qt"
-    readonly property string qpa: properties.qpa !== undefined ? properties.qpa : "xcb"
+    readonly property string png: properties.png
+    readonly property string qpa: properties.qpa
 
     // QtMultimedia
     readonly property bool gstreamer: properties.gstreamer
 
     // input from user
-    readonly property path propertiesFile: "qtconfig.json"
+    readonly property path propertiesFile: "qtconfig-" + project.profile + ".json"
     readonly property var properties: {
+        // For settings which shouldn't default to false
+        var config = {
+            shared: true,
+            pointerSize: qbs.architecture == "x86_64" ? 8 : 4,
+            qreal: "double",
+            prefix: "/opt/Qt" + project.qtVersion,
+            cursor: true,
+            png: "qt",
+            qpa: "xcb", // ### fix me for other platforms
+        };
         // ### in the case that there is a Qt attached to this profile, get these from Qt.core.config
         var filePath = FileInfo.isAbsolutePath(propertiesFile)
                        ? propertiesFile
@@ -55,54 +63,53 @@ Module {
                 configContents += line;
             }
             configFile.close();
-            return JSON.parse(configContents);
+            // Allow a trailing comma
+            configContents = configContents.replace(/, *\}$/, '}');
+            var json = JSON.parse(configContents);
+            for (var i in json)
+                config[i] = json[i];
         }
-        return { };
+        return config;
     }
 
+    // For compatibility with qmake's CONFIG list
     readonly property stringList config: {
         var config = [];
+        config.push(qbs.buildVariant);
         for (var i in properties) {
             if (properties[i])
                 config.push(i);
-        }
-        config.push(shared ? "shared" : "static");
-        config.push(qbs.buildVariant);
-        if (sse2)
-            config.push("sse2");
-        if (sse3)
-            config.push("sse3");
-        if (ssse3)
-            config.push("ssse3");
-        if (sse4_1)
-            config.push("sse4_1");
-        if (sse4_2)
-            config.push("sse4_2");
-        if (avx)
-            config.push("avx");
-        if (avx2)
-            config.push("avx2");
-        if (glib)
-            config.push("glib");
-        if (iconv)
-            config.push("iconv");
-        if (cursor)
-            config.push("cursor");
-        if (png)
-            config.push("png");
-        if (opengl)
-            config.push("opengl"); // ### add opengl type
-        if (qpa)
-            config.push("qpa");
-        if (udev)
-            config.push("udev");
 
+        }
+        if (opengl == "es2")
+            config.push("opengles2");
         return config;
     }
 
     Depends { name: "cpp" }
 
-    // ###todo: consider adding cxxFlags/linkerFlags here as well
+    cpp.cxxFlags: {
+        var cxxFlags = [];
+        if (qbs.toolchain.contains("gcc")) {
+            if (sse2)
+                cxxFlags.push("-msse2");
+            if (sse3)
+                cxxFlags.push("-msse3");
+            if (ssse3)
+                cxxFlags.push("-mssse3");
+            if (sse4_1)
+                cxxFlags.push("-msse4.1");
+            if (sse4_2)
+                cxxFlags.push("-msse4.2");
+            if (avx)
+                cxxFlags.push("-mavx");
+            if (avx2)
+                cxxFlags.push("-mavx2");
+            if (neon)
+                cxxFlags.push("-mfpu=neon");
+        }
+        return cxxFlags;
+    }
 
     // Trivial flags which would otherwise trigger a QT_NO_XXX definition should
     // have a default assigned above. Otherwise, a lower module may end up

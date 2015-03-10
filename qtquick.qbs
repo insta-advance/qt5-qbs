@@ -19,10 +19,8 @@ QtModule {
         "QT_OPENGL_ES_2", // ###fixme: configure.opengl is not getting inherited (?)
     ])
 
-    cpp.dynamicLibraries: [
-        "GLESv2",
-    ]
-
+    Depends { name: "opengl-desktop"; condition: configure.opengl == "desktop" }
+    Depends { name: "opengl-es2"; condition: configure.opengl == "es2" }
     Depends { name: "QtCore" }
     Depends { name: "QtGui" }
     Depends { name: "QtNetwork" }

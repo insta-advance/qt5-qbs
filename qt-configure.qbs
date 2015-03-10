@@ -20,20 +20,23 @@ Project {
     Gstreamer { id: gstreamer; name: "gstreamer" }
 
     Product {
-        name: "qtconfig.json"
+        name: "qtconfig-" + project.profile + ".json"
         type: "json"
 
         readonly property var config: ({
-            /*sse2: true,
-            sse3: true,
-            ssse3: true,
-            sse4_1: true,
-            sse4_2: true,
-            avx: true,
-            avx2: true,*/
+            // ### perform better checks for these
+            sse2: qbs.architecture != "arm",
+            sse3: qbs.architecture != "arm",
+            ssse3: qbs.architecture != "arm",
+            sse4_1: qbs.architecture != "arm",
+            sse4_2: qbs.architecture != "arm",
+            avx: qbs.architecture != "arm",
+            avx2: qbs.architecture != "arm",
+            neon: qbs.architecture == "arm",
+            // ###
             glib: glib.found,
             egl: egl.found,
-            opengl: opengl.found ? "desktop" : (opengles.found ? "es2" : undefined),
+            opengl: opengl.found ? "desktop" : (opengles.found ? "es2" : false),
             udev: udev.found,
             kms: kms.found,
             x11: x11.found,
@@ -53,7 +56,13 @@ Project {
             prepare: {
                 var cmd = new JavaScriptCommand();
                 cmd.description = "generating configuration";
-                cmd.config = JSON.stringify(product.config, null, 4);
+                var config = product.config;
+                // All variables coming from here are considered false by default, so only keep the truthy ones
+                for (var i in config) {
+                    if (!config[i])
+                        delete config[i];
+                }
+                cmd.config = JSON.stringify(config, null, 4);
                 cmd.sourceCode = function() {
                     var file = new TextFile(output.filePath, TextFile.WriteOnly);
                     file.write(config);

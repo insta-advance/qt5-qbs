@@ -7,10 +7,12 @@ Project {
 
         includeDependencies: ["QtCore", "QtMultimedia-private"]
 
+        Depends { name: "opengl-desktop"; condition: configure.opengl == "desktop" }
+        Depends { name: "opengl-es2"; condition: configure.opengl == "es2" }
         Depends { name: "QtCore" }
         Depends { name: "QtGui" }
-        Depends { name: "QtQuick" }
         Depends { name: "QtMultimedia" }
+        Depends { name: "QtQuick" }
 
         Group {
             name: "headers"
@@ -40,6 +42,8 @@ Project {
         includeDependencies: ["QtCore-private", "QtNetwork", "QtGui", "QtQuick", "QtMultimedia-private"]
 
         Depends { name: "gstreamer" }
+        Depends { name: "QtCore" }
+        Depends { name: "QtGui" }
         Depends { name: "QtMultimedia" }
 
         Group {

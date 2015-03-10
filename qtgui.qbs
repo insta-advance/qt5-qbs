@@ -30,31 +30,6 @@ QtModule {
         ])
     }
 
-    Properties {
-        condition: qbs.toolchain.contains("gcc")
-        cpp.cxxFlags: {
-            var cxxFlags = base;
-            // ### move these lower, like QtProduct
-            if (configure.sse2)
-                cxxFlags.push("-msse2");
-            if (configure.sse3)
-                cxxFlags.push("-msse3");
-            if (configure.ssse3)
-                cxxFlags.push("-mssse3");
-            if (configure.sse4_1)
-                cxxFlags.push("-msse4.1");
-            if (configure.sse4_2);
-                cxxFlags.push("-msse4.2");
-            if (configure.avx)
-                cxxFlags.push("-mavx");
-            if (configure.avx2)
-                cxxFlags.push("-mavx2");
-            if (configure.neon)
-                cxxFlags.push("-mfpu=neon");
-            return cxxFlags;
-        }
-    }
-
     QtGuiHeaders {
         name: "headers"
         excludeFiles: {
@@ -140,10 +115,5 @@ QtModule {
             "3rdparty/pixman/pixman-arm-neon-asm.S",
             "gui/painting/qdrawhelper_neon_asm.S",
         ]
-    }
-
-    Export {
-        Depends { name: "cpp" }
-        cpp.dynamicLibraries: product.cpp.dynamicLibraries
     }
 }

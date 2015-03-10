@@ -33,6 +33,7 @@ QtModule {
     //Depends { name: "pcre" }
     Depends { name: "QtCoreHeaders" }
     Depends { name: "zlib" }
+    Depends { name: "glib"; condition: configure.glib }
 
     Properties {
         condition: qbs.targetOS.contains("windows")

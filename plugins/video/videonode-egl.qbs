@@ -1,10 +1,8 @@
 import qbs
 
 QtPlugin {
-    readonly property string basePath: project.sourceDirectory + "/qtmultimedia/src/plugins/videonode/egl"
-
     category: "video"
-    condition: configure.egl
+    condition: configure.egl && configure.opengl == "es2"
 
     includeDependencies: [
         "QtCore-private",
@@ -14,27 +12,24 @@ QtPlugin {
         "QtQuick-private",
     ]
 
+    Depends { name: "egl" }
+    Depends { name: "opengl-es2" }
     Depends { name: "QtCore" }
     Depends { name: "QtGui" }
+    Depends { name: "QtMultimedia" }
     Depends { name: "QtMultimediaQuickTools" }
     Depends { name: "QtQuick" }
 
     Group {
         name: "headers"
-        prefix: basePath + "/"
-        files: [
-            "*.h",
-        ]
+        files: project.sourceDirectory + "/qtmultimedia/src/plugins/videonode/egl/*.h"
         fileTags: "moc"
         overrideTags: false
     }
 
     Group {
         name: "sources"
-        prefix: basePath + "/"
-        files: [
-            "*.cpp",
-        ]
+        files: project.sourceDirectory + "/qtmultimedia/src/plugins/videonode/egl/*.cpp"
         fileTags: "moc"
         overrideTags: false
     }

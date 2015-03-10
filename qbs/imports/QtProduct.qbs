@@ -5,6 +5,8 @@ Product {
     readonly property path includeDirectory: project.buildDirectory + "/include"
     property stringList includeDependencies: []
 
+    condition: configure.properties[name] !== false // Allows disabling any project from qtconfig.json
+
     cpp.includePaths: {
         var includes = [
             includeDirectory,

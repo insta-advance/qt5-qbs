@@ -61,8 +61,6 @@ QtProduct {
 
     Export {
         Depends { name: "cpp" }
-        cpp.includePaths: [
-            project.sourceDirectory + "/qtbase/src/3rdparty/zlib",
-        ]
+        cpp.includePaths: project.sourceDirectory + "/qtbase/src/3rdparty/zlib"
     }
 }

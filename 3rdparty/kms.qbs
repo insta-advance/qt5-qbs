@@ -21,7 +21,7 @@ Product {
     Export {
         Depends { name: "cpp" }
         cpp.cxxFlags: drmProbe.cflags
-        cpp.libraryPaths: Utils.libraryPaths(drmProbe.libs.concat(gbmProbe.libs))
-        cpp.dynamicLibraries: Utils.dynamicLibraries(drmProbe.libs.concat(gbmProbe.libs))
+        cpp.libraryPaths: product.found ? Utils.libraryPaths(drmProbe.libs.concat(gbmProbe.libs)) : []
+        cpp.dynamicLibraries: product.found ? Utils.dynamicLibraries(drmProbe.libs.concat(gbmProbe.libs)) : []
     }
 }

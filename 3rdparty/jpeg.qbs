@@ -82,8 +82,6 @@ QtProduct {
 
     Export {
         Depends { name: "cpp" }
-        cpp.includePaths: [
-            project.sourceDirectory + "/qtbase/src/3rdparty/libjpeg",
-        ]
+        cpp.includePaths: project.sourceDirectory + "/qtbase/src/3rdparty/libjpeg"
     }
 }

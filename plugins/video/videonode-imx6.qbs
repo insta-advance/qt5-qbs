@@ -15,9 +15,12 @@ QtPlugin {
         "QtQuick-private",
     ]
 
+    Depends { name: "opengl-es2" }
     Depends { name: "QtCore" }
     Depends { name: "QtGui" }
+    Depends { name: "QtMultimedia" }
     Depends { name: "QtMultimediaQuickTools" }
+    Depends { name: "QtQuick" }
 
     Group {
         name: "headers"
