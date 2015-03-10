@@ -9,7 +9,7 @@ QtModule {
     cpp.defines: {
         var defines = base;
 
-        defines.push("QT_BULD_NETWORK_LIB");
+        defines.push("QT_BUILD_NETWORK_LIB");
 
         if (!configure.ssl)
             defines.push("QT_NO_SSL");
@@ -82,6 +82,9 @@ QtModule {
                 excludeFiles.push("kernel/qhostinfo_unix.cpp");
                 excludeFiles.push("kernel/qnetworkinterface_unix.cpp");
                 excludeFiles.push("kernel/qnetworkproxy_generic.cpp");
+                excludeFiles.push("socket/qlocalserver_unix.cpp");
+                excludeFiles.push("socket/qlocalsocket_unix.cpp");
+                excludeFiles.push("socket/qnativesocketengine_unix.cpp");
             }
 
             if (!qbs.targetOS.contains("winrt")) {

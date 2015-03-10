@@ -43,18 +43,18 @@ Product {
     Export {
         Depends { name: "cpp" }
         cpp.cxxFlags: gstreamerProbe.cflags
-        cpp.libraryPaths: Utils.libraryPaths(
+        cpp.libraryPaths: product.found ? Utils.libraryPaths(
                                   gstreamerProbe.libs.concat(
                                   gstreamerAppProbe.libs).concat(
                                   gstreamerVideoProbe.libs).concat(
                                   gstreamerAudioProbe.libs).concat(
-                                  gstreamerPBUtilsProbe.libs))
-        cpp.dynamicLibraries: Utils.dynamicLibraries(
+                                  gstreamerPBUtilsProbe.libs)) : []
+        cpp.dynamicLibraries: product.found ? Utils.dynamicLibraries(
                                   gstreamerProbe.libs.concat(
                                   gstreamerAppProbe.libs).concat(
                                   gstreamerVideoProbe.libs).concat(
                                   gstreamerAudioProbe.libs).concat(
-                                  gstreamerPBUtilsProbe.libs))
+                                  gstreamerPBUtilsProbe.libs)) : []
     }
 }
 
