@@ -9,15 +9,6 @@ QtModule {
 
     includeDependencies: ["QtCore-private"]
 
-    cpp.cxxFlags: {
-        var cxxFlags = base;
-
-        if (configure.glib)
-            cxxFlags = cxxFlags.concat(glibProbe.cflags);
-
-        return cxxFlags;
-    }
-
     cpp.defines: base.concat([
         "QT_BUILD_CORE_LIB",
     ]);
@@ -30,19 +21,7 @@ QtModule {
             dynamicLibraries.push("dl");
         }
 
-        if (configure.glib)
-            dynamicLibraries = dynamicLibraries.concat(Utils.dynamicLibraries(glibProbe.libs));
-
         return dynamicLibraries;
-    }
-
-    cpp.libraryPaths: {
-        var libraryPaths = base;
-
-        if (configure.glib)
-            libraryPaths = libraryPaths.concat(Utils.libraryPaths(glibProbe.libs));
-
-        return libraryPaths;
     }
 
     cpp.includePaths: base.concat([
@@ -56,11 +35,6 @@ QtModule {
     Depends { name: "zlib" }
 
     Properties {
-        condition: configure.properties.glib === undefined
-        configure.glib: glibProbe.found
-    }
-
-    Properties {
         condition: qbs.targetOS.contains("windows")
         cpp.dynamicLibraries: base.concat([
             "shell32",
@@ -70,11 +44,6 @@ QtModule {
             "ws2_32",
             "mpr",
         ])
-    }
-
-    Probes.PkgConfigProbe {
-        id: glibProbe
-        name: "glib-2.0"
     }
 
     QtCoreHeaders {
@@ -307,7 +276,7 @@ QtModule {
                 outputFile.writeLine('static const char qt_configure_installation          [11 + 12]    = "qt_instdate=2012-12-20";'); //### qhost could patch this, too
                 outputFile.writeLine('');
                 outputFile.writeLine('/* Installation Info */');
-                outputFile.writeLine('static const char qt_configure_prefix_path_str       [256 + 12] = "qt_prfxpath=' + configure.prefix + '";'); // ###FIXME: qhost must be able to patch this; like an -install option.
+                outputFile.writeLine('static const char qt_configure_prefix_path_str       [256 + 12] = "qt_prfxpath=' + product.moduleProperty("configure", "prefix") + '";'); // ###FIXME: qhost must be able to patch this; like an -install option.
                 outputFile.writeLine('');
                 outputFile.writeLine("static const short qt_configure_str_offsets[] = { 0, 4, 12, 16, 24, 28, 36, 44, 48, 50, 52, 65, 74 };");
                 outputFile.writeLine('static const char  qt_configure_strs[] =');
@@ -338,11 +307,5 @@ QtModule {
             };
             return cmd;
         }
-    }
-
-    Export {
-        Depends { name: "configure" }
-        configure.glib: true
-        configure.iconv: product.configure.iconv // ### create a probe for this
     }
 }

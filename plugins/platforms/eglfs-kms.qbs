@@ -2,11 +2,13 @@ import qbs
 import qbs.Probes
 
 QtEglDeviceIntegrationPlugin {
+    condition: configure.kms
+
     cpp.defines: base.concat([
         "MESA_EGL_NO_X11_HEADERS",
     ])
 
-    cpp.dynamicLibraries: base.concat(kmsDynamicLibraries)
+    Depends { name: "kms" }
 
     Group {
         name: "headers"

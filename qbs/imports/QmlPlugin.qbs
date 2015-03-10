@@ -1,6 +1,6 @@
 import qbs
 
-QtLibrary {
+QtPlugin {
     property path pluginPath
 
     destinationDirectory: project.buildDirectory + "/qml/" + pluginPath

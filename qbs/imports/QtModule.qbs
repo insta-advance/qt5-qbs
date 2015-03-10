@@ -3,10 +3,10 @@ import qbs.FileInfo
 import qbs.TextFile
 import qbs.PathTools
 
-QtLibrary {
+QtProduct {
+    type: "dynamiclibrary"
     targetName: "Qt5" + name.slice(2)
     version: project.qtVersion
-
     destinationDirectory: project.buildDirectory + "/lib"
 
     Depends { name: "QtHost.sync" }

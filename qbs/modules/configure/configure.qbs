@@ -2,43 +2,44 @@ import qbs
 import qbs.File
 import qbs.FileInfo
 import qbs.TextFile
-import qbs.Probes
 
 Module {
     // configuration options -- use var also for boolean values which are initially undefined
-    property bool shared: true // ### allow for static builds as well
-    property int pointerSize: qbs.architecture == "x86_64" ? 8 : 4
-    property string qreal: properties.qreal !== undefined ? properties.qreal : "double"
-    property string prefix: properties.prefix !== undefined ? properties.prefix : ("/opt/Qt" + project.qtVersion)
-    // ### add and fix these in QtCore
-    property bool sse2: properties.sse2 !== undefined ? properties.sse2 : true
-    property bool sse3: properties.sse3 !== undefined ? properties.sse3 : true
-    property bool ssse3: properties.ssse3 !== undefined ? properties.ssse3 : true
-    property bool sse4_1: properties.sse4_1 !== undefined ? properties.sse4_1 : true
-    property bool sse4_2: properties.sse4_2 !== undefined ? properties.sse4_2 : true
-    property bool avx: properties.avx !== undefined ? properties.avx : true
-    property bool avx2: properties.avx2 !== undefined ? properties.avx2 : true
+    readonly property bool shared: true // ### allow for static builds as well
+    readonly property int pointerSize: qbs.architecture == "x86_64" ? 8 : 4
+    readonly property string qreal: properties.qreal !== undefined ? properties.qreal : "double"
+    readonly property string prefix: properties.prefix !== undefined ? properties.prefix : ("/opt/Qt" + project.qtVersion)
+
+    // ### add detections for everything which doesn't default to false
+    readonly property bool sse2: properties.sse2 !== undefined ? properties.sse2 : true
+    readonly property bool sse3: properties.sse3 !== undefined ? properties.sse3 : true
+    readonly property bool ssse3: properties.ssse3 !== undefined ? properties.ssse3 : true
+    readonly property bool sse4_1: properties.sse4_1 !== undefined ? properties.sse4_1 : true
+    readonly property bool sse4_2: properties.sse4_2 !== undefined ? properties.sse4_2 : true
+    readonly property bool avx: properties.avx !== undefined ? properties.avx : true
+    readonly property bool avx2: properties.avx2 !== undefined ? properties.avx2 : true
 
     // QtCore
-    property var glib: properties.glib
-    property var iconv: properties.iconv
+    readonly property bool glib: properties.glib
+    readonly property bool iconv: properties.iconv
 
     // QtGui
-    property bool cursor: properties.cursor !== undefined ? properties.cursor : true
-    property bool egl: properties.egl !== undefined ? properties.egl : eglProbe.found
-    property var png: properties.png !== undefined ? properties.png : "qt"
-    property var opengl: properties.opengl
-    property var qpa: properties.qpa
-    property var udev: properties.udev
-    property bool imx6: properties.imx6 !== undefined
-                        ? properties.imx6 : (eglProbe.found && eglProbe.libs.contains("-lGAL"))
+    readonly property bool cursor: properties.cursor !== undefined ? properties.cursor : true
+    readonly property bool egl: properties.egl
+    readonly property bool opengl: properties.opengl
+    readonly property bool udev: properties.udev
+    readonly property bool imx6: properties.imx6
+    readonly property bool kms: properties.kms
+    readonly property bool x11: properties.x11
+
+    readonly property string png: properties.png !== undefined ? properties.png : "qt"
+    readonly property string qpa: properties.qpa !== undefined ? properties.qpa : "xcb"
 
     // QtMultimedia
-    property bool gstreamer: properties.gstreamer !== undefined
-                             ? properties.gstreamer : (gstreamerProbe.found && gstreamerVideoProbe.found)
+    readonly property bool gstreamer: properties.gstreamer
 
     // input from user
-    property path propertiesFile: "qtconfig.json"
+    readonly property path propertiesFile: "qtconfig.json"
     readonly property var properties: {
         // ### in the case that there is a Qt attached to this profile, get these from Qt.core.config
         var filePath = FileInfo.isAbsolutePath(propertiesFile)
@@ -95,15 +96,17 @@ Module {
             config.push("qpa");
         if (udev)
             config.push("udev");
+
+        return config;
     }
+
+    Depends { name: "cpp" }
 
     // ###todo: consider adding cxxFlags/linkerFlags here as well
 
     // Trivial flags which would otherwise trigger a QT_NO_XXX definition should
     // have a default assigned above. Otherwise, a lower module may end up
     // with a conflicting definition in a higher module.
-    Depends { name: "cpp" }
-
     cpp.defines: {
         var defines = [
             "QT_POINTER_SIZE=" + pointerSize,
@@ -161,27 +164,5 @@ Module {
             defines.push('QT_QPA_DEFAULT_PLATFORM_NAME="' + qpa + '"');
 
         return defines;
-    }
-
-    // Probes we can't live without
-    readonly property var probes: ({
-        egl: eglProbe,
-        gstreamer: gstreamerProbe,
-        gstreamerVideo: gstreamerVideoProbe,
-    })
-
-    Probes.PkgConfigProbe {
-        id: eglProbe
-        name: "egl"
-    }
-
-    Probes.PkgConfigProbe {
-        id: gstreamerProbe
-        name: "gstreamer-1.0"
-    }
-
-    Probes.PkgConfigProbe {
-        id: gstreamerVideoProbe
-        name: "gstreamer-video-1.0"
     }
 }

@@ -1,23 +1,13 @@
 import qbs
+import qbs.ModUtils
 import qbs.Probes
 import "../../qbs/utils.js" as Utils
 
 QtModule {
+    condition: configure.egl
     name: "QtEglDeviceIntegration"
 
     includeDependencies: ["QtCore-private", "QtGui-private", "QtPlatformSupport-private"]
-
-    cpp.cxxFlags: {
-        var cxxFlags = base;
-
-        if (configure.glib && glibProbe.cflags)
-            cxxFlags = cxxFlags.concat(glibProbe.cflags);
-
-        if (configure.udev && udevProbe.cflags)
-            cxxFlags = cxxFlags.concat(udevProbe.cflags);
-
-        return cxxFlags;
-    }
 
     cpp.defines: base.concat([
         "QT_BUILD_EGL_DEVICE_LIB",
@@ -26,49 +16,21 @@ QtModule {
         "EGL_API_FB", // ### from imx6, not sure if this is compatible. we want to build an ARM binary that works with multiple boards
     ])
 
-    cpp.dynamicLibraries: {
-        var libs = base.concat([
-            "EGL",
-            "pthread",
-        ]);
-
-        if (configure.glib)
-            libs = libs.concat(Utils.dynamicLibraries(glibProbe.libs));
-
-        if (configure.udev)
-            libs = libs.concat(Utils.dynamicLibraries(udevProbe.libs));
-
-        return libs;
-    }
+    cpp.dynamicLibraries: base.concat([
+        "pthread",
+    ]);
 
     cpp.includePaths: base.concat([
         project.sourceDirectory + "/qtbase/src/3rdparty/freetype/include", // ### use Probe for system freetype
     ])
 
+    Depends { name: "egl"; condition: configure.egl }
+    Depends { name: "udev"; condition: configure.udev }
+    Depends { name: "glib" }
     Depends { name: "QtPlatformHeaders" }
     Depends { name: "QtPlatformSupport" }
     Depends { name: "QtCore" }
     Depends { name: "QtGui" }
-
-    Properties {
-        condition: configure.properties.glib === undefined
-        configure.glib: glibProbe.found
-    }
-
-    Properties {
-        condition: configure.properties.udev === undefined
-        configure.udev: udevProbe.found
-    }
-
-    Probes.PkgConfigProbe {
-        id: udevProbe
-        name: "libudev"
-    }
-
-    Probes.PkgConfigProbe {
-        id: glibProbe
-        name: "glib-2.0"
-    }
 
     Group {
         name: "headers"
@@ -132,11 +94,11 @@ QtModule {
                 "platformsupport/services/genericunix/qgenericunixservices.cpp",
             ];
 
-            if (udevProbe.found) {
+            if (configure.udev) {
                 files.push("platformsupport/devicediscovery/qdevicediscovery_udev.cpp");
             }
 
-            if (configure.glib !== false && glibProbe.found) {
+            if (configure.glib) {
                 files.push("platformsupport/eventdispatchers/qeventdispatcher_glib.cpp");
             }
 

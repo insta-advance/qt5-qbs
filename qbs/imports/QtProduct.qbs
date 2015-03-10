@@ -9,6 +9,7 @@ Product {
         var includes = [
             includeDirectory,
             project.sourceDirectory + "/qtbase/mkspecs/" + project.target,
+            product.buildDirectory + "/.moc",
         ];
         for (var i in includeDependencies) {
             var module = includeDependencies[i];
@@ -30,7 +31,14 @@ Product {
     }
 
     cpp.defines: {
-        var defines = [];
+        var defines = [
+            "QT_BUILDING_QT",
+            "_USE_MATH_DEFINES",
+            "QT_ASCII_CAST_WARNINGS",
+            "QT_MOC_COMPAT",
+            "QT_DEPRECATED_WARNINGS",
+            "QT_DISABLE_DEPRECATED_BEFORE=0x040800",
+        ];
 
         if (qbs.targetOS.contains("windows")) {
             defines.push("_WIN32");
@@ -43,6 +51,7 @@ Product {
 
     Depends { name: "configure" }
     Depends { name: "cpp" }
+    Depends { name: "QtHost"; submodules: ["rcc"] }
 
     Properties {
         condition: qbs.toolchain.contains("gcc") && !qbs.toolchain.contains("clang")

@@ -1,12 +1,14 @@
 import qbs
 
 QtEglDeviceIntegrationPlugin {
+    condition: configure.egl && configure.x11
+
     cpp.defines: base.concat([
         "MESA_EGL_NO_X11_HEADERS", // for Mesa
         "EGL_API_FB",              // for Vivante
     ])
 
-    cpp.dynamicLibraries: base.concat(x11DynamicLibraries)
+    Depends { name: "x11" }
 
     Group {
         name: "headers"

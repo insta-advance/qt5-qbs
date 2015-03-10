@@ -1,8 +1,9 @@
 import qbs
 
-QtLibrary {
+QtProduct {
     property string category
 
+    type: "dynamiclibrary"
     destinationDirectory: project.buildDirectory + "/plugins/" + category
 
     Group {

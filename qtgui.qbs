@@ -12,36 +12,14 @@ QtModule {
         "QT_BUILD_GUI_LIB",
     ])
 
+    Depends { name: "opengl-desktop"; condition: configure.opengl == "desktop" }
+    Depends { name: "opengl-es2"; condition: configure.opengl == "es2" }
     Depends { name: "freetype" }
     Depends { name: "jpeg" }
     Depends { name: "png" }
     Depends { name: "QtCore" }
     Depends { name: "QtGuiHeaders" }
     Depends { name: "zlib" }
-
-    Properties {
-        condition: configure.properties.opengl === undefined
-        configure.opengl: "es2" // ### perform detection
-    }
-
-    Properties {
-        condition: configure.properties.qpa === undefined
-        configure.qpa: "xcb" // ### make this smarter
-    }
-
-    Properties {
-        condition: configure.opengl == "desktop" && qbs.targetOS.contains("unix")
-        cpp.dynamicLibraries: base.concat([
-            "GL",
-        ])
-    }
-
-    Properties {
-        condition: configure.opengl == "es2"
-        cpp.dynamicLibraries: base.concat([
-            "GLESv2",
-        ])
-    }
 
     Properties {
         condition: qbs.targetOS.contains("windows")
@@ -167,10 +145,5 @@ QtModule {
     Export {
         Depends { name: "cpp" }
         cpp.dynamicLibraries: product.cpp.dynamicLibraries
-
-        Depends { name: "configure" }
-        configure.qpa: product.configure.qpa
-        configure.png: product.configure.png
-        configure.opengl: product.configure.opengl
     }
 }

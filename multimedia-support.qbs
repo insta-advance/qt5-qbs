@@ -39,8 +39,7 @@ Project {
 
         includeDependencies: ["QtCore-private", "QtNetwork", "QtGui", "QtQuick", "QtMultimedia-private"]
 
-        cpp.cxxFlags: base.concat(configure.probes.gstreamer.cflags)
-
+        Depends { name: "gstreamer" }
         Depends { name: "QtMultimedia" }
 
         Group {

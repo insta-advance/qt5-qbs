@@ -6,13 +6,11 @@ QtPlugin {
 
     category: "egldeviceintegrations"
 
-    cpp.cxxFlags: base.concat(cxxFlags)
-    cpp.dynamicLibraries: base.concat(eglDynamicLibraries)
     cpp.includePaths: base.concat(includePaths)
-    cpp.libraryPaths: base.concat(libraryPaths)
 
     includeDependencies: ["QtCore-private", "QtGui-private", "QtPlatformSupport-private"]
 
+    Depends { name: "egl" }
     Depends { name: "QtCore" }
     Depends { name: "QtGui" }
     Depends { name: "QtEglDeviceIntegration" }
