@@ -12,7 +12,7 @@ Project {
         "harfbuzz.qbs",
         "jpeg.qbs",
         "masm.qbs",
-        //"pcre.qbs",
+        "pcre.qbs",
         "opengl-desktop.qbs",
         "opengl-es2.qbs",
         "png.qbs",

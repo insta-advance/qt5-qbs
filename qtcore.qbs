@@ -36,11 +36,10 @@ QtModule {
 
     cpp.includePaths: base.concat([
         project.sourceDirectory + "/qtbase/src/3rdparty/forkfd",
-        project.sourceDirectory + "/qtbase/src/3rdparty/pcre",
     ])
 
     Depends { name: "harfbuzz" }
-    //Depends { name: "pcre" }
+    Depends { name: "pcre" }
     Depends { name: "QtCoreHeaders" }
     Depends { name: "zlib" }
     Depends { name: "glib"; condition: configure.glib }
@@ -249,16 +248,6 @@ QtModule {
         }
         fileTags: "moc"
         overrideTags: false
-    }
-
-    Group {
-        //condition: configure.pcre && !pcreProbe.found
-        name: "pcre"
-        files: project.sourceDirectory + "/qtbase/src/3rdparty/pcre/pcre16_*.c"
-        cpp.defines: base.concat([
-            "PCRE_HAVE_CONFIG_H",
-            "PCRE_STATIC",
-        ])
     }
 
     Group {

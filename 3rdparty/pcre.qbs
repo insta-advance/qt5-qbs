@@ -20,13 +20,14 @@ QtProduct {
         name: "sources"
         prefix: project.sourceDirectory + "/qtbase/src/3rdparty/pcre/"
         files: [
+            "*.h",
             "pcre16_*.c",
         ]
-        //fileTags: "cpp" // compile C files as CPP
     }
 
     Export {
         Depends { name: "cpp" }
         cpp.includePaths: project.sourceDirectory + "/qtbase/src/3rdparty/pcre"
+        cpp.defines: ["PCRE_HAVE_CONFIG_H", "PCRE_STATIC"]
     }
 }
