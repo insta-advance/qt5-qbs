@@ -58,7 +58,10 @@ Module {
     // QtWidgets
     readonly property bool android: properties.androidstyle
     readonly property bool gtkstyle: properties.gtkstyle
+    readonly property bool windowscestyle: properties.windowscestyle
+    readonly property bool windowsmobilestyle: properties.windowsmobilestyle
     readonly property bool windowsvistastyle: properties.windowsvistastyle
+    readonly property bool windowsxpstyle: properties.windowsxpstyle
 
     // QtMultimedia
     readonly property bool gstreamer: properties.gstreamer
@@ -91,7 +94,11 @@ Module {
             freetype: true,
 
             androidstyle: qbs.targetOS.contains("android"),
+            macstyle: qbs.targetOS.contains("osx"),
+            windowscestyle: qbs.targetOS.contains("windowsce"),
+            windowsmobilestyle: qbs.targetOS.contains("windowsce"),
             windowsvistastyle: qbs.targetOS.contains("windows"),
+            windowsxpstyle: qbs.targetOS.contains("windows"),
         };
 
         // ### in the case that there is a Qt attached to this profile, get these from Qt.core.config

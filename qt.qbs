@@ -129,8 +129,16 @@ Project {
                         outputFile.writeLine("#define QT_NO_STYLE_ANDROID");
                     if (!properties.gtkstyle)
                         outputFile.writeLine("#define QT_NO_STYLE_GTK");
+                    if (!properties.macstyle)
+                        outputFile.writeLine("#define QT_NO_STYLE_MAC");
+                    if (!properties.windowscestyle)
+                        outputFile.writeLine("#define QT_NO_STYLE_WINDOWSCE");
+                    if (!properties.windowsmobilestyle)
+                        outputFile.writeLine("#define QT_NO_STYLE_WINDOWSMOBILE");
                     if (!properties.windowsvistastyle)
                         outputFile.writeLine("#define QT_NO_STYLE_WINDOWSVISTA");
+                    if (!properties.windowsxpstyle)
+                        outputFile.writeLine("#define QT_NO_STYLE_WINDOWSXP");
 
                     outputFile.writeLine('');
                     outputFile.writeLine("#endif // QFEATURES_H");
