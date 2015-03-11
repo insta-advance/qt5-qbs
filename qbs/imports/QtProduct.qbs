@@ -33,19 +33,21 @@ Product {
     }
 
     cpp.defines: {
-        var defines = [
+        var defines = configure.baseDefines.concat([
             "QT_BUILDING_QT",
-            "_USE_MATH_DEFINES",
-            "QT_ASCII_CAST_WARNINGS",
             "QT_MOC_COMPAT",
-            "QT_DEPRECATED_WARNINGS",
-            "QT_DISABLE_DEPRECATED_BEFORE=0x040800",
-        ];
+            "_USE_MATH_DEFINES",
+        ]);
 
         if (qbs.targetOS.contains("windows")) {
             defines.push("_WIN32");
             if (qbs.toolchain.contains("msvc"))
                 defines.push("_SCL_SECURE_NO_WARNINGS");
+        }
+
+        if (configure.properties.qreal) {
+            defines.push("QT_COORD_TYPE=" + properties.qreal);
+            defines.push('QT_COORD_TYPE_STRING="' + properties.qreal + '"');
         }
 
         return defines;

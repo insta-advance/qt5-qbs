@@ -9,9 +9,19 @@ QtModule {
 
     includeDependencies: ["QtCore-private"]
 
-    cpp.defines: base.concat([
-        "QT_BUILD_CORE_LIB",
-    ]);
+    cpp.defines: {
+        var defines = base.concat([
+            "QT_BUILD_CORE_LIB",
+        ]);
+
+        if (!configure.glib)
+            defines.push("QT_NO_GLIB");
+
+        if (!configure.iconv)
+            defines.push("QT_NO_ICONV");
+
+        return defines;
+    }
 
     cpp.dynamicLibraries: {
         var dynamicLibraries = base;

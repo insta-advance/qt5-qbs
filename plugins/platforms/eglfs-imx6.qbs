@@ -3,9 +3,9 @@ import qbs
 QtEglDeviceIntegrationPlugin {
     condition: configure.imx6
 
-    cpp.defines: [
+    cpp.defines: base.concat([
         "EGL_API_FB",
-    ]
+    ])
 
     Group {
         name: "headers"

@@ -47,6 +47,12 @@ Project {
     }
 
     QtHeaders {
+        name: "QtWidgetHeaders"
+        module: "QtWidgets"
+        QtWidgetHeaders { fileTags: "header_sync" }
+    }
+
+    QtHeaders {
         name: "QtPlatformHeaders"
         module: "QtPlatformHeaders"
         QtPlatformHeaders { fileTags: "header_sync" }

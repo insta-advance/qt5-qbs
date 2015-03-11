@@ -6,7 +6,7 @@ import "3rdparty/opengl-desktop.qbs" as OpenGL
 import "3rdparty/opengl-es2.qbs" as OpenGLES
 import "3rdparty/udev.qbs" as Udev
 import "3rdparty/kms.qbs" as Kms
-import "3rdparty/x11.qbs" as X11
+import "3rdparty/xcb.qbs" as Xcb
 import "3rdparty/gstreamer.qbs" as Gstreamer
 
 Project {
@@ -16,7 +16,7 @@ Project {
     OpenGLES { id: opengles; name: "opengles" }
     Udev { id: udev; name: "udev" }
     Kms { id: kms; name: "kms" }
-    X11 { id: x11; name: "x11" }
+    Xcb { id: xcb; name: "xcb" }
     Gstreamer { id: gstreamer; name: "gstreamer" }
 
     Product {
@@ -39,7 +39,7 @@ Project {
             opengl: opengl.found ? "desktop" : (opengles.found ? "es2" : false),
             udev: udev.found,
             kms: kms.found,
-            x11: x11.found,
+            xcb: xcb.found,
             gstreamer: gstreamer.found,
         })
 

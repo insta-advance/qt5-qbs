@@ -2,6 +2,8 @@ import qbs
 
 QtModule {
     name: "QtQuick"
+    condition: configure.quick
+
     readonly property path basePath: project.sourceDirectory
                                      + "/qtdeclarative/src/quick"
 

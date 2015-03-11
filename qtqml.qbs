@@ -4,6 +4,8 @@ import qbs.TextFile
 
 QtModule {
     name: "QtQml"
+    condition: configure.qml
+
     readonly property path basePath: project.sourceDirectory
                                      + "/qtdeclarative/src/qml"
 

@@ -56,6 +56,7 @@ Project {
         "qtcore.qbs",
         "qtgui.qbs",
         "qtnetwork.qbs",
+        "qtwidgets.qbs",
 
         "qtqml.qbs",
         "qtquick.qbs",
@@ -97,6 +98,8 @@ Project {
     Product {
         type: "install"
 
+        Depends { name: "configure" }
+
         Transformer {
             Artifact {
                 filePath: "qfeatures.h"
@@ -104,19 +107,32 @@ Project {
             }
             prepare: {
                 var cmd = new JavaScriptCommand();
-                cmd.description = "Preparing qfeatures.h";
+                cmd.description = "preparing qfeatures.h";
                 cmd.sourceCode = function() {
                     var outputFile = new TextFile(output.filePath, TextFile.WriteOnly);
                     outputFile.writeLine("#ifndef QFEATURES_H");
                     outputFile.writeLine("#define QFEATURES_H");
+                    outputFile.writeLine('');
 
-                    var defines = product.moduleProperty("configure", "defines");
-                    for (var i in defines) {
-                        var define = defines[i];
-                        if (define.startsWith("QT_NO_"))
-                            outputFile.writeLine("#define " + define);
-                    }
+                    // ### TODO: generate this properly using features.txt
 
+                    var properties = product.moduleProperty("configure", "properties");
+                    if (!properties.glib)
+                        outputFile.writeLine("#define QT_NO_GLIB");
+                    if (!properties.iconv)
+                        outputFile.writeLine("#define QT_NO_ICONV");
+                    if (!properties.widgets)
+                        outputFile.writeLine("#define QT_NO_WIDGETS");
+                    if (!properties.gtkstyle)
+                        outputFile.writeLine("#define QT_NO_STYLE_GTK");
+                    if (!properties.androidstyle)
+                        outputFile.writeLine("#define QT_NO_STYLE_ANDROID");
+                    if (!properties.gtkstyle)
+                        outputFile.writeLine("#define QT_NO_STYLE_GTK");
+                    if (!properties.windowsvistastyle)
+                        outputFile.writeLine("#define QT_NO_STYLE_WINDOWSVISTA");
+
+                    outputFile.writeLine('');
                     outputFile.writeLine("#endif // QFEATURES_H");
                     outputFile.close();
                 };
@@ -131,19 +147,20 @@ Project {
             }
             prepare: {
                 var cmd = new JavaScriptCommand();
-                cmd.description = "Preparing qconfig.h";
+                cmd.description = "preparing qconfig.h";
+                cmd.defines = product.moduleProperty("configure", "baseDefines").concat(
+                              product.moduleProperty("configure", "openglDefines")).concat(
+                              product.moduleProperty("configure", "simdDefines"));
                 cmd.sourceCode = function() {
                     var outputFile = new TextFile(output.filePath, TextFile.WriteOnly);
                     outputFile.writeLine("#ifndef QCONFIG_H");
                     outputFile.writeLine("#define QCONFIG_H");
-
-                    var defines = product.moduleProperty("configure", "defines");
+                    outputFile.writeLine('');
                     for (var i in defines) {
-                        var define = defines[i];
-                        if (!define.startsWith("QT_NO_"))
-                            outputFile.writeLine("#define " + define);
+                        var define = defines[i].replace(/^(\w+)=/, "$1 ");
+                        outputFile.writeLine("#define " + define);
                     }
-
+                    outputFile.writeLine('');
                     outputFile.writeLine("#endif // QCONFIG_H");
                     outputFile.close();
                 };
@@ -186,18 +203,26 @@ Project {
             prepare: {
                 var cmd = new JavaScriptCommand();
                 cmd.description = "generating qconfig.pri";
+                cmd.config = ["shared", product.moduleProperty("qbs", "buildVariant")];
+                var properties = product.moduleProperty("configure", "properties");
+                cmd.qtconfig = [];
+                for (var i in properties) {
+                    if (properties[i])
+                        cmd.qtconfig.push(i);
+                }
+                if (properties.opengl == "es2")
+                    cmd.qtconfig.push("opengles2");
+                cmd.qtVersionParts = project.qtVersion.split(".");
                 cmd.sourceCode = function() {
-                    var config = product.moduleProperty("configure", "config");
                     var file = new TextFile(output.filePath, TextFile.WriteOnly);
-                    file.writeLine("QT_MAJOR_VERSION = 5"); // ### get from project.version
-                    file.writeLine("QT_MINOR_VERSION = 5");
-                    file.writeLine("QT_PATCH_VERSION = 0");
+                    file.writeLine("QT_MAJOR_VERSION = " + qtVersionParts[0]);
+                    file.writeLine("QT_MINOR_VERSION = " + qtVersionParts[1]);
+                    file.writeLine("QT_PATCH_VERSION = " + qtVersionParts[2]);
                     file.writeLine("QT_NAMESPACE = "); // ### namespace
                     file.writeLine("QT_LIBINFIX = "); // ### libinfix
                     file.writeLine("QT_TARGET_ARCH = " + product.moduleProperty("qbs", "architecture"));
-                    // ### fixme: separate CONFIG and QT_CONFIG
                     file.writeLine("CONFIG = " + config.join(' '));
-                    file.writeLine("QT_CONFIG = " + config.join(' '));
+                    file.writeLine("QT_CONFIG = " + qtconfig.join(' '));
                     file.close();
                 }
                 return cmd;

@@ -48,13 +48,16 @@ Module {
             var reTypedef = /^typedef +(unsigned )?([^ ]*)(<[\w, ]+>)? +(Q[^ ]*);$/;
             var reQtMacro = / ?Q_[A-Z_]+/;
             var reDecl = /^(template <class [\w, ]+> )?(class|struct) +(\w+)( ?: public [\w<>, ]+)?( {)?$/;
-            var reIterator = /^Q_DECLARE_.*ITERATOR\((.*)\)$/;
+            var reIterator = /^Q_DECLARE_\w+ITERATOR\((\w+)\)$/;
             var reNamespace = /^namespace \w+( {)?/; //extern "C" could go here too
 
             var classes = [];
 
             // Special cases
             switch (input.fileName) {
+            case "qalgorithms.h":
+                classes.push("QtAlgorithms");
+                break;
             case "qdebug.h":
                 classes.push("QtDebug");
                 break;
@@ -166,6 +169,17 @@ Module {
                     continue;
                 }
 
+                // grab iterators
+                if (reIterator.test(line)) {
+                    var className = "Q";
+                    if (line.contains("MUTABLE"))
+                        className += "Mutable";
+                    className += line.match(reIterator)[1] + "Iterator";
+                    classes.push(className);
+                    line = "";
+                    continue;
+                }
+
                 // make parsing easier by removing noise
                 line = line.replace(reQtMacro, "");
 
@@ -191,13 +205,6 @@ Module {
                 // grab classes
                 if (reDecl.test(line)) {
                     classes.push(line.match(reDecl)[3]);
-                    line = "";
-                    continue;
-                }
-
-                // grab iterators
-                if (reIterator.test(line)) {
-                    classes.push(line.match(reIterator)[1]);
                     line = "";
                     continue;
                 }

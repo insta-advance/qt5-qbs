@@ -4,13 +4,29 @@ import qbs.Probes
 
 QtModule {
     name: "QtGui"
+    condition: configure.gui
+
     readonly property path basePath: project.sourceDirectory + "/qtbase/src/gui"
 
-    includeDependencies: ["QtCore-private", "QtGui", "QtGui-private"]
+    includeDependencies: ["QtCore-private", "QtGui-private"]
 
-    cpp.defines: base.concat([
-        "QT_BUILD_GUI_LIB",
-    ])
+    cpp.defines: {
+        var defines = base.concat(configure.simdDefines).concat(configure.openglDefines).concat([
+            "QT_BUILD_GUI_LIB",
+            'QT_QPA_DEFAULT_PLATFORM_NAME="' + configure.qpa + '"',
+        ]);
+
+        if (configure.png == "qt")
+            defines.push("QT_USE_BUNDLED_LIBPNG");
+
+        if (!configure.cursor) {
+            defines.push("QT_NO_CURSOR");
+            defines.push("QT_NO_WHEELEVENT");
+            defines.push("QT_NO_DRAGANDDROP");
+        }
+
+        return defines;
+    }
 
     Depends { name: "opengl-desktop"; condition: configure.opengl == "desktop" }
     Depends { name: "opengl-es2"; condition: configure.opengl == "es2" }
@@ -115,5 +131,10 @@ QtModule {
             "3rdparty/pixman/pixman-arm-neon-asm.S",
             "gui/painting/qdrawhelper_neon_asm.S",
         ]
+    }
+
+    Export {
+        Depends { name: "cpp" }
+        cpp.defines: configure.openglDefines
     }
 }
