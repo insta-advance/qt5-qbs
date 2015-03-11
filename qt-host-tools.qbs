@@ -29,5 +29,6 @@ Project {
         "host-tools/qhost.qbs",
         "host-tools/qtbootstrap.qbs",
         "host-tools/rcc.qbs",
+        "host-tools/uic.qbs",
     ]
 }

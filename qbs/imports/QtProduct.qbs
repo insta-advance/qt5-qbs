@@ -8,11 +8,11 @@ Product {
     condition: configure.properties[name] !== false // Allows disabling any project from qtconfig.json
 
     cpp.includePaths: {
-        var includes = [
+        var includes = base.concat([
             includeDirectory,
             project.sourceDirectory + "/qtbase/mkspecs/" + project.target,
-            product.buildDirectory + "/.moc",
-        ];
+            product.buildDirectory + "/.moc", // ### maybe move back to a module
+        ]);
         for (var i in includeDependencies) {
             var module = includeDependencies[i];
             if (module.endsWith("-private")) {
@@ -55,7 +55,7 @@ Product {
 
     Depends { name: "configure" }
     Depends { name: "cpp" }
-    Depends { name: "QtHost"; submodules: ["rcc"] }
+    Depends { name: "QtHost.rcc" }
 
     Properties {
         condition: qbs.toolchain.contains("gcc") && !qbs.toolchain.contains("clang")
