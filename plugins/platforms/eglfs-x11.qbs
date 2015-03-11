@@ -1,7 +1,7 @@
 import qbs
 
 QtEglDeviceIntegrationPlugin {
-    condition: configure.egl && configure.x11
+    condition: configure.egl && configure.xcb
 
     cpp.defines: base.concat([
         "MESA_EGL_NO_X11_HEADERS", // for Mesa
