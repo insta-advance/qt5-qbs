@@ -11,7 +11,7 @@ QtProduct {
     Depends { name: "QtBootstrap" }
 
     Properties {
-        condition: qbs.targetOS.contains("gcc")
+        condition: qbs.toolchain.contains("gcc")
         cpp.cxxFlags: base.concat(["-std=c++11"])
     }
 
