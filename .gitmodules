@@ -10,3 +10,6 @@
 [submodule "qtmultimedia"]
 	path = qtmultimedia
 	url = https://github.com/qtproject/qtmultimedia
+[submodule "qtquickcontrols"]
+	path = qtquickcontrols
+	url = https://github.com/qtproject/qtquickcontrols.git
