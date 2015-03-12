@@ -59,7 +59,17 @@ Product {
 
     Properties {
         condition: qbs.toolchain.contains("gcc") && !qbs.toolchain.contains("clang")
-        cpp.cxxFlags: base.concat(["-Wno-psabi"])
+        cpp.cxxFlags: base.concat(["-Wno-psabi"]);
+    }
+
+    Properties {
+        condition: qbs.toolchain.contains("gcc")
+        cpp.cxxFlags: {
+            var cxxFlags = base;
+            if (configure.cxx11)
+                cxxFlags.push("-std=c++11");
+            return cxxFlags;
+        }
         cpp.rpaths: configure.prefix + "/lib"
     }
 
