@@ -79,6 +79,18 @@ Module {
             quick: true,
             multimedia: true,
 
+            // ### TODO: autodetection
+            sse2: qbs.architecture.startsWith("x86"),
+            sse3: qbs.architecture.startsWith("x86"),
+            ssse3: qbs.architecture.startsWith("x86"),
+            sse4_1: qbs.architecture.startsWith("x86"),
+            sse4_2: qbs.architecture.startsWith("x86"),
+            avx: qbs.architecture.startsWith("x86"),
+            avx2: qbs.architecture.startsWith("x86"),
+            neon: qbs.architecture.startsWith("arm"),
+
+            opengl: "es2", // ### fixme... this needs to be no-opengl unless we can make a simple detection here
+
             // default config
             prefix: qbs.installRoot ? qbs.installRoot : project.buildDirectory,
 

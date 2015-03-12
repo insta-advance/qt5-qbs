@@ -15,11 +15,14 @@ QtModule {
         "QtQuick-private",
     ]
 
-    cpp.defines: base.concat([
-        "QT_BUILD_QUICK_LIB",
-        "QT_OPENGL_ES",
-        "QT_OPENGL_ES_2", // ###fixme: configure.opengl is not getting inherited (?)
-    ])
+    cpp.defines: {
+        var defines = base.concat([
+            "QT_BUILD_QUICK_LIB",
+        ]);
+        if (!configure.cursor)
+            defines.push("QT_NO_CURSOR");
+        return defines;
+    }
 
     Depends { name: "opengl-desktop"; condition: configure.opengl == "desktop" }
     Depends { name: "opengl-es2"; condition: configure.opengl == "es2" }
@@ -31,12 +34,14 @@ QtModule {
 
     QtQuickHeaders {
         name: "headers"
-        excludeFiles: {
+        /*excludeFiles: {
             var excludeFiles = [];
-            if (!configure.cursor)
+            if (!configure.cursor) {
                 excludeFiles.push("items/qquickdroparea_p.h");
+                excludeFiles.push("items/qquickdrag_p.h");
+            }
             return excludeFiles;
-        }
+        }*/
         fileTags: "moc"
         overrideTags: false
     }
@@ -55,6 +60,14 @@ QtModule {
             "scenegraph/util/*.cpp",
             "util/*.cpp",
         ]
+        /*excludeFiles: {
+            var excludeFiles = [];
+            if (!configure.cursor) {
+                excludeFiles.push("items/qquickdroparea.cpp");
+                excludeFiles.push("items/qquickdragcpp");
+            }
+            return excludeFiles;
+        }*/
         fileTags: "moc"
         overrideTags: false
     }

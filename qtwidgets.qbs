@@ -26,6 +26,8 @@ QtModule {
             defines.push("QT_NO_STYLE_WINDOWSVISTA");
         if (!configure.windowsxpstyle)
             defines.push("QT_NO_STYLE_WINDOWSXP");
+        if (!configure.cursor)
+            defines.push("QT_NO_CURSOR");
         return defines;
     }
 

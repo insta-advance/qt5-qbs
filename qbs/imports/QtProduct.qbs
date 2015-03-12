@@ -60,6 +60,7 @@ Product {
     Properties {
         condition: qbs.toolchain.contains("gcc") && !qbs.toolchain.contains("clang")
         cpp.cxxFlags: base.concat(["-Wno-psabi"])
+        cpp.rpaths: configure.prefix + "/lib"
     }
 
     Rule {

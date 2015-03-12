@@ -19,11 +19,8 @@ QtModule {
         if (configure.png == "qt")
             defines.push("QT_USE_BUNDLED_LIBPNG");
 
-        if (!configure.cursor) {
+        if (!configure.cursor)
             defines.push("QT_NO_CURSOR");
-            defines.push("QT_NO_WHEELEVENT");
-            defines.push("QT_NO_DRAGANDDROP");
-        }
 
         return defines;
     }

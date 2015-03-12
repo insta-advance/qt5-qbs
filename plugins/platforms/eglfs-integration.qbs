@@ -17,11 +17,8 @@ QtModule {
             "EGL_API_FB", // ### from imx6, not sure if this is compatible. we want to build an ARM binary that works with multiple boards
         ]);
 
-        if (!configure.cursor) {
+        if (!configure.cursor)
             defines.push("QT_NO_CURSOR");
-            defines.push("QT_NO_WHEELEVENT");
-            defines.push("QT_NO_DRAGANDDROP");
-        }
 
         if (!configure.glib)
             defines.push("QT_NO_GLIB");
