@@ -122,7 +122,7 @@ QtModule {
 
     Group {
         name: "sources (pixman neon)"
-        condition: qbs.architecture == "arm"
+        condition: configure.neon
         prefix: project.sourceDirectory + "/qtbase/src/"
         files: [
             "3rdparty/pixman/pixman-arm-neon-asm.S",

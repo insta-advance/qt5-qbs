@@ -117,6 +117,10 @@ Project {
                     // ### TODO: generate this properly using features.txt
 
                     var properties = product.moduleProperty("configure", "properties");
+                    if (!properties.dbus) {
+                        outputFile.writeLine("#define QT_NO_DBUS");
+                        outputFile.writeLine("#define QT_NO_ACCESSIBILITY_ATSPI_BRIDGE");
+                    }
                     if (!properties.glib)
                         outputFile.writeLine("#define QT_NO_GLIB");
                     if (!properties.iconv)
@@ -139,6 +143,8 @@ Project {
                         outputFile.writeLine("#define QT_NO_STYLE_WINDOWSVISTA");
                     if (!properties.windowsxpstyle)
                         outputFile.writeLine("#define QT_NO_STYLE_WINDOWSXP");
+                    if (!properties.xkb)
+                        outputFile.writeLine("#define QT_NO_XKB");
 
                     outputFile.writeLine('');
                     outputFile.writeLine("#endif // QFEATURES_H");

@@ -49,11 +49,11 @@ Module {
     readonly property bool imx6: properties.imx6
     readonly property bool kms: properties.kms
     readonly property bool xcb: properties.xcb
+    readonly property bool xkb: properties.xkb
     readonly property bool linuxfb: properties.linuxfb
     readonly property string png: properties.png
     readonly property string qpa: properties.qpa
     // xcb-qt
-    // xcbcommon
 
     // QtWidgets
     readonly property bool android: properties.androidstyle

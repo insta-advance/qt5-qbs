@@ -8,7 +8,7 @@ QtEglDeviceIntegrationPlugin {
         "EGL_API_FB",              // for Vivante
     ])
 
-    Depends { name: "xcb" }
+    Depends { name: "xcb-x11" }
 
     Group {
         name: "headers"

@@ -17,7 +17,9 @@ Project {
         "opengl-es2.qbs",
         "png.qbs",
         "udev.qbs",
-        "xcb.qbs",
+        "xcb-x11.qbs",
+        "xkbcommon.qbs",
+        "xkb-x11.qbs",
         "zlib.qbs",
     ]
 }
