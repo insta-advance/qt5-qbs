@@ -11,7 +11,7 @@ Project {
     ]
 
     QtPlugin {
-        condition: configure.xcb && configure.egl
+        condition: configure.xcb && configure.egl && qbs.targetOS.contains("linux")
         category: "platforms"
         targetName: "qxcb"
 

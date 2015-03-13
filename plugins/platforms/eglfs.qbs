@@ -12,7 +12,7 @@ Project {
     references: "eglfs-integration.qbs"
 
     QtPlugin {
-        condition: configure.egl
+        condition: configure.egl && qbs.targetOS.contains("linux")
         category: "platforms"
         targetName: "qeglfs"
 
