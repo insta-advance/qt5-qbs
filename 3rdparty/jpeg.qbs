@@ -2,9 +2,6 @@ import qbs
 
 QtProduct {
     type: "staticlibrary"
-    destinationDirectory: project.buildDirectory + "/lib"
-
-    Depends { name: "cpp" }
 
     Properties {
         condition: qbs.toolchain.contains("gcc")
