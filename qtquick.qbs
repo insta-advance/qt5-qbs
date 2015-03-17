@@ -24,8 +24,16 @@ QtModule {
         return defines;
     }
 
+    cpp.dynamicLibraries: {
+        var dynamicLibraries = base;
+        if (qbs.targetOS.contains("windows"))
+            dynamicLibraries.push("user32");
+        return dynamicLibraries;
+    }
+
     Depends { name: "opengl-desktop"; condition: configure.opengl == "desktop" }
     Depends { name: "opengl-es2"; condition: configure.opengl == "es2" }
+    Depends { name: "angle-gles2"; condition: configure.angle }
     Depends { name: "QtCore" }
     Depends { name: "QtGui" }
     Depends { name: "QtNetwork" }
@@ -34,14 +42,6 @@ QtModule {
 
     QtQuickHeaders {
         name: "headers"
-        /*excludeFiles: {
-            var excludeFiles = [];
-            if (!configure.cursor) {
-                excludeFiles.push("items/qquickdroparea_p.h");
-                excludeFiles.push("items/qquickdrag_p.h");
-            }
-            return excludeFiles;
-        }*/
         fileTags: "moc"
         overrideTags: false
     }
@@ -60,14 +60,6 @@ QtModule {
             "scenegraph/util/*.cpp",
             "util/*.cpp",
         ]
-        /*excludeFiles: {
-            var excludeFiles = [];
-            if (!configure.cursor) {
-                excludeFiles.push("items/qquickdroparea.cpp");
-                excludeFiles.push("items/qquickdragcpp");
-            }
-            return excludeFiles;
-        }*/
         fileTags: "moc"
         overrideTags: false
     }

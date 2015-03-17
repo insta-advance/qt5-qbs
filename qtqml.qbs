@@ -17,10 +17,10 @@ QtModule {
 
     cpp.dynamicLibraries: {
         var dynamicLibraries = base;
-
         if (qbs.targetOS.contains("unix"))
             dynamicLibraries.push("pthread");
-
+        if (qbs.targetOS.contains("windows"))
+            dynamicLibraries.push("shell32");
         return dynamicLibraries;
     }
 

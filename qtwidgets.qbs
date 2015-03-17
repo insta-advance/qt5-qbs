@@ -31,8 +31,19 @@ QtModule {
         return defines;
     }
 
+    cpp.dynamicLibraries: {
+        var dynamicLibraries = base;
+        if (qbs.targetOS.contains("windows")) {
+            dynamicLibraries.push("gdi32");
+            dynamicLibraries.push("shell32");
+            dynamicLibraries.push("user32");
+        }
+        return dynamicLibraries;
+    }
+
     Depends { name: "opengl-desktop"; condition: configure.opengl == "desktop" }
     Depends { name: "opengl-es2"; condition: configure.opengl == "es2" }
+    Depends { name: "angle-gles2"; condition: configure.angle }
     Depends { name: "QtCore" }
     Depends { name: "QtGui" }
     Depends { name: "QtWidgetHeaders" }
@@ -76,10 +87,11 @@ QtModule {
             if (!qbs.targetOS.contains("windows")) {
                 excludeFiles.push("util/qsystemtrayicon_win.cpp");
             }
-            if (configure.xcb) {
-                excludeFiles.push("util/qsystemtrayicon_qpa.cpp");
-            } else {
+            if (!configure.xcb) {
                 excludeFiles.push("util/qsystemtrayicon_x11.cpp");
+            }
+            if (configure.xcb || !qbs.targetOS.contains("unix")) {
+                excludeFiles.push("util/qsystemtrayicon_qpa.cpp");
             }
             if (!configure.windowsxpstyle) {
                 excludeFiles.push("styles/qwindowsxpstyle.cpp");

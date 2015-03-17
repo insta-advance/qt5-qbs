@@ -7,8 +7,13 @@ Project {
 
         includeDependencies: ["QtCore", "QtMultimedia-private"]
 
+        cpp.defines: [
+            "QT_BUILD_QTMM_QUICK_LIB",
+        ].concat(base)
+
         Depends { name: "opengl-desktop"; condition: configure.opengl == "desktop" }
         Depends { name: "opengl-es2"; condition: configure.opengl == "es2" }
+        Depends { name: "angle-gles2"; condition: configure.angle }
         Depends { name: "QtCore" }
         Depends { name: "QtGui" }
         Depends { name: "QtMultimedia" }

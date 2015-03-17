@@ -2,6 +2,7 @@ import qbs
 
 QtProduct {
     type: "staticlibrary"
+    condition: qbs.targetOS.contains("unix")
 
     cpp.includePaths: base.concat([
         project.sourceDirectory + "/qtbase/src/3rdparty/xkbcommon",
