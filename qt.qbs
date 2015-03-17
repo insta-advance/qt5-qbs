@@ -4,6 +4,7 @@ import qbs.Process
 
 Project {
     id: root
+    name: "Qt"
 
     property string target: {
         var host;
