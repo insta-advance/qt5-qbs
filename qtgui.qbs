@@ -26,7 +26,8 @@ QtModule {
     }
 
     Depends { name: "opengl-desktop"; condition: configure.opengl == "desktop" }
-    Depends { name: "opengl-es2"; condition: configure.opengl == "es2" }
+    Depends { name: "opengl-es2"; condition: configure.opengl == "es2" && !configure.angle }
+    Depends { name: "angle-gles2"; condition: configure.angle }
     Depends { name: "freetype" }
     Depends { name: "jpeg" }
     Depends { name: "png" }

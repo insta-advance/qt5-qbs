@@ -3,6 +3,7 @@ import qbs
 Project {
     name: "3rdparty"
     references: [
+        "angle.qbs",
         "double-conversion.qbs",
         "kms.qbs",
         "egl.qbs",
