@@ -1,11 +1,13 @@
 import qbs
 import qbs.File
+import qbs.Probes
 import qbs.Process
 import qbs.TextFile
 
 QtProduct {
     readonly property path basePath: project.sourceDirectory
                                      + "/qtdeclarative/src/3rdparty/masm"
+    readonly property bool generateJitTables: pythonProbe.found
     type: "staticlibrary"
 
     cpp.defines: {
@@ -52,7 +54,8 @@ QtProduct {
 
     includeDependencies: ["QtCore", "QtQml-private"]
 
-    cpp.includePaths: base.concat(product.includePaths.concat([product.buildDirectory]))
+    cpp.includePaths: base.concat(product.includePaths.concat(pythonProbe.found
+                                  ? [product.buildDirectory] : [project.sourceDirectory + "/include/masm"]))
 
     Depends { name: "QtCoreHeaders" }
     Depends { name: "QtQmlHeaders" }
@@ -71,7 +74,19 @@ QtProduct {
         ]
     }
 
-    Transformer {
+    Probes.BinaryProbe {
+        id: pythonProbe
+        names: "python"
+    }
+
+    Group {
+        name: "JIT table generator"
+        files: product.basePath + "/create_regex_tables"
+        fileTags: "create_regex_tables"
+    }
+
+    Rule {
+        inputs: "create_regex_tables"
         Artifact {
             filePath: product.buildDirectory + "/RegExpJitTables.h"
             fileTags: "hpp"
@@ -80,11 +95,10 @@ QtProduct {
             var cmd = new JavaScriptCommand();
             cmd.description = "generating " + output.fileName;
             cmd.masmPath = product.basePath;
+            cmd.enabled = product.generateJitTables;
             cmd.sourceCode = function() {
-                // The header is static; don't regenerate it if it exists
-                if (File.exists(output.filePath))
+                if (!enabled)
                     return;
-
                 var process = new Process();
                 process.setWorkingDirectory(masmPath);
                 var exitCode = process.exec("python", ["create_regex_tables"], true);
