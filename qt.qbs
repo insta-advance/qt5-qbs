@@ -76,6 +76,7 @@ Project {
             references: [
                 "plugins/platforms/eglfs.qbs",
                 "plugins/platforms/xcb.qbs",
+                "plugins/platforms/windows.qbs",
             ]
         }
 
