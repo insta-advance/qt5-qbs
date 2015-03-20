@@ -3,8 +3,8 @@ import qbs
 Product {
     type: "hpp"
 
-    Depends { name: "QtHost.sync" }
-    QtHost.sync.module: "QtNetwork"
+    Depends { name: "sync" }
+    sync.module: "QtNetwork"
 
     Group {
         name: "header_sync"

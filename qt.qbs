@@ -72,24 +72,24 @@ Project {
     Project {
         name: "platforms"
         references: [
-            "plugins/platforms/eglfs.qbs",
-            "plugins/platforms/xcb.qbs",
-            "plugins/platforms/windows.qbs",
+            "platforms/eglfs.qbs",
+            "platforms/xcb.qbs",
+            "platforms/windows.qbs",
         ]
     }
 
     Project {
         name: "mediaservice"
         references: [
-            "plugins/mediaservice/gstreamer-camerabin.qbs",
+            "mediaservice/gstreamer-camerabin.qbs",
         ]
     }
 
     Project {
         name: "video"
         references: [
-            "plugins/video/videonode-egl.qbs",
-            "plugins/video/videonode-imx6.qbs",
+            "video/videonode-egl.qbs",
+            "video/videonode-imx6.qbs",
         ]
     }
 
@@ -261,7 +261,7 @@ Project {
 
         Group {
             name: "mkspecs"
-            files: "qtbase/mkspecs"
+            files: project.sourcePath + "/qtbase/mkspecs"
             fileTags: []
             qbs.install: true
         }

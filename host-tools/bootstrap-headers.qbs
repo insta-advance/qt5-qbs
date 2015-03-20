@@ -6,8 +6,8 @@ Project {
         type: "hpp"
 
         Depends { name: "cpp" }
-        Depends { name: "QtHost.sync" }
-        QtHost.sync.module: "QtCore"
+        Depends { name: "sync" }
+        sync.module: "QtCore"
 
         Group {
             name: "headers (QtCore)"
@@ -165,8 +165,8 @@ Project {
         type: "hpp"
 
         Depends { name: "cpp" }
-        Depends { name: "QtHost.sync" }
-        QtHost.sync.module: "QtXml"
+        Depends { name: "sync" }
+        sync.module: "QtXml"
 
         Group {
             name: "headers (QtXml)"

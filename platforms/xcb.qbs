@@ -1,9 +1,9 @@
 import qbs
 import qbs.Probes
-import "../../qbs/utils.js" as Utils
+import "../qbs/utils.js" as Utils
 
 Project {
-    qbsSearchPaths: ["../../qbs", "."]
+    qbsSearchPaths: ["../qbs", "."]
 
     references: [
         "xcb-integration.qbs",

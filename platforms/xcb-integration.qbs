@@ -1,7 +1,7 @@
 import qbs
 import qbs.ModUtils
 import qbs.Probes
-import "../../qbs/utils.js" as Utils
+import "../qbs/utils.js" as Utils
 
 QtModule {
     name: "QtXcbQpa"

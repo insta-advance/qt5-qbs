@@ -55,7 +55,7 @@ Product {
 
     Depends { name: "configure" }
     Depends { name: "cpp" }
-    Depends { name: "QtHost.rcc" }
+    Depends { name: "rcc" }
 
     Properties {
         condition: qbs.toolchain.contains("gcc") && !qbs.toolchain.contains("clang")

@@ -3,9 +3,9 @@ import qbs
 Product {
     type: "hpp"
     property string module
-    QtHost.sync.module: product.module
+    sync.module: product.module
 
-    Depends { name: "QtHost.sync" }
+    Depends { name: "sync" }
 
     Group {
         fileTagsFilter: ["hpp_public", "hpp_" + product.module]

@@ -9,7 +9,7 @@ QtProduct {
     version: project.qtVersion
     destinationDirectory: project.buildDirectory + "/lib"
 
-    Depends { name: "QtHost.sync" }
+    Depends { name: "sync" }
 
     Group {
         fileTagsFilter: [

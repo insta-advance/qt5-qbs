@@ -20,7 +20,7 @@ Module {
                 "-o", output.filePath,
                 input.filePath,
             ]);
-            cmd.environment = product.moduleProperty("QtHost.uic", "environment");
+            cmd.environment = product.moduleProperty("uic", "environment");
             cmd.description = "uic " + input.fileName;
             cmd.highlight = "codegen";
             return cmd;

@@ -14,7 +14,7 @@ Module {
         inputs: "header_sync"
         outputFileTags: "hpp"
         outputArtifacts: {
-            var module = product.moduleProperty("QtHost.sync", "module");
+            var module = product.moduleProperty("sync", "module");
             var basePath = project.buildDirectory + "/include/" + module + "/";
 
             var fileTags = ["hpp"];
@@ -281,11 +281,11 @@ Module {
     }
 
     Rule {
-        inputs: "hpp_" + product.moduleProperty("QtHost.sync", "module")
+        inputs: "hpp_" + product.moduleProperty("sync", "module")
         multiplex: true
         Artifact {
             filePath: {
-                var module = product.moduleProperty("QtHost.sync", "module");
+                var module = product.moduleProperty("sync", "module");
                 return project.buildDirectory + "/include/" + module + "/" + module;
             }
             fileTags: "hpp"
@@ -293,7 +293,7 @@ Module {
         prepare: {
             var cmd = new JavaScriptCommand();
             cmd.description = "creating module header " + output.fileName;
-            cmd.module = product.moduleProperty("QtHost.sync", "module");
+            cmd.module = product.moduleProperty("sync", "module");
             cmd.sourceCode = function() {
                 var file = new TextFile(output.filePath, TextFile.WriteOnly);
                 file.writeLine("#ifndef QT_" + module.toUpperCase() + "_MODULE_H");
