@@ -10,7 +10,7 @@ Product {
     cpp.includePaths: {
         var includes = base.concat([
             includeDirectory,
-            project.sourceDirectory + "/qtbase/mkspecs/" + project.target,
+            project.sourcePath + "/qtbase/mkspecs/" + project.target,
             product.buildDirectory + "/.moc", // ### maybe move back to a module
         ]);
         for (var i in includeDependencies) {

@@ -31,7 +31,7 @@ QtModule {
     ]);
 
     cpp.includePaths: base.concat([
-        project.sourceDirectory + "/qtbase/src/3rdparty/freetype/include", // ### use Probe for system freetype
+        project.sourcePath + "/qtbase/src/3rdparty/freetype/include", // ### use Probe for system freetype
     ])
 
     Depends { name: "egl" }
@@ -45,7 +45,7 @@ QtModule {
 
     Group {
         name: "headers"
-        prefix: project.sourceDirectory + "/qtbase/src/"
+        prefix: project.sourcePath + "/qtbase/src/"
         files: {
             var files = [
                 "plugins/platforms/eglfs/qeglfscontext.h",
@@ -79,7 +79,7 @@ QtModule {
 
     Group {
         name: "sources"
-        prefix: project.sourceDirectory + "/qtbase/src/"
+        prefix: project.sourcePath + "/qtbase/src/"
         files: {
             var files = [
                 "plugins/platforms/eglfs/qeglfscontext.cpp",
@@ -128,7 +128,7 @@ QtModule {
     Group {
         condition: configure.cursor
         name: "cursor.qrc"
-        files: project.sourceDirectory + "/qtbase/src/plugins/platforms/eglfs/cursor.qrc"
+        files: project.sourcePath + "/qtbase/src/plugins/platforms/eglfs/cursor.qrc"
         fileTags: "qrc"
     }
 }

@@ -5,7 +5,7 @@ import "qbs/utils.js" as Utils
 
 QtModule {
     name: "QtCore"
-    property path basePath: project.sourceDirectory + "/qtbase/src/corelib"
+    property path basePath: project.sourcePath + "/qtbase/src/corelib"
 
     includeDependencies: ["QtCore-private"]
 
@@ -35,7 +35,7 @@ QtModule {
     }
 
     cpp.includePaths: base.concat([
-        project.sourceDirectory + "/qtbase/src/3rdparty/forkfd",
+        project.sourcePath + "/qtbase/src/3rdparty/forkfd",
     ])
 
     Depends { name: "harfbuzz" }

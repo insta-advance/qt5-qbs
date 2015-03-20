@@ -2,7 +2,7 @@ import qbs
 
 Group {
     name: "headers"
-    prefix: project.sourceDirectory + "/qtbase/src/corelib/"
+    prefix: project.sourcePath + "/qtbase/src/corelib/"
     files: [
         "mimetypes/*.h",
         "statemachine/*.h",

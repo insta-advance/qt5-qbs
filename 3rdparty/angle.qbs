@@ -2,7 +2,7 @@ import qbs
 
 Project {
     id: angle
-    readonly property path basePath: project.sourceDirectory + "/qtbase/src/3rdparty/angle"
+    readonly property path basePath: project.sourcePath + "/qtbase/src/3rdparty/angle"
 
     DynamicLibrary {
         name: "angle-gles2"
@@ -191,7 +191,7 @@ Project {
 
         Export {
             Depends { name: "cpp" }
-            cpp.includePaths: project.sourceDirectory + "/qtbase/src/3rdparty/angle/include"
+            cpp.includePaths: project.sourcePath + "/qtbase/src/3rdparty/angle/include"
         }
     }
 
@@ -246,7 +246,7 @@ Project {
 
         Export {
             Depends { name: "cpp" }
-            cpp.includePaths: project.sourceDirectory + "/qtbase/src/3rdparty/angle/include"
+            cpp.includePaths: project.sourcePath + "/qtbase/src/3rdparty/angle/include"
         }
     }
 
@@ -256,10 +256,10 @@ Project {
         Group {
             name: "headers"
             files: [
-                project.sourceDirectory + "/qtbase/src/3rdparty/angle/include/EGL",
-                project.sourceDirectory + "/qtbase/src/3rdparty/angle/include/GLES2",
-                project.sourceDirectory + "/qtbase/src/3rdparty/angle/include/GLES3",
-                project.sourceDirectory + "/qtbase/src/3rdparty/angle/include/KHR",
+                project.sourcePath + "/qtbase/src/3rdparty/angle/include/EGL",
+                project.sourcePath + "/qtbase/src/3rdparty/angle/include/GLES2",
+                project.sourcePath + "/qtbase/src/3rdparty/angle/include/GLES3",
+                project.sourcePath + "/qtbase/src/3rdparty/angle/include/KHR",
             ]
             fileTags: "hpp_ANGLE"
             qbs.install: true

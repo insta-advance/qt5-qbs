@@ -6,7 +6,7 @@ QtModule {
     name: "QtGui"
     condition: configure.gui
 
-    readonly property path basePath: project.sourceDirectory + "/qtbase/src/gui"
+    readonly property path basePath: project.sourcePath + "/qtbase/src/gui"
 
     includeDependencies: ["QtCore-private", "QtGui-private"]
 
@@ -124,7 +124,7 @@ QtModule {
     Group {
         name: "sources (pixman neon)"
         condition: configure.neon
-        prefix: project.sourceDirectory + "/qtbase/src/"
+        prefix: project.sourcePath + "/qtbase/src/"
         files: [
             "3rdparty/pixman/pixman-arm-neon-asm.S",
             "gui/painting/qdrawhelper_neon_asm.S",

@@ -9,7 +9,7 @@ Product {
     Group {
         name: "header_sync"
         fileTags: "header_sync"
-        prefix: project.sourceDirectory + "/qtbase/src/"
+        prefix: project.sourcePath + "/qtbase/src/"
         files: "network/access/qnetworkaccessmanager.h"
     }
 }

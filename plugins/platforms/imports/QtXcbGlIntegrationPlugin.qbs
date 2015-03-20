@@ -2,7 +2,7 @@ import qbs
 
 QtPlugin {
     targetName: name + "-integration"
-    readonly property string basePath: project.sourceDirectory + "/qtbase/src/plugins/platforms/xcb"
+    readonly property string basePath: project.sourcePath + "/qtbase/src/plugins/platforms/xcb"
 
     category: "xcbglintegrations"
 

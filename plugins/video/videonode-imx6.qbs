@@ -2,7 +2,7 @@ import qbs
 import qbs.Probes
 
 QtPlugin {
-    readonly property string basePath: project.sourceDirectory + "/qtmultimedia/src/plugins/videonode/imx6"
+    readonly property string basePath: project.sourcePath + "/qtmultimedia/src/plugins/videonode/imx6"
 
     category: "video"
     condition: configure.imx6

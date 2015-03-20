@@ -4,7 +4,7 @@ QtProduct {
     type: "staticlibrary"
     condition: qbs.targetOS.contains("linux") && !qbs.targetOS.contains("android")
 
-    readonly property path basePath: project.sourceDirectory + "/qtbase/src/3rdparty/xcb"
+    readonly property path basePath: project.sourcePath + "/qtbase/src/3rdparty/xcb"
 
     cpp.includePaths: base.concat([
         basePath + "/include",
@@ -32,6 +32,6 @@ QtProduct {
 
     Export {
         Depends { name: "cpp" }
-        cpp.includePaths: project.sourceDirectory + "/qtbase/src/3rdparty/xcb/include"
+        cpp.includePaths: project.sourcePath + "/qtbase/src/3rdparty/xcb/include"
     }
 }

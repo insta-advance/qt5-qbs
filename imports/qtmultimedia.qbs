@@ -1,7 +1,7 @@
 import qbs
 
 QmlPlugin {
-    readonly property path basePath: project.sourceDirectory + "/qtmultimedia/src/imports/multimedia"
+    readonly property path basePath: project.sourcePath + "/qtmultimedia/src/imports/multimedia"
     targetName: "declarative_multimedia"
     pluginPath: "QtMultimedia"
 

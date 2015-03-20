@@ -2,7 +2,7 @@ import qbs
 
 Group {
     name: "headers"
-    prefix: project.sourceDirectory + "/qtbase/src/platformsupport/"
+    prefix: project.sourcePath + "/qtbase/src/platformsupport/"
     files: [
         "accessibility/*.h",
         "cfsocketnotifier/*.h",

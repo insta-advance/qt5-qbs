@@ -1,7 +1,7 @@
 import qbs
 
 QtProduct {
-    readonly property string basePath: project.sourceDirectory
+    readonly property string basePath: project.sourcePath
                                        + "/qtdeclarative/src/3rdparty/double-conversion"
 
     type: "staticlibrary"

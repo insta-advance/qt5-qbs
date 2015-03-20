@@ -4,7 +4,7 @@ QtModule {
     name: "QtNetwork"
     condition: configure.network
 
-    readonly property path basePath: project.sourceDirectory + "/qtbase/src/network"
+    readonly property path basePath: project.sourcePath + "/qtbase/src/network"
 
     includeDependencies: ["QtCore-private", "QtNetwork", "QtNetwork-private"]
 

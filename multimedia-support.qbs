@@ -21,7 +21,7 @@ Project {
 
         Group {
             name: "headers"
-            prefix: project.sourceDirectory + "/qtmultimedia/src/"
+            prefix: project.sourcePath + "/qtmultimedia/src/"
             files: [
                 "multimedia/qtmultimediaquicktools_headers/*.h",
                 "qtmultimediaquicktools/*.h",
@@ -32,7 +32,7 @@ Project {
 
         Group {
             name: "sources"
-            prefix: project.sourceDirectory + "/qtmultimedia/src/qtmultimediaquicktools/"
+            prefix: project.sourcePath + "/qtmultimedia/src/qtmultimediaquicktools/"
             files: "*.cpp"
             fileTags: "moc"
             overrideTags: false
@@ -53,7 +53,7 @@ Project {
 
         Group {
             name: "headers"
-            prefix: project.sourceDirectory + "/qtmultimedia/src/multimedia/gsttools_headers/"
+            prefix: project.sourcePath + "/qtmultimedia/src/multimedia/gsttools_headers/"
             files: [
                 "*.h",
             ]
@@ -69,7 +69,7 @@ Project {
 
         Group {
             name: "sources"
-            prefix: project.sourceDirectory + "/qtmultimedia/src/gsttools/"
+            prefix: project.sourcePath + "/qtmultimedia/src/gsttools/"
             files: "*.cpp"
             excludeFiles: [
                 "qgstreamergltexturerenderer.cpp", // ### fixme: see above

@@ -5,7 +5,7 @@ QtPlugin {
     category: "platforms"
     targetName: "qwindows"
 
-    readonly property path basePath: project.sourceDirectory + "/qtbase/src/plugins/platforms/windows"
+    readonly property path basePath: project.sourcePath + "/qtbase/src/plugins/platforms/windows"
 
     includeDependencies: ["QtCore-private", "QtGui-private", "QtPlatformSupport-private"]
 

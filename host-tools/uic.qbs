@@ -13,8 +13,8 @@ QtProduct {
     ])
 
     cpp.includePaths: base.concat([
-        project.sourceDirectory + "/qtbase/src/tools/uic",
-        project.sourceDirectory + "/qtbase/src/tools/uic/cpp",
+        project.sourcePath + "/qtbase/src/tools/uic",
+        project.sourcePath + "/qtbase/src/tools/uic/cpp",
     ])
 
     Depends { name: "QtBootstrap" }
@@ -35,7 +35,7 @@ QtProduct {
 
     Group {
         name: "headers"
-        prefix: project.sourceDirectory + "/qtbase/src/tools/uic/"
+        prefix: project.sourcePath + "/qtbase/src/tools/uic/"
         files: [
             "*.h",
             "cpp/*.h",
@@ -44,7 +44,7 @@ QtProduct {
 
     Group {
         name: "sources"
-        prefix: project.sourceDirectory + "/qtbase/src/tools/uic/"
+        prefix: project.sourcePath + "/qtbase/src/tools/uic/"
         files: [
             "*.cpp",
             "cpp/*.cpp",

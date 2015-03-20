@@ -4,7 +4,7 @@ QtModule {
     name: "QtMultimedia"
     condition: configure.multimedia
 
-    readonly property path basePath: project.sourceDirectory + "/qtmultimedia/src/multimedia"
+    readonly property path basePath: project.sourcePath + "/qtmultimedia/src/multimedia"
 
     includeDependencies: ["QtCore-private", "QtNetwork", "QtGui", "QtQuick", "QtMultimedia-private"]
 

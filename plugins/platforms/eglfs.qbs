@@ -4,7 +4,7 @@ import "../../qbs/utils.js" as Utils
 
 Project {
     readonly property stringList includePaths: [
-        project.sourceDirectory + "/qtbase/src/plugins/platforms/eglfs",
+        project.sourcePath + "/qtbase/src/plugins/platforms/eglfs",
     ]
 
     qbsSearchPaths: ["../../qbs", "."]
@@ -25,7 +25,7 @@ Project {
 
         Group {
             name: "sources"
-            prefix: project.sourceDirectory + "/qtbase/src/plugins/platforms/eglfs/"
+            prefix: project.sourcePath + "/qtbase/src/plugins/platforms/eglfs/"
             files: "qeglfsmain.cpp"
             fileTags: "moc"
             overrideTags: false

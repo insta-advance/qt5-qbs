@@ -46,6 +46,7 @@ Project {
         return host;
     }
 
+    property string sourcePath: sourceDirectory
     property string qtVersion: "5.5.0"
 
     qbsSearchPaths: ["qbs", "headers"]
@@ -69,31 +70,27 @@ Project {
     ]
 
     Project {
-        name: "plugins"
+        name: "platforms"
+        references: [
+            "plugins/platforms/eglfs.qbs",
+            "plugins/platforms/xcb.qbs",
+            "plugins/platforms/windows.qbs",
+        ]
+    }
 
-        Project {
-            name: "platforms"
-            references: [
-                "plugins/platforms/eglfs.qbs",
-                "plugins/platforms/xcb.qbs",
-                "plugins/platforms/windows.qbs",
-            ]
-        }
+    Project {
+        name: "mediaservice"
+        references: [
+            "plugins/mediaservice/gstreamer-camerabin.qbs",
+        ]
+    }
 
-        Project {
-            name: "mediaservice"
-            references: [
-                "plugins/mediaservice/gstreamer-camerabin.qbs",
-            ]
-        }
-
-        Project {
-            name: "video"
-            references: [
-                "plugins/video/videonode-egl.qbs",
-                "plugins/video/videonode-imx6.qbs",
-            ]
-        }
+    Project {
+        name: "video"
+        references: [
+            "plugins/video/videonode-egl.qbs",
+            "plugins/video/videonode-imx6.qbs",
+        ]
     }
 
     // Rules for installation only

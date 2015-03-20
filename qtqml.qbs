@@ -6,7 +6,7 @@ QtModule {
     name: "QtQml"
     condition: configure.qml
 
-    readonly property path basePath: project.sourceDirectory
+    readonly property path basePath: project.sourcePath
                                      + "/qtdeclarative/src/qml"
 
     property bool disassembler: false

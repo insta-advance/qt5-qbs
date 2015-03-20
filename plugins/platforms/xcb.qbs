@@ -15,7 +15,7 @@ Project {
         category: "platforms"
         targetName: "qxcb"
 
-        readonly property path basePath: project.sourceDirectory + "/qtbase/src/plugins/platforms/xcb"
+        readonly property path basePath: project.sourcePath + "/qtbase/src/plugins/platforms/xcb"
 
         includeDependencies: ["QtCore-private", "QtGui-private", "QtPlatformSupport-private"]
 

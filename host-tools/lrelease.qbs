@@ -9,8 +9,8 @@ QtProduct {
     includeDependencies: ["QtCore", "QtCore-private"]
 
     cpp.includePaths: base.concat([
-        project.sourceDirectory + "/qttools/src/linguist/lrelease",
-        project.sourceDirectory + "/qttools/src/linguist/shared",
+        project.sourcePath + "/qttools/src/linguist/lrelease",
+        project.sourcePath + "/qttools/src/linguist/shared",
     ])
 
     cpp.defines: base.concat([
@@ -26,7 +26,7 @@ QtProduct {
 
     Group {
         name: "source"
-        prefix: project.sourceDirectory + "/qttools/src/linguist/"
+        prefix: project.sourcePath + "/qttools/src/linguist/"
         files: [
             "lrelease/main.cpp",
             "lrelease/lrelease.1",

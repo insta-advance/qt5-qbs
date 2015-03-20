@@ -28,7 +28,7 @@ QtProduct {
     ]
 
     property stringList bootstrapIncludes: [
-        project.sourceDirectory + "/qtbase/mkspecs/" + project.host,
+        project.sourcePath + "/qtbase/mkspecs/" + project.host,
     ]
 
     includeDependencies: ["QtCore", "QtCore-private", "QtXml", "QtXml-private"]
@@ -56,7 +56,7 @@ QtProduct {
 
     Group {
         name: "sources"
-        prefix: project.sourceDirectory + "/qtbase/src/corelib/"
+        prefix: project.sourcePath + "/qtbase/src/corelib/"
         files: [
             "codecs/qlatincodec.cpp",
             "codecs/qtextcodec.cpp",
@@ -129,7 +129,7 @@ QtProduct {
     Group {
         name: "sources_windows"
         condition: qbs.targetOS.contains("windows")
-        prefix: project.sourceDirectory + "/qtbase/src/corelib/"
+        prefix: project.sourcePath + "/qtbase/src/corelib/"
         files: [
             "io/qfilesystemengine_win.cpp",
             "io/qfilesystemiterator_win.cpp",
@@ -143,7 +143,7 @@ QtProduct {
     Group {
         name: "sources_unix"
         condition: qbs.targetOS.contains("unix")
-        prefix: project.sourceDirectory + "/qtbase/src/corelib/"
+        prefix: project.sourcePath + "/qtbase/src/corelib/"
         files: [
             "io/qfilesystemengine_unix.cpp",
             "io/qfilesystemiterator_unix.cpp",
@@ -154,7 +154,7 @@ QtProduct {
 
     Group {
         name: "xml_sources"
-        prefix: project.sourceDirectory + "/qtbase/src/xml/"
+        prefix: project.sourcePath + "/qtbase/src/xml/"
         files: [
             "dom/qdom.cpp",
             "sax/qxml.cpp",

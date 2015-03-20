@@ -116,7 +116,7 @@ Module {
         // ### in the case that there is a Qt attached to this profile, get these from Qt.core.config
         var filePath = FileInfo.isAbsolutePath(propertiesFile)
                        ? propertiesFile
-                       : project.sourceDirectory + '/' + propertiesFile;
+                       : project.sourcePath + '/' + propertiesFile;
         if (File.exists(filePath)) {
             var configFile = new TextFile(filePath);
             var configContents = "";

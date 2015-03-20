@@ -2,7 +2,7 @@ import qbs
 
 Group {
     name: "headers"
-    prefix: project.sourceDirectory + "/qtbase/src/network/"
+    prefix: project.sourcePath + "/qtbase/src/network/"
     files: [
         "access/*.h",
         "bearer/*.h",
