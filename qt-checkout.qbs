@@ -33,7 +33,7 @@ Project {
                 }
                 for (var i in processes) {
                     var process = processes[i];
-                    process.waitForFinished(60000);
+                    process.waitForFinished(600000);
                     print(process.readStdOut());
                     print(process.readStdErr());
                     if (process.needsCheckout) {
