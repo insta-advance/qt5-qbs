@@ -65,9 +65,15 @@ Project {
 
         "qtmultimedia.qbs",
         "multimedia-support.qbs",
-
-        "imports/imports.qbs",
     ]
+
+    Project {
+        name: "qml-imports"
+        references: [
+            "qml-imports/qtquick2.qbs",
+            "qml-imports/qtmultimedia.qbs",
+        ]
+    }
 
     Project {
         name: "platforms"
