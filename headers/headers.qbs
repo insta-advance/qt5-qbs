@@ -12,7 +12,7 @@ Project {
         // Copy dummy headers
         Group {
             name: "dummy headers"
-            prefix: project.sourcePath + "/include/QtCore/"
+            prefix: project.sourceDirectory + "/include/QtCore/"
             files: [ "qconfig.h", "qfeatures.h" ]
             fileTags: "hpp_dummy"
         }
