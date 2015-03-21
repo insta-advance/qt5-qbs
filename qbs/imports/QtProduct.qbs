@@ -4,6 +4,9 @@ import qbs.FileInfo
 Product {
     readonly property path includeDirectory: project.buildDirectory + "/include"
     property stringList includeDependencies: []
+    property stringList hostToolsEnvironment: [
+        "QT_SELECT=qhost",
+    ]
 
     condition: configure.properties[name] !== false // Allows disabling any project from qtconfig.json
 
@@ -11,7 +14,8 @@ Product {
         var includes = base.concat([
             includeDirectory,
             project.sourcePath + "/qtbase/mkspecs/" + project.target,
-            product.buildDirectory + "/.moc", // ### maybe move back to a module
+            product.buildDirectory + "/.moc",
+            product.buildDirectory + "/.uic",
         ]);
         for (var i in includeDependencies) {
             var module = includeDependencies[i];
@@ -55,7 +59,6 @@ Product {
 
     Depends { name: "configure" }
     Depends { name: "cpp" }
-    Depends { name: "rcc" }
 
     Properties {
         condition: qbs.toolchain.contains("gcc") && !qbs.toolchain.contains("clang")
@@ -138,14 +141,49 @@ Product {
                     input.fileName, "-o", allOutputs[i].filePath,
                 ]));
                 cmd.workingDirectory = FileInfo.path(input.filePath);
-                cmd.environment = [
-                    "QT_SELECT=qhost",
-                ];
+                cmd.environment = product.hostToolsEnvironment;
                 cmd.description = "moc " + input.fileName;
                 cmd.highlight = "codegen";
                 commands.push(cmd);
             }
             return commands;
+        }
+    }
+
+    Rule {
+        inputs: "qrc"
+        Artifact {
+            fileTags: "cpp"
+            filePath: product.buildDirectory + "/.rcc/" + input.baseName + "_rcc.cpp"
+        }
+        prepare: {
+            var cmd = new Command("rcc", [
+                input.filePath,
+                "--name", input.baseName,
+                "-o", output.filePath,
+            ]);
+            cmd.environment = product.hostToolsEnvironment;
+            cmd.description = "rcc " + input.fileName;
+            cmd.highlight = "codegen";
+            return cmd;
+        }
+    }
+
+    Rule {
+        inputs: "uic"
+        Artifact {
+            fileTags: "hpp"
+            filePath: product.buildDirectory + "/.uic/ui_" + input.baseName + ".h"
+        }
+        prepare: {
+            var cmd = new Command("uic", [
+                "-o", output.filePath,
+                input.filePath,
+            ]);
+            cmd.environment = product.hostToolsEnvironment;
+            cmd.description = "uic " + input.fileName;
+            cmd.highlight = "codegen";
+            return cmd;
         }
     }
 }

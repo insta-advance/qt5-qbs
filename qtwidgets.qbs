@@ -47,7 +47,6 @@ QtModule {
     Depends { name: "QtCore" }
     Depends { name: "QtGui" }
     Depends { name: "QtWidgetHeaders" }
-    Depends { name: "uic" }
 
     QtWidgetHeaders {
         name: "headers"
