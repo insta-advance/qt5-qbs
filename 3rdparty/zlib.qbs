@@ -13,8 +13,8 @@ QtProduct {
     ])
 
     cpp.includePaths: base.concat([
-        project.sourcePath + "/include",
-        project.sourcePath + "/include/QtCore",
+        project.sourceDirectory + "/include",
+        project.sourceDirectory + "/include/QtCore",
         project.sourcePath + "/qtbase/src/corelib/global",
     ])
 
