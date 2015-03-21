@@ -1,7 +1,7 @@
 import qbs
 
 QtPlugin {
-    //condition: qbs.targetOS.contains("windows")
+    condition: qbs.targetOS.contains("windows")
     category: "platforms"
     targetName: "qwindows"
 
