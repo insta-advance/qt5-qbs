@@ -6,6 +6,7 @@ Project {
 
     DynamicLibrary {
         name: "angle-gles2"
+        //condition: configure.angle
         targetName: "GLESv2"
         type: "dynamiclibrary"
 
@@ -20,17 +21,25 @@ Project {
             'GL_GLEXT_PROTOTYPES=',
             'EGLAPI=',
             'ANGLE_PRELOADED_D3DCOMPILER_MODULE_NAMES={ "d3dcompiler_47.dll", "d3dcompiler_46.dll", "d3dcompiler_43.dll" }',
+            "ANGLE_MULTITHREADED_D3D_SHADER_COMPILE=0", // ### mingw/msvc2010 only
+            "ANGLE_SKIP_DXGI_1_2_CHECK",
+            "NDEBUG", //### fix the ID3DDebug usage instead
+            "D3DCOMPILE_RESERVED16=0x00010000", // ### mingw
+            "D3DCOMPILE_RESERVED17=0x00020000", // ### mingw
+            "D3D11_MAP_FLAG_DO_NOT_WAIT=0x1000000", // ### mingw
         ];
 
         cpp.defines: cppDefines
 
-        cpp.includePaths: base.concat([
+        cpp.includePaths: [
             angle.basePath + "/include",
             angle.basePath + "/src",
             angle.basePath + "/src/third_party/khronos/",
             angle.basePath + "/src/compiler/preprocessor",
-        ])
+            project.sourceDirectory + "/include/angle",
+        ].concat(base)
 
+        Depends { name: "configure" }
         Depends { name: "cpp" }
 
         Properties {
@@ -41,18 +50,27 @@ Project {
                 "ANGLE_ENABLE_HLSL",
                 "ANGLE_ENABLE_D3D9",
                 "ANGLE_ENABLE_D3D11",
-                "ANGLE_ENABLE_OPENGL",
+                //"ANGLE_ENABLE_OPENGL",
             ].concat(cppDefines)
             cpp.dynamicLibraries: [
                 "d3d9",
                 "dxguid",
                 "gdi32",
                 "user32",
+                //"uuid",
             ]
-            cpp.linkerFlags: [
-                "/DEF:" + angle.basePath + "/src/libGLESv2/libGLESv2"
-                + (qbs.buildVariant == "debug" ? "d.def" : ".def"),
-            ]
+            cpp.linkerFlags: {
+                var linkerFlags = base;
+                var def =  angle.basePath + "/src/libGLESv2/libGLESv2"
+                           + (qbs.buildVariant == "debug" ? "d" : "");
+                if (qbs.toolchain.contains("msvc")) {
+                    linkerFlags.push("/DEF:" + def + ".def");
+                } else if (qbs.toolchain.contains("mingw")) {
+                    linkerFlags.push("-Wl," + def + ".def");
+                    //linkerFlags.push("-Wl," + def + "_mingw.def");
+                }
+                return linkerFlags;
+            }
         }
 
         Properties {
@@ -79,8 +97,8 @@ Project {
                 "compiler/translator/timing/*.h",
                 "libANGLE/*.h",
                 "libANGLE/renderer/*.h",
-                "libANGLE/renderer/gl/*.h",
-                "libANGLE/renderer/gl/wgl/*.h",
+                //"libANGLE/renderer/gl/*.h",
+                //"libANGLE/renderer/gl/wgl/*.h",
                 "libANGLE/renderer/d3d/*.h",
                 "libANGLE/renderer/d3d/d3d9/*.h",
                 "libANGLE/renderer/d3d/d3d11/*.h",
@@ -106,14 +124,14 @@ Project {
                     "compiler/translator/timing/*.cpp",
                     "libANGLE/*.cpp",
                     "libANGLE/renderer/*.cpp",
-                    "libANGLE/renderer/gl/*.cpp",
+                    //"libANGLE/renderer/gl/*.cpp",
                     "libGLESv2/*.cpp",
                     "third_party/compiler/ArrayBoundsClamper.cpp",
                 ];
                 if (qbs.targetOS.contains("windows")) {
                     files.push("libANGLE/renderer/d3d/*.cpp");
                     files.push("libANGLE/renderer/d3d/d3d11/*.cpp");
-                    files.push("libANGLE/renderer/gl/wgl/*.cpp");
+                    //files.push("libANGLE/renderer/gl/wgl/*.cpp");
                     files.push("third_party/systeminfo/SystemInfo.cpp");
                     files.push("third_party/murmurhash/MurmurHash3.cpp");
                     if (qbs.targetOS.contains("winrt")) {
@@ -197,6 +215,7 @@ Project {
 
     DynamicLibrary {
         name: "angle-egl"
+        //condition: configure.angle
         targetName: "EGL"
         type: "dynamiclibrary"
 
@@ -214,6 +233,7 @@ Project {
             angle.basePath + "/src",
         ])
 
+        Depends { name: "configure" }
         Depends { name: "cpp" }
         Depends { name: "angle-gles2" }
 

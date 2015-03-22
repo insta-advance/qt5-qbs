@@ -13,7 +13,7 @@ QtModule {
         "QT_MULTIMEDIA_QAUDIO",
     ])
 
-    Depends { name: "angle-gles2"; condition: configure.angle }
+    Depends { name: "angle-gles2"; condition: configure.angle; required: false }
     Depends { name: "QtCore" }
     Depends { name: "QtGui" }
     Depends { name: "QtMultimediaHeaders" }

@@ -42,18 +42,19 @@ QtModule {
     Depends { name: "pcre" }
     Depends { name: "QtCoreHeaders" }
     Depends { name: "zlib" }
-    Depends { name: "glib"; condition: configure.glib }
+    Depends { name: "glib"; condition: configure.glib; required: false }
 
     Properties {
         condition: qbs.targetOS.contains("windows")
-        cpp.dynamicLibraries: base.concat([
+        cpp.dynamicLibraries: [
             "shell32",
             "user32",
             "ole32",
             "advapi32",
             "ws2_32",
             "mpr",
-        ])
+            "uuid",
+        ].concat(base)
     }
 
     QtCoreHeaders {

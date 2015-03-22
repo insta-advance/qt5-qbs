@@ -6,7 +6,7 @@ QtPlugin {
 
     category: "egldeviceintegrations"
 
-    cpp.includePaths: base.concat(includePaths)
+    cpp.includePaths: base.concat(project.sourcePath + "/qtbase/src/plugins/eglfs")
 
     includeDependencies: ["QtCore-private", "QtGui-private", "QtPlatformSupport-private"]
 

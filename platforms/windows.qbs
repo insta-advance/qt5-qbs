@@ -21,7 +21,7 @@ QtPlugin {
         "gdi32",
     ]
 
-    Depends { name: "angle-gles2"; condition: configure.angle }
+    Depends { name: "angle-gles2"; condition: configure.angle; required: false }
     Depends { name: "freetype" }
     Depends { name: "QtCore" }
     Depends { name: "QtGui" }

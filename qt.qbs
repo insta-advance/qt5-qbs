@@ -47,7 +47,8 @@ Project {
     }
 
     property string sourcePath: sourceDirectory
-    property string qtVersion: "5.5.0"
+    property string qtVersion: qtVersionProbe.version
+    property stringList qtVersionParts: qtVersion.split('.')
 
     qbsSearchPaths: ["qbs", "headers"]
 
@@ -99,11 +100,27 @@ Project {
         ]
     }
 
-    // Rules for installation only
     Product {
         type: "install"
 
         Depends { name: "configure" }
+
+        Probe {
+            id: qtVersionProbe
+            property string version
+            configure: {
+                var file = new TextFile(sourcePath + "/qtbase/src/corelib/global/qglobal.h");
+                var reVersion = /#define QT_VERSION_STR +"(\d\.\d\.\d)"/;
+                while (!file.atEof()) {
+                    var line = file.readLine();
+                    if (reVersion.test(line)) {
+                        version = line.match(reVersion)[1];
+                        break;
+                    }
+                }
+                file.close();
+            }
+        }
 
         Transformer {
             Artifact {
@@ -231,7 +248,7 @@ Project {
                 }
                 if (properties.opengl == "es2")
                     cmd.qtconfig.push("opengles2");
-                cmd.qtVersionParts = project.qtVersion.split(".");
+                cmd.qtVersionParts = project.qtVersionParts;
                 cmd.sourceCode = function() {
                     var file = new TextFile(output.filePath, TextFile.WriteOnly);
                     file.writeLine("QT_MAJOR_VERSION = " + qtVersionParts[0]);

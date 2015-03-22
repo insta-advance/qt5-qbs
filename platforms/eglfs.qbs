@@ -3,10 +3,6 @@ import qbs.Probes
 import "../qbs/utils.js" as Utils
 
 Project {
-    readonly property stringList includePaths: [
-        project.sourcePath + "/qtbase/src/plugins/platforms/eglfs",
-    ]
-
     qbsSearchPaths: ["../qbs", "."]
 
     references: "eglfs-integration.qbs"
