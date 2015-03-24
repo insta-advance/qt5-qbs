@@ -1,3 +1,7 @@
 .directory
 *.qbs.user*
 qtconfig*.json
+qtbase
+qtdeclarative
+qtmultimedia
+qttools
