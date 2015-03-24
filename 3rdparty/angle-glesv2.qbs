@@ -9,7 +9,6 @@ DynamicLibrary {
 
     readonly property path basePath: project.sourcePath + "/qtbase/src/3rdparty/angle"
     readonly property stringList cppDefines: [
-        "ANGLE_TRANSLATOR_IMPLEMENTATION",
         "ANGLE_TRANSLATOR_STATIC",
         "LIBANGLE_IMPLEMENTATION",
         "LIBGLESV2_IMPLEMENTATION",
