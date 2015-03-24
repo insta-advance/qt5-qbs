@@ -32,7 +32,7 @@ DynamicLibrary {
         basePath + "/src",
         basePath + "/src/third_party/khronos/",
         basePath + "/src/compiler/preprocessor",
-        project.sourceDirectory + "/include/angle" + project.qtVersion,
+        project.sourceDirectory + "/include/angle/" + project.qtVersion,
     ].concat(base)
 
     Depends { name: "configure" }
