@@ -3,7 +3,8 @@ import qbs
 Project {
     name: "3rdparty"
     references: [
-        "angle.qbs",
+        "angle-egl.qbs",
+        "angle-glesv2.qbs",
         "double-conversion.qbs",
         "kms.qbs",
         "egl.qbs",
@@ -14,8 +15,7 @@ Project {
         "jpeg.qbs",
         "masm.qbs",
         "pcre.qbs",
-        "opengl-desktop.qbs",
-        "opengl-es2.qbs",
+        "opengl.qbs",
         "png.qbs",
         "udev.qbs",
         "xcb-static.qbs",

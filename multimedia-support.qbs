@@ -11,9 +11,7 @@ Project {
             "QT_BUILD_QTMM_QUICK_LIB",
         ].concat(base)
 
-        Depends { name: "opengl-desktop"; condition: configure.opengl == "desktop"; required: false }
-        Depends { name: "opengl-es2"; condition: configure.opengl == "es2"; required: false }
-        Depends { name: "angle-gles2"; condition: configure.angle; required: false }
+        Depends { name: "opengl" }
         Depends { name: "QtCore" }
         Depends { name: "QtGui" }
         Depends { name: "QtMultimedia" }

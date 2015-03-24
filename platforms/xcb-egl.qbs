@@ -12,7 +12,7 @@ QtXcbGlIntegrationPlugin {
     ])
 
     Depends { name: "egl" }
-    Depends { name: "opengl-es2" }
+    Depends { name: "opengl" }
     Depends { name: "xcb-x11" }
 
     Group {

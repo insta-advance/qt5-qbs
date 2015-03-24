@@ -4,8 +4,7 @@ import "3rdparty/egl.qbs" as Egl
 import "3rdparty/glib.qbs" as Glib
 import "3rdparty/gstreamer.qbs" as Gstreamer
 import "3rdparty/kms.qbs" as Kms
-import "3rdparty/opengl-desktop.qbs" as OpenGL
-import "3rdparty/opengl-es2.qbs" as OpenGLES
+import "3rdparty/opengl.qbs" as OpenGL
 import "3rdparty/udev.qbs" as Udev
 import "3rdparty/xcb-x11.qbs" as Xcb
 import "3rdparty/xkb-x11.qbs" as Xkb
@@ -15,7 +14,6 @@ Project {
     Glib { id: glib; name: "glib" }
     Gstreamer { id: gstreamer; name: "gstreamer" }
     Kms { id: kms; name: "kms" }
-    OpenGLES { id: opengles; name: "opengles" }
     OpenGL { id: opengl; name: "opengl" }
     Udev { id: udev; name: "udev" }
     Xcb { id: xcb; name: "xcb-x11" }
@@ -30,7 +28,7 @@ Project {
             glib: glib.found,
             gstreamer: gstreamer.found,
             kms: kms.found,
-            opengl: opengl.found ? "desktop" : (opengles.found ? "es2" : false),
+            opengl: opengl.detectedVersion,
             udev: udev.found,
             xcb: xcb.found,
             xkb: xkb.found,

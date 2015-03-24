@@ -36,7 +36,7 @@ QtModule {
 
     Depends { name: "egl" }
     Depends { name: "glib"; condition: configure.glib }
-    Depends { name: "opengl-es2" }
+    Depends { name: "opengl" }
     Depends { name: "udev"; condition: configure.udev }
     Depends { name: "QtCore" }
     Depends { name: "QtGui" }
