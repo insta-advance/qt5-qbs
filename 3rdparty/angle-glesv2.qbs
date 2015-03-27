@@ -4,6 +4,7 @@ DynamicLibrary {
     targetName: "GLESv2"
     type: "dynamiclibrary"
     builtByDefault: false
+    condition: configure.angle
 
     cpp.dynamicLibraryPrefix: "lib"
 

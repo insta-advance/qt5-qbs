@@ -4,6 +4,7 @@ DynamicLibrary {
     targetName: "EGL"
     type: "dynamiclibrary"
     builtByDefault: false
+    condition: configure.angle
 
     readonly property path basePath: project.sourcePath + "/qtbase/src/3rdparty/angle"
 

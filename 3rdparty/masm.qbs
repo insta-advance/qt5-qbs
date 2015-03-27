@@ -39,7 +39,7 @@ QtProduct {
         return defines;
     }
 
-    property stringList includePaths: base.concat([
+    property stringList includePaths: [
         basePath,
         basePath + "/assembler",
         basePath + "/disassembler",
@@ -49,12 +49,13 @@ QtProduct {
         basePath + "/stubs",
         basePath + "/stubs/wtf",
         basePath + "/wtf",
-    ]);
+    ]
 
     includeDependencies: ["QtCore", "QtQml-private"]
 
-    cpp.includePaths: base.concat(product.includePaths.concat(pythonProbe.found
-                                  ? [product.buildDirectory] : [project.sourcePath + "/include/masm"]))
+    cpp.includePaths: [
+        pythonProbe.found ? buildDirectory : project.sourcePath + "/include/masm",
+    ].concat(includePaths).concat(base)
 
     Depends { name: "QtCoreHeaders" }
     Depends { name: "QtQmlHeaders" }

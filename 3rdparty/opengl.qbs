@@ -16,9 +16,9 @@ Project {
         type: "hpp"
         builtByDefault: false
 
-        Depends { name: "configure" }
         Depends { name: "cpp" }
-        Depends { name: "angle-glesv2"; condition: configure.angle }
+        Depends { name: "configure"; required: false }
+        Depends { name: "angle-glesv2"; required: false }
 
         Probes.PkgConfigProbe {
             id: glEs2Probe
