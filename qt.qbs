@@ -72,6 +72,7 @@ Project {
         name: "qml-imports"
         references: [
             "qml-imports/qtquick2.qbs",
+            "qml-imports/qtquick2window.qbs",
             "qml-imports/qtmultimedia.qbs",
         ]
     }
