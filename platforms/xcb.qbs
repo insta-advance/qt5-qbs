@@ -24,9 +24,10 @@ Project {
         ])
 
         Depends { name: "egl" }
-        Depends { name: "xcb-x11" }
+        //Depends { name: "xcb-x11" }
+        Depends { name: "qt-xcb" }
         Depends { name: "xkbcommon" }
-        Depends { name: "xkb-x11"; condition: configure.xkb }
+        //Depends { name: "xkb-x11"; condition: configure.xkb }
         Depends { name: "QtCore" }
         Depends { name: "QtGui" }
         Depends { name: "QtXcbQpa" }

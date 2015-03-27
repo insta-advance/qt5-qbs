@@ -80,7 +80,8 @@ QtModule {
     }
 
     Depends { name: "egl" }
-    Depends { name: "xcb-x11" }
+    Depends { name: "qt-xcb" }
+    //Depends { name: "xcb-x11" }
     Depends { name: "xkbcommon" }
     Depends { name: "glib"; condition: configure.glib }
     Depends { name: "opengl" }

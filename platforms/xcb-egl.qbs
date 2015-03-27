@@ -13,7 +13,6 @@ QtXcbGlIntegrationPlugin {
 
     Depends { name: "egl" }
     Depends { name: "opengl" }
-    Depends { name: "xcb-x11" }
 
     Group {
         name: "headers"

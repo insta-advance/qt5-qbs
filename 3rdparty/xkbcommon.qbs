@@ -11,8 +11,10 @@ QtProduct {
 
     cpp.cFlags: base.concat(["-std=c99"])
 
+    readonly property string xkbConfigRoot: qbs.getEnv("CFG_XKB_CONFIG_ROOT")
+
     cpp.defines: base.concat([
-        'DFLT_XKB_CONFIG_ROOT="' + qbs.getEnv("CFG_XKB_CONFIG_ROOT") + '"',
+        'DFLT_XKB_CONFIG_ROOT="' + (xkbConfigRoot || "not found") + '"',
         'DEFAULT_XKB_RULES="evdev"',
         'DEFAULT_XKB_MODEL="pc105"',
         'DEFAULT_XKB_LAYOUT="us"',

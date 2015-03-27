@@ -53,7 +53,6 @@ Module {
     readonly property bool linuxfb: properties.linuxfb
     readonly property string png: properties.png
     readonly property string qpa: properties.qpa
-    // xcb-qt
 
     // QtWidgets
     readonly property bool android: properties.androidstyle
@@ -86,7 +85,7 @@ Module {
             opengl: "es2", // ### fixme... this needs to be no-opengl unless we can make a simple detection here
 
             // default config
-            prefix: qbs.installRoot ? qbs.installRoot : project.buildDirectory,
+            prefix: qbs.installRoot,
 
             "c++11": true, // ### compiler/version test?
 
@@ -94,7 +93,7 @@ Module {
             zlib: true,
 
             png: "qt",
-            qpa: "xcb", // ### fix me for other platforms
+            qpa: qbs.targetOS.contains("linux") ? "xcb" : "windows", // ### fixme
             accessibility: true,
             cursor: true,
             freetype: true,

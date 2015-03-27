@@ -32,6 +32,9 @@ QtProduct {
 
     Export {
         Depends { name: "cpp" }
-        cpp.includePaths: project.sourcePath + "/qtbase/src/3rdparty/xcb/include"
+        cpp.includePaths: [
+            project.sourcePath + "/qtbase/src/3rdparty/xcb/include",
+            project.sourcePath + "/qtbase/src/3rdparty/xcb/sysinclude",
+        ]
     }
 }

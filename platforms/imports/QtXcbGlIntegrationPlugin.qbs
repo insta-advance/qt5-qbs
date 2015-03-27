@@ -10,7 +10,8 @@ QtPlugin {
 
     cpp.includePaths: base.concat(basePath)
 
-    Depends { name: "xcb-x11" }
+    //Depends { name: "xcb-x11" }
+    Depends { name: "qt-xcb" }
     Depends { name: "QtCore" }
     Depends { name: "QtGui" }
     Depends { name: "QtXcbQpa" }

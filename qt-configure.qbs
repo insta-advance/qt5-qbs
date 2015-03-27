@@ -16,7 +16,7 @@ Project {
     Kms { id: kms; name: "kms" }
     OpenGL { id: opengl; name: "opengl" }
     Udev { id: udev; name: "udev" }
-    Xcb { id: xcb; name: "xcb-x11" }
+    //Xcb { id: xcb; name: "xcb-x11" }
     Xkb { id: xkb; name: "xkb" }
 
     Product {
@@ -30,7 +30,7 @@ Project {
             kms: kms.found,
             opengl: opengl.detectedVersion,
             udev: udev.found,
-            xcb: xcb.found,
+            //xcb: xcb.found,
             xkb: xkb.found,
         })
 

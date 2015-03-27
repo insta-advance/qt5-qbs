@@ -1,14 +1,14 @@
 import qbs
 
 QtEglDeviceIntegrationPlugin {
-    condition: configure.egl && configure.xcb
+    condition: configure.egl && configure.x11
 
     cpp.defines: base.concat([
         "MESA_EGL_NO_X11_HEADERS", // for Mesa
         "EGL_API_FB",              // for Vivante
     ])
 
-    Depends { name: "xcb-x11" }
+    //Depends { name: "x11" }
 
     Group {
         name: "headers"
