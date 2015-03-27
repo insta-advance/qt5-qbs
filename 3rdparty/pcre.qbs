@@ -7,14 +7,14 @@ QtProduct {
 
     Depends { name: "cpp" }
 
-    cpp.defines: base.concat([
-        "PCRE_HAVE_CONFIG_H",
+    cpp.defines: [
+        "HAVE_CONFIG_H",
         "PCRE_STATIC",
-    ])
+    ].concat(base)
 
-    cpp.includePaths: base.concat([
+    cpp.includePaths: [
         project.sourcePath + "/qtbase/src/3rdparty/pcre"
-    ])
+    ].concat(base)
 
     Group {
         name: "sources"
@@ -28,6 +28,6 @@ QtProduct {
     Export {
         Depends { name: "cpp" }
         cpp.includePaths: project.sourcePath + "/qtbase/src/3rdparty/pcre"
-        cpp.defines: ["PCRE_HAVE_CONFIG_H", "PCRE_STATIC"]
+        cpp.defines: product.cpp.defines
     }
 }
