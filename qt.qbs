@@ -16,6 +16,7 @@ Project {
         "qtnetwork.qbs",
         "qtqml.qbs",
         "qtquick.qbs",
+        "qtquickcontrols.qbs",
         "qtsvg.qbs",
         "qtwidgets.qbs",
     ]
