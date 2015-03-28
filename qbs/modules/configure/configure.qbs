@@ -57,6 +57,7 @@ Module {
     readonly property bool qml: properties.qml
     readonly property bool quick: properties.quick
     readonly property bool multimedia: properties.multimedia
+    readonly property bool svg: properties.svg
 
     // Common
     readonly property string prefix: properties.prefix
@@ -114,13 +115,14 @@ Module {
     readonly property var properties: {
         // For settings which shouldn't default to false
         var config = {
-            // modules are true by default
+            // modules are true if the sources can be found
             gui: true,
             network: true,
             widgets: true,
             qml: true,
             quick: true,
             multimedia: true,
+            svg: true,
 
             // These are the minimum SIMD instructions assumed to be supported on the target
             sse2: qbs.architecture.startsWith("x86"),

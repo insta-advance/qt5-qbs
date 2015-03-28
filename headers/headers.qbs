@@ -81,4 +81,10 @@ Project {
         module: "QtMultimedia"
         QtMultimediaHeaders { fileTags: "header_sync" }
     }
+
+    QtHeaders {
+        name: "QtSvgHeaders"
+        module: "QtSvg"
+        QtSvgHeaders { fileTags: "header_sync" }
+    }
 }
