@@ -8,7 +8,7 @@ DynamicLibrary {
 
     cpp.dynamicLibraryPrefix: "lib"
 
-    readonly property path basePath: project.sourcePath + "/qtbase/src/3rdparty/angle"
+    readonly property path basePath: configure.sourcePath + "/qtbase/src/3rdparty/angle"
     readonly property stringList cppDefines: [
         "ANGLE_TRANSLATOR_STATIC",
         "LIBANGLE_IMPLEMENTATION",
@@ -32,7 +32,7 @@ DynamicLibrary {
         basePath + "/src",
         basePath + "/src/third_party/khronos/",
         basePath + "/src/compiler/preprocessor",
-        project.sourceDirectory + "/include/angle/" + project.qtVersion,
+        project.sourceDirectory + "/include/angle/" + configure.version,
     ].concat(base)
 
     Depends { name: "configure" }
@@ -69,7 +69,9 @@ DynamicLibrary {
 
     Properties {
         condition: qbs.targetOS.contains("unix")
-        cpp.dynamicLibraries: base.concat("pthread")
+        cpp.dynamicLibraries: [
+            "pthread",
+        ].concat(outer)
     }
 
     Properties {
@@ -77,16 +79,16 @@ DynamicLibrary {
         cpp.cxxFlags: [
             "-std=c++11",
             "-Wno-unused-parameter",
-        ]
+        ].concat(outer)
     }
 
     Group {
         name: "QtANGLEHeaders"
         files: [
-            project.sourcePath + "/qtbase/src/3rdparty/angle/include/EGL",
-            project.sourcePath + "/qtbase/src/3rdparty/angle/include/GLES2",
-            project.sourcePath + "/qtbase/src/3rdparty/angle/include/GLES3",
-            project.sourcePath + "/qtbase/src/3rdparty/angle/include/KHR",
+            configure.sourcePath + "/qtbase/src/3rdparty/angle/include/EGL",
+            configure.sourcePath + "/qtbase/src/3rdparty/angle/include/GLES2",
+            configure.sourcePath + "/qtbase/src/3rdparty/angle/include/GLES3",
+            configure.sourcePath + "/qtbase/src/3rdparty/angle/include/KHR",
         ]
         fileTags: "hpp_ANGLE"
         qbs.install: true
@@ -212,6 +214,6 @@ DynamicLibrary {
 
     Export {
         Depends { name: "cpp" }
-        cpp.includePaths: project.sourcePath + "/qtbase/src/3rdparty/angle/include"
+        cpp.includePaths: configure.sourcePath + "/qtbase/src/3rdparty/angle/include"
     }
 }

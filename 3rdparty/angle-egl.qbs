@@ -6,7 +6,7 @@ DynamicLibrary {
     builtByDefault: false
     condition: configure.angle
 
-    readonly property path basePath: project.sourcePath + "/qtbase/src/3rdparty/angle"
+    readonly property path basePath: configure.sourcePath + "/qtbase/src/3rdparty/angle"
 
     cpp.dynamicLibraryPrefix: "lib"
 
@@ -28,12 +28,16 @@ DynamicLibrary {
 
     Properties {
         condition: qbs.targetOS.contains("unix")
-        cpp.dynamicLibraries: base.concat("pthread")
+        cpp.dynamicLibraries: [
+            "pthread",
+        ].concat(outer)
     }
 
     Properties {
         condition: qbs.toolchain.contains("gcc")
-        cpp.cxxFlags: "-std=c++11"
+        cpp.cxxFlags: [
+            "-std=c++11",
+        ].concat(outer)
     }
 
     Group {
@@ -55,6 +59,6 @@ DynamicLibrary {
 
     Export {
         Depends { name: "cpp" }
-        cpp.includePaths: project.sourcePath + "/qtbase/src/3rdparty/angle/include"
+        cpp.includePaths: configure.sourcePath + "/qtbase/src/3rdparty/angle/include"
     }
 }

@@ -4,9 +4,9 @@ import qbs.Probes
 QtEglDeviceIntegrationPlugin {
     condition: configure.kms
 
-    cpp.defines: base.concat([
+    cpp.defines: [
         "MESA_EGL_NO_X11_HEADERS",
-    ])
+    ].concat(base)
 
     Depends { name: "kms" }
 

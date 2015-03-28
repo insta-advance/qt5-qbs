@@ -7,17 +7,17 @@ QtProduct {
 
     Depends { name: "cpp" }
 
-    cpp.defines: base.concat([
+    cpp.defines: [
         "FT2_BUILD_LIBRARY",
-    ])
+    ].concat(base)
 
-    cpp.includePaths: base.concat([
-        project.sourcePath + "/qtbase/src/3rdparty/freetype/include",
-    ])
+    cpp.includePaths: [
+        configure.sourcePath + "/qtbase/src/3rdparty/freetype/include",
+    ].concat(base)
 
     Group {
         name: "sources"
-        prefix: project.sourcePath + "/qtbase/src/3rdparty/freetype/src/"
+        prefix: configure.sourcePath + "/qtbase/src/3rdparty/freetype/src/"
         files: [
             "base/ftbase.c",
             "base/ftbbox.c",
@@ -57,7 +57,7 @@ QtProduct {
     Export {
         Depends { name: "cpp" }
         cpp.includePaths: [
-            project.sourcePath + "/qtbase/src/3rdparty/freetype/include",
+            configure.sourcePath + "/qtbase/src/3rdparty/freetype/include",
         ]
     }
 }

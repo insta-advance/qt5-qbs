@@ -4,25 +4,29 @@ QtProduct {
     type: "staticlibrary"
     condition: qbs.targetOS.contains("unix")
 
-    cpp.includePaths: base.concat([
-        project.sourcePath + "/qtbase/src/3rdparty/xkbcommon",
-        project.sourcePath + "/qtbase/src/3rdparty/xkbcommon/src",
-    ])
+    cpp.includePaths: [
+        configure.sourcePath + "/qtbase/src/3rdparty/xkbcommon",
+        configure.sourcePath + "/qtbase/src/3rdparty/xkbcommon/src",
+    ].concat(base)
 
-    cpp.cFlags: base.concat(["-std=c99"])
+    cpp.cFlags: [
+        "-Wno-implicit-function-declaration",
+        "-Wno-missing-field-initializers",
+        "-Wno-unused-parameter",
+    ].concat(base)
 
     readonly property string xkbConfigRoot: qbs.getEnv("CFG_XKB_CONFIG_ROOT")
 
-    cpp.defines: base.concat([
+    cpp.defines: [
         'DFLT_XKB_CONFIG_ROOT="' + (xkbConfigRoot || "not found") + '"',
         'DEFAULT_XKB_RULES="evdev"',
         'DEFAULT_XKB_MODEL="pc105"',
         'DEFAULT_XKB_LAYOUT="us"',
-    ])
+    ].concat(base)
 
     Group {
         name: "headers"
-        prefix: project.sourcePath + "/qtbase/src/3rdparty/xkbcommon/src/"
+        prefix: configure.sourcePath + "/qtbase/src/3rdparty/xkbcommon/src/"
         files: [
             "*.h",
             "xkbcomp/*.h",
@@ -31,7 +35,7 @@ QtProduct {
 
     Group {
         name: "sources"
-        prefix: project.sourcePath + "/qtbase/src/3rdparty/xkbcommon/src/"
+        prefix: configure.sourcePath + "/qtbase/src/3rdparty/xkbcommon/src/"
         files: [
             "*.c",
             "xkbcomp/*.c",
@@ -40,6 +44,6 @@ QtProduct {
 
     Export {
         Depends { name: "cpp" }
-        cpp.includePaths: project.sourcePath + "/qtbase/src/3rdparty/xkbcommon"
+        cpp.includePaths: configure.sourcePath + "/qtbase/src/3rdparty/xkbcommon"
     }
 }

@@ -1,13 +1,13 @@
 import qbs
 import qbs.ModUtils
 import qbs.Probes
-import "../qbs/utils.js" as Utils
+import "../../qbs/imports/QtUtils.js" as QtUtils
 
 QtModule {
     name: "QtXcbQpa"
     condition: configure.xcb
 
-    readonly property path basePath: project.sourcePath + "/qtbase/src/plugins/platforms/xcb"
+    readonly property path basePath: configure.sourcePath + "/qtbase/src/plugins/platforms/xcb"
 
     includeDependencies: ["QtCore-private", "QtGui-private", "QtPlatformSupport-private"]
 
@@ -26,27 +26,27 @@ QtModule {
         return defines;
     }
 
-    cpp.defines: base.concat([
+    cpp.defines: [
         "QT_BUILD_XCB_DEVICE_LIB",
         "MESA_EGL_NO_X11_HEADERS",
-    ]).concat(product.defines)
+    ].concat(base).concat(product.defines)
 
-    cpp.dynamicLibraries: base.concat([
+    cpp.dynamicLibraries: [
         "pthread",
         "dl",
-    ]).concat(Utils.dynamicLibraries(xcbImageProbe.libs)).concat(
-              Utils.dynamicLibraries(xcbKeysymsProbe.libs)).concat(
-              Utils.dynamicLibraries(xcbRandrProbe.libs)).concat(
-              Utils.dynamicLibraries(xcbSyncProbe.libs)).concat(
-              Utils.dynamicLibraries(xcbIcccmProbe.libs)).concat(
-              Utils.dynamicLibraries(xcbXfixesProbe.libs))
+    ].concat(QtUtils.dynamicLibraries(xcbImageProbe.libs)).concat(
+             QtUtils.dynamicLibraries(xcbKeysymsProbe.libs)).concat(
+             QtUtils.dynamicLibraries(xcbRandrProbe.libs)).concat(
+             QtUtils.dynamicLibraries(xcbSyncProbe.libs)).concat(
+             QtUtils.dynamicLibraries(xcbIcccmProbe.libs)).concat(
+             QtUtils.dynamicLibraries(xcbXfixesProbe.libs)).concat(base)
 
 
-    cpp.includePaths: base.concat([
+    cpp.includePaths: [
         basePath,
         basePath + "/gl_integrations",
-        project.sourcePath + "/qtbase/src/3rdparty/freetype/include", // ### use Probe for system freetype
-    ])
+        configure.sourcePath + "/qtbase/src/3rdparty/freetype/include", // ### use Probe for system freetype
+    ].concat(base)
 
     // ### move these to the xcb-x11 depends project
     Probes.PkgConfigProbe {

@@ -1,11 +1,8 @@
 import qbs
-import qbs.Probes
 
 QtPlugin {
-    readonly property string basePath: project.sourcePath + "/qtmultimedia/src/plugins/videonode/imx6"
-
     category: "video"
-    condition: configure.imx6
+    condition: configure.egl && configure.opengl == "es2"
 
     includeDependencies: [
         "QtCore-private",
@@ -15,6 +12,7 @@ QtPlugin {
         "QtQuick-private",
     ]
 
+    Depends { name: "egl" }
     Depends { name: "opengl" }
     Depends { name: "QtCore" }
     Depends { name: "QtGui" }
@@ -24,20 +22,14 @@ QtPlugin {
 
     Group {
         name: "headers"
-        prefix: basePath + "/"
-        files: [
-            "*.h",
-        ]
+        files: configure.sourcePath + "/qtmultimedia/src/plugins/videonode/egl/*.h"
         fileTags: "moc"
         overrideTags: false
     }
 
     Group {
         name: "sources"
-        prefix: basePath + "/"
-        files: [
-            "*.cpp",
-        ]
+        files: configure.sourcePath + "/qtmultimedia/src/plugins/videonode/egl/*.cpp"
         fileTags: "moc"
         overrideTags: false
     }

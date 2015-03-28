@@ -1,10 +1,6 @@
 import qbs
-import qbs.Probes
-import "../qbs/utils.js" as Utils
 
 Project {
-    qbsSearchPaths: ["../qbs", "."]
-
     references: "eglfs-integration.qbs"
 
     QtPlugin {
@@ -21,7 +17,7 @@ Project {
 
         Group {
             name: "sources"
-            prefix: project.sourcePath + "/qtbase/src/plugins/platforms/eglfs/"
+            prefix: configure.sourcePath + "/qtbase/src/plugins/platforms/eglfs/"
             files: "qeglfsmain.cpp"
             fileTags: "moc"
             overrideTags: false

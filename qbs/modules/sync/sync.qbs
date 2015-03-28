@@ -20,19 +20,18 @@ Module {
             var fileTags = ["hpp"];
 
             // Simply copy private headers without parsing
+            var version = product.moduleProperty("configure", "version");
             if (module == "QtGui" && (input.fileName.startsWith("qplatform")
                 || input.fileName.startsWith("qwindowsysteminterface"))) {
                 return [{
-                    filePath: basePath + project.qtVersion + "/" + module
-                              + "/qpa/" + input.fileName,
+                    filePath: basePath + version + "/" + module + "/qpa/" + input.fileName,
                     fileTags: fileTags.concat(["hpp_qpa"])
                 }];
             }
 
             if (input.fileName.endsWith("_p.h")) {
                 return [{
-                    filePath: basePath + project.qtVersion + "/" + module
-                              + "/private/" + input.fileName,
+                    filePath: basePath + version + "/" + module + "/private/" + input.fileName,
                     fileTags: fileTags.concat(["hpp_private"])
                 }];
             }

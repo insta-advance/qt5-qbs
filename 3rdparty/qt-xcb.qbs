@@ -4,13 +4,20 @@ QtProduct {
     type: "staticlibrary"
     condition: qbs.targetOS.contains("linux") && !qbs.targetOS.contains("android")
 
-    readonly property path basePath: project.sourcePath + "/qtbase/src/3rdparty/xcb"
+    readonly property path basePath: configure.sourcePath + "/qtbase/src/3rdparty/xcb"
 
-    cpp.includePaths: base.concat([
+    cpp.cFlags: [
+        "-Wno-implicit-function-declaration",
+        "-Wno-sign-compare",
+        "-Wno-tautological-compare",
+        "-Wno-unused-parameter",
+    ].concat(base)
+
+    cpp.includePaths: [
         basePath + "/include",
         basePath + "/include/xcb",
         basePath + "/sysinclude",
-    ])
+    ].concat(base)
 
     Group {
         name: "headers"
@@ -33,8 +40,8 @@ QtProduct {
     Export {
         Depends { name: "cpp" }
         cpp.includePaths: [
-            project.sourcePath + "/qtbase/src/3rdparty/xcb/include",
-            project.sourcePath + "/qtbase/src/3rdparty/xcb/sysinclude",
+            configure.sourcePath + "/qtbase/src/3rdparty/xcb/include",
+            configure.sourcePath + "/qtbase/src/3rdparty/xcb/sysinclude",
         ]
     }
 }

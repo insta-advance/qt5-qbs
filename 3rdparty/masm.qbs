@@ -5,12 +5,12 @@ import qbs.Process
 import qbs.TextFile
 
 QtProduct {
-    readonly property path basePath: project.sourcePath + "/qtdeclarative/src/3rdparty/masm"
+    readonly property path basePath: configure.sourcePath + "/qtdeclarative/src/3rdparty/masm"
     readonly property bool generateJitTables: pythonProbe.found
     type: "staticlibrary"
 
     cpp.defines: {
-        var defines = base.concat([
+        var defines = [
             "WTF_EXPORT_PRIVATE=",
             "JS_EXPORT_PRIVATE=",
             "WTFReportAssertionFailure=qmlWTFReportAssertionFailure",
@@ -22,7 +22,7 @@ QtProduct {
             "ENABLE_DFG_JIT_UTILITY_METHODS=1",
             "ENABLE_JIT_CONSTANT_BLINDING=0",
             "BUILDING_QT__",
-        ]);
+        ].concat(base);
 
         if (qbs.enableDebugCode)
             defines.push("NDEBUG");
@@ -54,7 +54,7 @@ QtProduct {
     includeDependencies: ["QtCore", "QtQml-private"]
 
     cpp.includePaths: [
-        pythonProbe.found ? buildDirectory : project.sourcePath + "/include/masm",
+        pythonProbe.found ? buildDirectory : configure.sourcePath + "/include/masm",
     ].concat(includePaths).concat(base)
 
     Depends { name: "QtCoreHeaders" }

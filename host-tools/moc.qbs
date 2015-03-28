@@ -16,7 +16,7 @@ QtProduct {
 
     Group {
         name: "source"
-        prefix: project.sourcePath + "/qtbase/src/tools/moc/"
+        prefix: configure.sourcePath + "/qtbase/src/tools/moc/"
         files: [
             "token.cpp",
             "generator.cpp",

@@ -4,6 +4,50 @@ import qbs.FileInfo
 import qbs.TextFile
 
 Module {
+    // Essentials
+    readonly property path sourcePath: project.sourceDirectory
+    readonly property string version: qtVersionProbe.version
+    readonly property stringList versionParts: version.split('.')
+    readonly property string mkspec: {
+        var mkspec;
+        if (qbs.targetOS.contains("linux")) {
+            if (qbs.toolchain.contains("clang"))
+                mkspec = "linux-clang";
+            else if (qbs.toolchain.contains("gcc"))
+                mkspec = "linux-g++";
+        } else if (qbs.targetOS.contains("winphone")) {
+            switch (qbs.architecture) {
+            case "x86":
+                mkspec = "winphone-x86-msvc2013";
+                break;
+            case "x86_64":
+                mkspec = "winphone-x64-msvc2013";
+                break;
+            case "arm":
+                mkspec = "winphone-arm-msvc2013";
+                break;
+            }
+        } else if (qbs.targetOS.contains("winrt")) {
+            switch (qbs.architecture) {
+            case "x86":
+                mkspec = "winrt-x86-msvc2013";
+                break;
+            case "x86_64":
+                mkspec = "winrt-x64-msvc2013";
+                break;
+            case "arm":
+                mkspec = "winrt-arm-msvc2013";
+                break;
+            }
+        } else if (qbs.targetOS.contains("windows")) {
+            if (qbs.toolchain.contains("mingw"))
+                mkspec = "win32-g++";
+            else if (qbs.toolchain.contains("msvc"))
+                mkspec = "win32-msvc2013";
+        }
+        return mkspec;
+    }
+
     // Modules
     readonly property bool concurrent: properties.concurrent
     readonly property bool dbus: properties.dbus
@@ -109,7 +153,7 @@ Module {
         // ### in the case that there is a Qt attached to this profile, get these from Qt.core.config
         var filePath = FileInfo.isAbsolutePath(propertiesFile)
                        ? propertiesFile
-                       : project.sourcePath + '/' + propertiesFile;
+                       : configure.sourcePath + '/' + propertiesFile;
         if (File.exists(filePath)) {
             var configFile = new TextFile(filePath);
             var configContents = "";
@@ -198,5 +242,22 @@ Module {
                 cxxFlags.push("-mfpu=neon");
         }
         return cxxFlags;
+    }
+
+    Probe {
+        id: qtVersionProbe
+        property string version
+        configure: {
+            var file = new TextFile(sourcePath + "/qtbase/src/corelib/global/qglobal.h");
+            var reVersion = /#define QT_VERSION_STR +"(\d\.\d\.\d)"/;
+            while (!file.atEof()) {
+                var line = file.readLine();
+                if (reVersion.test(line)) {
+                    version = line.match(reVersion)[1];
+                    break;
+                }
+            }
+            file.close();
+        }
     }
 }

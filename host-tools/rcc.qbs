@@ -9,9 +9,9 @@ QtProduct {
 
     Depends { name: "QtBootstrap" }
 
-    cpp.includePaths: base.concat([
-        project.sourcePath + "/qtbase/src/tools/rcc",
-    ])
+    cpp.includePaths: [
+        configure.sourcePath + "/qtbase/src/tools/rcc",
+    ].concat(base)
 
     Group {
         fileTagsFilter: "application"
@@ -21,7 +21,7 @@ QtProduct {
 
     Group {
         name: "source"
-        prefix: project.sourcePath + "/qtbase/src/tools/rcc/"
+        prefix: configure.sourcePath + "/qtbase/src/tools/rcc/"
         files: [
             "main.cpp",
             "rcc.cpp",

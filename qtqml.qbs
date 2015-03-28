@@ -2,68 +2,74 @@ import qbs
 import qbs.Process
 import qbs.TextFile
 
-QtModule {
+Project {
     name: "QtQml"
-    condition: configure.qml
 
-    readonly property path basePath: project.sourcePath
-                                     + "/qtdeclarative/src/qml"
+    QtModule {
+        name: "QtQml"
+        condition: configure.qml
 
-    property bool disassembler: false
+        readonly property path basePath: configure.sourcePath
+                                         + "/qtdeclarative/src/qml"
 
-    includeDependencies: ["QtCore-private", "QtGui", "QtNetwork", "QtQml", "QtQml-private"]
+        property bool disassembler: false
 
-    cpp.defines: base.concat(["QT_BUILD_QML_LIB"])
+        includeDependencies: ["QtCore-private", "QtGui", "QtNetwork", "QtQml", "QtQml-private"]
 
-    cpp.dynamicLibraries: {
-        var dynamicLibraries = base;
-        if (qbs.targetOS.contains("unix"))
-            dynamicLibraries.push("pthread");
-        if (qbs.targetOS.contains("windows"))
-            dynamicLibraries.push("shell32");
-        return dynamicLibraries;
-    }
+        cpp.defines: [
+            "QT_BUILD_QML_LIB",
+        ].concat(base)
 
-    cpp.includePaths: {
-        var includePaths = base;
+        cpp.dynamicLibraries: {
+            var dynamicLibraries = base;
+            if (qbs.targetOS.contains("unix"))
+                dynamicLibraries.push("pthread");
+            if (qbs.targetOS.contains("windows"))
+                dynamicLibraries.push("shell32");
+            return dynamicLibraries;
+        }
 
-        if (qbs.targetOS.contains("windowsce"))
-            includePaths.push(masmPath + "/stubs/compat");
+        cpp.includePaths: {
+            var includePaths = base;
 
-        return includePaths;
-    }
+            if (qbs.targetOS.contains("windowsce"))
+                includePaths.push(masmPath + "/stubs/compat");
 
-    Depends { name: "double-conversion" }
-    Depends { name: "masm" }
-    Depends { name: "QtCore" }
-    Depends { name: "QtGui" }
-    Depends { name: "QtNetwork" }
-    Depends { name: "QtQmlHeaders" }
+            return includePaths;
+        }
 
-    QtQmlHeaders {
-        name: "headers"
-        fileTags: "moc"
-        overrideTags: false
-    }
+        Depends { name: "double-conversion" }
+        Depends { name: "masm" }
+        Depends { name: "QtCore" }
+        Depends { name: "QtGui" }
+        Depends { name: "QtNetwork" }
+        Depends { name: "QtQmlHeaders" }
 
-    Group {
-        name: "sources"
-        prefix: basePath + "/"
-        files: [
-            "animations/*.cpp",
-            "compiler/*.cpp",
-            "debugger/*.cpp",
-            "jit/*.cpp",
-            "jsapi/*.cpp",
-            "jsruntime/*.cpp",
-            "parser/*.cpp",
-            "qml/*.cpp",
-            "qml/ftw/*.cpp",
-            "qml/v8/*.cpp",
-            "types/*.cpp",
-            "util/*.cpp",
-        ]
-        fileTags: "moc"
-        overrideTags: false
+        QtQmlHeaders {
+            name: "headers"
+            fileTags: "moc"
+            overrideTags: false
+        }
+
+        Group {
+            name: "sources"
+            prefix: basePath + "/"
+            files: [
+                "animations/*.cpp",
+                "compiler/*.cpp",
+                "debugger/*.cpp",
+                "jit/*.cpp",
+                "jsapi/*.cpp",
+                "jsruntime/*.cpp",
+                "parser/*.cpp",
+                "qml/*.cpp",
+                "qml/ftw/*.cpp",
+                "qml/v8/*.cpp",
+                "types/*.cpp",
+                "util/*.cpp",
+            ]
+            fileTags: "moc"
+            overrideTags: false
+        }
     }
 }

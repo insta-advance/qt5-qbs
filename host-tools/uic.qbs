@@ -7,15 +7,15 @@ QtProduct {
 
     includeDependencies: ["QtCore"]
 
-    cpp.defines: base.concat([
+    cpp.defines: [
         "QT_UIC",
         "QT_UIC_CPP_GENERATOR",
-    ])
+    ].concat(base)
 
-    cpp.includePaths: base.concat([
-        project.sourcePath + "/qtbase/src/tools/uic",
-        project.sourcePath + "/qtbase/src/tools/uic/cpp",
-    ])
+    cpp.includePaths: [
+        configure.sourcePath + "/qtbase/src/tools/uic",
+        configure.sourcePath + "/qtbase/src/tools/uic/cpp",
+    ].concat(base)
 
     Depends { name: "QtBootstrap" }
 
@@ -35,7 +35,7 @@ QtProduct {
 
     Group {
         name: "headers"
-        prefix: project.sourcePath + "/qtbase/src/tools/uic/"
+        prefix: configure.sourcePath + "/qtbase/src/tools/uic/"
         files: [
             "*.h",
             "cpp/*.h",
@@ -44,7 +44,7 @@ QtProduct {
 
     Group {
         name: "sources"
-        prefix: project.sourcePath + "/qtbase/src/tools/uic/"
+        prefix: configure.sourcePath + "/qtbase/src/tools/uic/"
         files: [
             "*.cpp",
             "cpp/*.cpp",

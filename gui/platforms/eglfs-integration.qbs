@@ -1,7 +1,6 @@
 import qbs
 import qbs.ModUtils
 import qbs.Probes
-import "../qbs/utils.js" as Utils
 
 QtModule {
     condition: configure.egl
@@ -10,12 +9,12 @@ QtModule {
     includeDependencies: ["QtCore-private", "QtGui-private", "QtPlatformSupport-private"]
 
     cpp.defines: {
-        var defines = base.concat([
+        var defines = [
             "QT_BUILD_EGL_DEVICE_LIB",
             "MESA_EGL_NO_X11_HEADERS",
             "QT_NO_EVDEV", // ### build the evdev plugins separately
             "EGL_API_FB", // ### from imx6, not sure if this is compatible. we want to build an ARM binary that works with multiple boards
-        ]);
+        ].concat(base);
 
         if (!configure.cursor)
             defines.push("QT_NO_CURSOR");
@@ -26,13 +25,13 @@ QtModule {
         return defines;
     }
 
-    cpp.dynamicLibraries: base.concat([
+    cpp.dynamicLibraries: [
         "pthread",
-    ]);
+    ].concat(base)
 
-    cpp.includePaths: base.concat([
-        project.sourcePath + "/qtbase/src/3rdparty/freetype/include", // ### use Probe for system freetype
-    ])
+    cpp.includePaths: [
+        configure.sourcePath + "/qtbase/src/3rdparty/freetype/include", // ### use Probe for system freetype
+    ].concat(base)
 
     Depends { name: "egl" }
     Depends { name: "glib"; condition: configure.glib }
@@ -45,7 +44,7 @@ QtModule {
 
     Group {
         name: "headers"
-        prefix: project.sourcePath + "/qtbase/src/"
+        prefix: configure.sourcePath + "/qtbase/src/"
         files: {
             var files = [
                 "plugins/platforms/eglfs/qeglfscontext.h",
@@ -79,7 +78,7 @@ QtModule {
 
     Group {
         name: "sources"
-        prefix: project.sourcePath + "/qtbase/src/"
+        prefix: configure.sourcePath + "/qtbase/src/"
         files: {
             var files = [
                 "plugins/platforms/eglfs/qeglfscontext.cpp",
@@ -128,7 +127,7 @@ QtModule {
     Group {
         condition: configure.cursor
         name: "cursor.qrc"
-        files: project.sourcePath + "/qtbase/src/plugins/platforms/eglfs/cursor.qrc"
+        files: configure.sourcePath + "/qtbase/src/plugins/platforms/eglfs/cursor.qrc"
         fileTags: "qrc"
     }
 }

@@ -2,7 +2,7 @@ import qbs
 import qbs.File
 import qbs.FileInfo
 
-QtProduct {
+QtModule {
     type: "staticlibrary"
     name: "QtBootstrap"
 
@@ -28,16 +28,16 @@ QtProduct {
     ]
 
     property stringList bootstrapIncludes: [
-        project.sourcePath + "/qtbase/mkspecs/" + project.host,
+        configure.sourcePath + "/qtbase/mkspecs/" + project.host,
     ]
 
     includeDependencies: ["QtCore", "QtCore-private", "QtXml", "QtXml-private"]
 
-    cpp.defines: base.concat(bootstrapDefines).concat([
+    cpp.defines: [
         "QT_BUILD_BOOTSTRAP_LIB",
-    ])
+    ].concat(bootstrapDefines).concat(base)
 
-    cpp.includePaths: base.concat(bootstrapIncludes)
+    cpp.includePaths: bootstrapIncludes.concat(base)
 
     // ### mingw: cpp.cxxFlags: "-std=gnu++0x"
     Properties {
@@ -56,7 +56,7 @@ QtProduct {
 
     Group {
         name: "sources"
-        prefix: project.sourcePath + "/qtbase/src/corelib/"
+        prefix: configure.sourcePath + "/qtbase/src/corelib/"
         files: [
             "codecs/qlatincodec.cpp",
             "codecs/qtextcodec.cpp",
@@ -129,7 +129,7 @@ QtProduct {
     Group {
         name: "sources_windows"
         condition: qbs.targetOS.contains("windows")
-        prefix: project.sourcePath + "/qtbase/src/corelib/"
+        prefix: configure.sourcePath + "/qtbase/src/corelib/"
         files: [
             "io/qfilesystemengine_win.cpp",
             "io/qfilesystemiterator_win.cpp",
@@ -143,7 +143,7 @@ QtProduct {
     Group {
         name: "sources_unix"
         condition: qbs.targetOS.contains("unix")
-        prefix: project.sourcePath + "/qtbase/src/corelib/"
+        prefix: configure.sourcePath + "/qtbase/src/corelib/"
         files: [
             "io/qfilesystemengine_unix.cpp",
             "io/qfilesystemiterator_unix.cpp",
@@ -154,7 +154,7 @@ QtProduct {
 
     Group {
         name: "xml_sources"
-        prefix: project.sourcePath + "/qtbase/src/xml/"
+        prefix: configure.sourcePath + "/qtbase/src/xml/"
         files: [
             "dom/qdom.cpp",
             "sax/qxml.cpp",

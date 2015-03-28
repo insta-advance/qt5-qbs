@@ -12,15 +12,15 @@ QtProduct {
 
     Properties {
         condition: qbs.toolchain.contains("gcc")
-        cpp.cxxFlags: base.concat(["-std=c++11"])
+        cpp.cxxFlags: ["-std=c++11"].concat(outer)
     }
 
     Properties {
         condition: qbs.targetOS.contains("windows")
-        cpp.dynamicLibraries: base.concat([
+        cpp.dynamicLibraries: [
             "shell32",
             "ole32",
-        ])
+        ].concat(base)
     }
 
     Group {

@@ -2,7 +2,7 @@ import qbs
 
 Group {
     name: "headers"
-    prefix: project.sourcePath + "/qtbase/src/gui/"
+    prefix: configure.sourcePath + "/qtbase/src/gui/"
     files: [
         "accessible/*.h",
         "animation/*.h",

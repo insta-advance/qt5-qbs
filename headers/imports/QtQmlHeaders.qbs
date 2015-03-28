@@ -2,7 +2,7 @@ import qbs
 
 Group {
     name: "headers"
-    prefix: project.sourcePath + "/qtdeclarative/src/qml/"
+    prefix: configure.sourcePath + "/qtdeclarative/src/qml/"
     files: [
         "*.h",
         "animations/*.h",

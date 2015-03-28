@@ -8,15 +8,15 @@ QtProduct {
     Depends { name: "QtBootstrap" }
     includeDependencies: ["QtCore", "QtCore-private"]
 
-    cpp.includePaths: base.concat([
-        project.sourcePath + "/qttools/src/linguist/lrelease",
-        project.sourcePath + "/qttools/src/linguist/shared",
-    ])
+    cpp.includePaths: [
+        configure.sourcePath + "/qttools/src/linguist/lrelease",
+        configure.sourcePath + "/qttools/src/linguist/shared",
+    ].concat(base)
 
-    cpp.defines: base.concat([
+    cpp.defines: [
         "PROEVALUATOR_INIT_PROPS",
         "PROEVALUATOR_CUMULATIVE",
-    ])
+    ].concat(base)
 
     Group {
         fileTagsFilter: "application"
@@ -26,7 +26,7 @@ QtProduct {
 
     Group {
         name: "source"
-        prefix: project.sourcePath + "/qttools/src/linguist/"
+        prefix: configure.sourcePath + "/qttools/src/linguist/"
         files: [
             "lrelease/main.cpp",
             "lrelease/lrelease.1",

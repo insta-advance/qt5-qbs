@@ -1,5 +1,6 @@
 import qbs
 import qbs.FileInfo
+import "QtUtils.js" as QtUtils
 
 Product {
     readonly property path includeDirectory: project.buildDirectory + "/include"
@@ -11,37 +12,25 @@ Product {
     condition: configure.properties[name] !== false // Allows disabling any project from qtconfig.json
 
     cpp.includePaths: {
-        var includes = base.concat([
+        var includes = [
             includeDirectory,
-            project.sourcePath + "/qtbase/mkspecs/" + project.target,
+            configure.sourcePath + "/qtbase/mkspecs/" + configure.mkspec,
             product.buildDirectory + "/.moc",
             product.buildDirectory + "/.uic",
-        ]);
+        ].concat(base);
         for (var i in includeDependencies) {
             var module = includeDependencies[i];
-            if (module.endsWith("-private")) {
-                module = module.slice(0, -8);
-                includes.push(includeDirectory + "/" + module + "/" + project.qtVersion);
-                includes.push(includeDirectory + "/" + module + "/" + project.qtVersion
-                                               + "/" + module);
-                includes.push(includeDirectory + "/" + module + "/" + project.qtVersion
-                                               + "/" + module + "/private");
-                if (module == "QtGui") {
-                    includes.push(includeDirectory + "/" + module + "/" + project.qtVersion
-                                                   + "/" + module + "/qpa");
-                }
-            }
-            includes.push(includeDirectory + "/" + module);
+            Array.prototype.push.apply(includes, QtUtils.includesForModule(module, includeDirectory, configure.version));
         }
         return includes;
     }
 
     cpp.defines: {
-        var defines = configure.baseDefines.concat([
+        var defines = [
             "QT_BUILDING_QT",
             "QT_MOC_COMPAT",
             "_USE_MATH_DEFINES",
-        ]);
+        ];
 
         if (qbs.targetOS.contains("windows")) {
             defines.push("_WIN32");
@@ -54,7 +43,7 @@ Product {
             defines.push('QT_COORD_TYPE_STRING="' + properties.qreal + '"');
         }
 
-        return defines;
+        return defines.concat(configure.baseDefines);
     }
 
     Depends { name: "configure" }
@@ -62,7 +51,9 @@ Product {
 
     Properties {
         condition: qbs.toolchain.contains("gcc") && !qbs.toolchain.contains("clang")
-        cpp.cxxFlags: base.concat(["-Wno-psabi"]);
+        cpp.cxxFlags: [
+            "-Wno-psabi"
+        ].concat(base)
     }
 
     Properties {

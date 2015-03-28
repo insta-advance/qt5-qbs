@@ -12,7 +12,7 @@ Project {
         Group {
             name: "headers (QtCore)"
             fileTags: "header_sync"
-            prefix: project.sourcePath + "/qtbase/src/corelib/"
+            prefix: configure.sourcePath + "/qtbase/src/corelib/"
             files: [
                 "arch/qatomic_bootstrap.h",
                 "codecs/qtextcodec.h",
@@ -171,7 +171,7 @@ Project {
         Group {
             name: "headers (QtXml)"
             fileTags: "header_sync"
-            prefix: project.sourcePath + "/qtbase/src/xml/"
+            prefix: configure.sourcePath + "/qtbase/src/xml/"
             files: [
                 "dom/qdom.h",
                 "qtxmlglobal.h",

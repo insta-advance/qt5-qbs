@@ -3,13 +3,13 @@ import qbs
 QtXcbGlIntegrationPlugin {
     condition: configure.xcb && configure.egl
 
-    cpp.defines: base.concat([
+    cpp.defines: [
         "MESA_EGL_NO_X11_HEADERS",
-    ])
+    ].concat(base)
 
-    cpp.includePaths: base.concat([
+    cpp.includePaths: [
         basePath + "/gl_integrations",
-    ])
+    ].concat(base)
 
     Depends { name: "egl" }
     Depends { name: "opengl" }

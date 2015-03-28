@@ -2,7 +2,7 @@ import qbs
 
 Group {
     name: "headers"
-    prefix: project.sourcePath + "/qtdeclarative/src/quick/"
+    prefix: configure.sourcePath + "/qtdeclarative/src/quick/"
     files: [
         "*.h",
         "accessible/*.h",

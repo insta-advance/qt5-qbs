@@ -1,18 +1,15 @@
 import qbs
 
 QtEglDeviceIntegrationPlugin {
-    condition: configure.egl && configure.x11
+    condition: configure.imx6
 
-    cpp.defines: base.concat([
-        "MESA_EGL_NO_X11_HEADERS", // for Mesa
-        "EGL_API_FB",              // for Vivante
-    ])
-
-    //Depends { name: "x11" }
+    cpp.defines: [
+        "EGL_API_FB",
+    ].concat(base)
 
     Group {
         name: "headers"
-        prefix: basePath + "/eglfs_x11/"
+        prefix: basePath + "/eglfs_viv/"
         files: [
             "*.h",
         ]
@@ -22,7 +19,7 @@ QtEglDeviceIntegrationPlugin {
 
     Group {
         name: "sources"
-        prefix: basePath + "/eglfs_x11/"
+        prefix: basePath + "/eglfs_viv/"
         files: [
             "*.cpp",
         ]

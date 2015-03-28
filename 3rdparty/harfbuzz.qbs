@@ -9,7 +9,7 @@ QtProduct {
 
     Group {
         name: "sources"
-        prefix: project.sourcePath + "/qtbase/src/3rdparty/harfbuzz/src/"
+        prefix: configure.sourcePath + "/qtbase/src/3rdparty/harfbuzz/src/"
         files: [
             "harfbuzz-buffer.c",
             "harfbuzz-gdef.c",
@@ -25,7 +25,7 @@ QtProduct {
     Export {
         Depends { name: "cpp" }
         cpp.includePaths: [
-            project.sourcePath + "/qtbase/src/3rdparty/harfbuzz/src",
+            configure.sourcePath + "/qtbase/src/3rdparty/harfbuzz/src",
         ]
     }
 }

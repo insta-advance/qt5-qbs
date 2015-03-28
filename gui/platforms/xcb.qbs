@@ -1,10 +1,7 @@
 import qbs
 import qbs.Probes
-import "../qbs/utils.js" as Utils
 
 Project {
-    qbsSearchPaths: ["../qbs", "."]
-
     references: [
         "xcb-integration.qbs",
         "xcb-egl.qbs",
@@ -15,13 +12,13 @@ Project {
         category: "platforms"
         targetName: "qxcb"
 
-        readonly property path basePath: project.sourcePath + "/qtbase/src/plugins/platforms/xcb"
+        readonly property path basePath: configure.sourcePath + "/qtbase/src/plugins/platforms/xcb"
 
         includeDependencies: ["QtCore-private", "QtGui-private", "QtPlatformSupport-private"]
 
-        cpp.includePaths: base.concat([
+        cpp.includePaths: [
             basePath,
-        ])
+        ].concat(base)
 
         Depends { name: "egl" }
         //Depends { name: "xcb-x11" }

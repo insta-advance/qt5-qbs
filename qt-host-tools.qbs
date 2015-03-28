@@ -20,8 +20,6 @@ Project {
         return host;
     }
 
-    property string sourcePath: sourceDirectory
-
     qbsSearchPaths: "qbs"
 
     references: [

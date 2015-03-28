@@ -5,6 +5,7 @@ Product {
     property string module
     sync.module: product.module
 
+    Depends { name: "configure" }
     Depends { name: "sync" }
 
     Group {
@@ -17,13 +18,13 @@ Product {
         fileTagsFilter: "hpp_private"
         qbs.install: true
         qbs.installDir: "include/" + product.module + "/"
-                        + project.qtVersion + "/" + product.module
+                        + configure.version + "/" + product.module
                         + "/private"
     }
 
     Group {
         fileTagsFilter: "hpp_qpa"
         qbs.install: true
-        qbs.installDir: "include/QtGui/" + project.qtVersion + "/QtGui/qpa"
+        qbs.installDir: "include/QtGui/" + configure.version + "/QtGui/qpa"
     }
 }

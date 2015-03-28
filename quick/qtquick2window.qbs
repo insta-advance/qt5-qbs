@@ -1,11 +1,11 @@
 import qbs
 
 QmlPlugin {
-    readonly property path basePath: project.sourcePath + "/qtdeclarative/src/imports/qtquick2"
-    targetName: "qtquick2plugin"
-    pluginPath: "QtQuick.2"
+    readonly property path basePath: configure.sourcePath + "/qtdeclarative/src/imports/window"
+    targetName: "windowplugin"
+    pluginPath: "QtQuick/Window.2"
 
-    includeDependencies: ["QtQuick-private"]
+    includeDependencies: ["QtQml-private", "QtQuick-private"]
 
     Depends { name: "QtCore" }
     Depends { name: "QtQml" }

@@ -2,11 +2,12 @@ import qbs
 import qbs.FileInfo
 import qbs.TextFile
 import qbs.PathTools
+import "QtUtils.js" as QtUtils
 
 QtProduct {
     type: "dynamiclibrary"
     targetName: "Qt5" + name.slice(2)
-    version: project.qtVersion
+    version: configure.version
     destinationDirectory: project.buildDirectory + "/lib"
 
     Depends { name: "sync" }
@@ -57,7 +58,13 @@ QtProduct {
             var cmd = new JavaScriptCommand();
             cmd.description = "generating " + output.fileName;
             cmd.modulePrefix = "QT." + output.baseName.slice(7) + '.';
-            cmd.includes = "$$QT_MODULE_INCLUDE_BASE $$QT_MODULE_INCLUDE_BASE/" + product.name;// ### includeDependencies
+            cmd.includes = "$$QT_MODULE_INCLUDE_BASE";
+            for (var i in product.includeDependencies) {
+                var module = product.includeDependencies[i];
+                cmd.includes += ' ' + QtUtils.includesForModule(
+                            module, "$$QT_MODULE_INCLUDE_BASE",
+                            product.moduleProperty("configure", "version")).join(' ');
+            }
             cmd.sourceCode = function() {
                 var file = new TextFile(output.filePath, TextFile.WriteOnly);
                 file.writeLine(modulePrefix + "name = " + product.name);
