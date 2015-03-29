@@ -1,7 +1,9 @@
 import qbs
+import qbs.File
 
 Project {
     name: "QtSvg"
+    condition: File.exists(project.sourcePath + "/qtsvg")
 
     references: [
         "svg/imageformats/svg.qbs",

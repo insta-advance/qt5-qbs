@@ -1,7 +1,9 @@
 import qbs
+import qbs.File
 
 Project {
     name: "QtMultimedia"
+    condition: File.exists(project.sourcePath + "/qtmultimedia")
 
     Project {
         name: "tools"

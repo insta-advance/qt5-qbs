@@ -1,7 +1,9 @@
 import qbs
+import qbs.File
 
 Project {
     name: "QtGraphicalEffects"
+    condition: File.exists(project.sourcePath + "/qtgraphicaleffects")
 
     QmlPlugin {
         name: "QtGraphicalEffects"

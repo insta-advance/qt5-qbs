@@ -1,9 +1,11 @@
 import qbs
+import qbs.File
 import qbs.Process
 import qbs.TextFile
 
 Project {
     name: "QtQml"
+    condition: File.exists(project.sourcePath + "/qtdeclarative")
 
     QtModule {
         name: "QtQml"

@@ -1,8 +1,10 @@
 import qbs
+import qbs.File
 import qbs.TextFile
 
 Project {
     name: "QtQuickControls"
+    condition: File.exists(project.sourcePath + "/qtquickcontrols")
 
     QmlPlugin {
         name: "QtQuickControls"

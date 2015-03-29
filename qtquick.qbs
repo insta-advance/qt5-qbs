@@ -1,7 +1,9 @@
 import qbs
+import qbs.File
 
 Project {
     name: "QtQuick"
+    condition: File.exists(project.sourcePath + "/qtdeclarative")
 
     Project {
         name: "imports"

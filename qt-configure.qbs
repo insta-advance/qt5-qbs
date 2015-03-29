@@ -95,12 +95,12 @@ Project {
                 config.gui = true;
                 config.network = true;
                 config.widgets = true;
-                config.graphicaleffects = File.exists(project.sourcePath + "/qtgraphicaleffects");
-                config.multimedia = File.exists(project.sourcePath + "/qtmultimedia");
-                config.qml = File.exists(project.sourcePath + "/qtdeclarative");
-                config.quick = File.exists(project.sourcePath + "/qtdeclarative");
-                config.quickcontrols = File.exists(project.sourcePath + "/qtquickcontrols");
-                config.svg = File.exists(project.sourcePath + "/qtsvg");
+                config.graphicaleffects = true;
+                config.multimedia = true;
+                config.qml = true;
+                config.quick = true;
+                config.quickcontrols = true;
+                config.svg = true;
                 config.qpa = targetOS.contains("linux") ? "xcb" : "windows"; // ### fixme
 
                 // Compiler/architecture features
