@@ -8,8 +8,10 @@ QtProduct {
 
     cpp.cFlags: [
         "-Wno-implicit-function-declaration",
+        "-Wno-return-type",
         "-Wno-sign-compare",
         "-Wno-tautological-compare",
+        "-Wno-unused-function",
         "-Wno-unused-parameter",
     ].concat(base)
 
