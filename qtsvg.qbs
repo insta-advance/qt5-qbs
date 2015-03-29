@@ -6,7 +6,7 @@ Project {
     condition: File.exists(project.sourcePath + "/qtsvg")
 
     references: [
-        "svg/imageformats/svg.qbs",
+        "plugins/imageformats/svg.qbs",
     ]
 
     QtModule {

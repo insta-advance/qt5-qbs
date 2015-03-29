@@ -18,7 +18,6 @@ Project {
         "3rdparty/3rdparty.qbs",
         "headers/headers.qbs",
         "qtcore.qbs",
-        "qtgraphicaleffects.qbs",
         "qtgui.qbs",
         "qtmultimedia.qbs",
         "qtnetwork.qbs",

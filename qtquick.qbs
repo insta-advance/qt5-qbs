@@ -8,8 +8,9 @@ Project {
     Project {
         name: "imports"
         references: [
-            "quick/qtquick2.qbs",
-            "quick/qtquick2window.qbs",
+            "qml/qtquick2.qbs",
+            "qml/qtquick2window.qbs",
+            "qml/qtgraphicaleffects.qbs", // here because it doesn't contain a module
         ]
     }
 

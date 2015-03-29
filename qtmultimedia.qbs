@@ -8,30 +8,30 @@ Project {
     Project {
         name: "tools"
         references: [
-            "multimedia/gsttools.qbs",
-            "multimedia/multimediaquicktools.qbs",
+            "gsttools.qbs",
+            "multimediaquicktools.qbs",
         ]
     }
 
     Project {
         name: "imports"
         references: [
-            "multimedia/declarative_multimedia.qbs",
+            "qml/declarative_multimedia.qbs",
         ]
     }
 
     Project {
         name: "mediaservice"
         references: [
-            "multimedia/mediaservice/gstreamer-camerabin.qbs",
+            "plugins/mediaservice/gstreamer-camerabin.qbs",
         ]
     }
 
     Project {
         name: "video"
         references: [
-            "multimedia/video/videonode-egl.qbs",
-            "multimedia/video/videonode-imx6.qbs",
+            "plugins/video/videonode-egl.qbs",
+            "plugins/video/videonode-imx6.qbs",
         ]
     }
 

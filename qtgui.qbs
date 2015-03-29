@@ -8,9 +8,9 @@ Project {
     Project {
         name: "platforms"
         references: [
-            "gui/platforms/eglfs.qbs",
-            "gui/platforms/xcb.qbs",
-            "gui/platforms/windows.qbs",
+            "plugins/platforms/eglfs.qbs",
+            "plugins/platforms/xcb.qbs",
+            "plugins/platforms/windows.qbs",
         ]
     }
 
