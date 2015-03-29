@@ -8,10 +8,10 @@ URL: https://github.com/intopalo/qt5-qbs
 Vendor: Qt Project
 Packager: Andrew Knight <andrew.knight@intopalo.com>
 Source0: qt5-qbs.tar.gz
-Source1: qtbase~v%{qtversion}%{qtsuffix}.tar.gz
-Source2: qtdeclarative~v%{qtversion}%{qtsuffix}.tar.gz
-Source3: qtmultimedia~v%{qtversion}%{qtsuffix}.tar.gz
-Source4: qttools~v%{qtversion}%{qtsuffix}.tar.gz
+Source1: qtbase.tar.gz
+Source2: qtdeclarative.tar.gz
+Source3: qtmultimedia.tar.gz
+Source4: qttools.tar.gz
 
 %description
 Qt is a cross-platform C++ application framework.
@@ -22,13 +22,13 @@ This package was built using QBS, the Qt Build Suite.
 %prep
 %setup -n "qt5-qbs-master"
 %setup -D -n "qt5-qbs-master" -a 1
-mv "qtbase-%{qtversion}%{qtsuffix}" "qtbase"
+mv "qtbase-%{qttag}" "qtbase"
 %setup -D -n "qt5-qbs-master" -a 2
-mv "qtdeclarative-%{qtversion}%{qtsuffix}" "qtdeclarative"
+mv "qtdeclarative-%{qttag}" "qtdeclarative"
 %setup -D -n "qt5-qbs-master" -a 3
-mv "qtmultimedia-%{qtversion}%{qtsuffix}" "qtmultimedia"
+mv "qtmultimedia-%{qttag}" "qtmultimedia"
 %setup -D -n "qt5-qbs-master" -a 4
-mv "qttools-%{qtversion}%{qtsuffix}" "qttools"
+mv "qttools-%{qttag}" "qttools"
 
 %build
 qbs install -d %{_builddir} --install-root %{_builddir}/qt5-qbs-master \

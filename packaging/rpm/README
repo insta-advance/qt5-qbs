@@ -1,8 +1,8 @@
 This .spec file and corresponding downloader will help you to build a Qt 5 RPM.
 
 The basic commands are:
- ./download.sh 5.5.0-alpha1
- rpmbuild -ba --define 'qtversion 5.5.0' --define 'qtsuffix -alpha1' --define 'args' qt.spec
+ ./download.sh dev
+ rpmbuild -ba --define 'qtversion 5.6.0' --define 'qttag dev' --define 'args release' qt.spec
 
  To change the architecture, pass
  --define '_arch armhf'
