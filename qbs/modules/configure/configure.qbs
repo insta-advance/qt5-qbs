@@ -166,7 +166,7 @@ Module {
             return config;
         var filePaths = [
             FileInfo.isAbsolutePath(configuration) ? configuration : project.sourceDirectory + '/' + configuration, // user-provided
-            qbs.installRoot + "/qtconfig.json", // installed
+            qbs.qtconfig, // profile-installed
             project.sourceDirectory + '/' + project.profile + '-' + qbs.buildVariant + "/qtconfig.json", // auto-generated
         ];
         // Loop through each file option in order of precedence to find the configuration.
