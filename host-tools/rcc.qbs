@@ -2,7 +2,6 @@ import qbs
 
 QtProduct {
     type: "application"
-
     destinationDirectory: project.buildDirectory + "/bin"
 
     includeDependencies: ["QtCore"]
@@ -10,7 +9,7 @@ QtProduct {
     Depends { name: "QtBootstrap" }
 
     cpp.includePaths: [
-        configure.sourcePath + "/qtbase/src/tools/rcc",
+        project.sourcePath + "/qtbase/src/tools/rcc",
     ].concat(base)
 
     Group {
@@ -21,7 +20,7 @@ QtProduct {
 
     Group {
         name: "source"
-        prefix: configure.sourcePath + "/qtbase/src/tools/rcc/"
+        prefix: project.sourcePath + "/qtbase/src/tools/rcc/"
         files: [
             "main.cpp",
             "rcc.cpp",

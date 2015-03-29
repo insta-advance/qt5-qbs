@@ -2,65 +2,29 @@ import qbs
 import qbs.File
 import qbs.FileInfo
 import qbs.TextFile
+import qbs.Probes
 
 Module {
+    id: configureModule
+
     // Essentials
-    readonly property path sourcePath: project.sourceDirectory
-    readonly property string version: qtVersionProbe.version
-    readonly property stringList versionParts: version.split('.')
-    readonly property string mkspec: {
-        var mkspec;
-        if (qbs.targetOS.contains("linux")) {
-            if (qbs.toolchain.contains("clang"))
-                mkspec = "linux-clang";
-            else if (qbs.toolchain.contains("gcc"))
-                mkspec = "linux-g++";
-        } else if (qbs.targetOS.contains("winphone")) {
-            switch (qbs.architecture) {
-            case "x86":
-                mkspec = "winphone-x86-msvc2013";
-                break;
-            case "x86_64":
-                mkspec = "winphone-x64-msvc2013";
-                break;
-            case "arm":
-                mkspec = "winphone-arm-msvc2013";
-                break;
-            }
-        } else if (qbs.targetOS.contains("winrt")) {
-            switch (qbs.architecture) {
-            case "x86":
-                mkspec = "winrt-x86-msvc2013";
-                break;
-            case "x86_64":
-                mkspec = "winrt-x64-msvc2013";
-                break;
-            case "arm":
-                mkspec = "winrt-arm-msvc2013";
-                break;
-            }
-        } else if (qbs.targetOS.contains("windows")) {
-            if (qbs.toolchain.contains("mingw"))
-                mkspec = "win32-g++";
-            else if (qbs.toolchain.contains("msvc"))
-                mkspec = "win32-msvc2013";
-        }
-        return mkspec;
-    }
 
     // Modules
     readonly property bool concurrent: properties.concurrent
     readonly property bool dbus: properties.dbus
+    readonly property bool graphicaleffects: properties.graphicaleffects
     readonly property bool gui: properties.gui
-    readonly property bool widgets: properties.widgets
+    readonly property bool multimedia: properties.multimedia
     readonly property bool network: properties.network
     readonly property bool qml: properties.qml
     readonly property bool quick: properties.quick
-    readonly property bool multimedia: properties.multimedia
+    readonly property bool quickcontrols: properties.quickcontrols
     readonly property bool svg: properties.svg
+    readonly property bool widgets: properties.widgets
 
     // Common
     readonly property string prefix: properties.prefix
+    readonly property string mkspec: properties.mkspec
     readonly property bool cxx11: properties["c++11"]
     readonly property bool sse2: properties.sse2
     readonly property bool sse3: properties.sse3
@@ -97,6 +61,8 @@ Module {
     readonly property bool xkb: properties.xkb
     readonly property bool linuxfb: properties.linuxfb
     readonly property string png: properties.png
+    readonly property string jpeg: properties.jpeg
+    readonly property string freetype: properties.freetype
     readonly property string qpa: properties.qpa
 
     // QtWidgets
@@ -109,71 +75,6 @@ Module {
 
     // QtMultimedia
     readonly property bool gstreamer: properties.gstreamer
-
-    // input from user
-    readonly property path propertiesFile: "qtconfig-" + project.profile + ".json"
-    readonly property var properties: {
-        // For settings which shouldn't default to false
-        var config = {
-            // modules are true if the sources can be found
-            gui: true,
-            network: true,
-            widgets: true,
-            qml: true,
-            quick: true,
-            multimedia: true,
-            svg: true,
-
-            // These are the minimum SIMD instructions assumed to be supported on the target
-            sse2: qbs.architecture.startsWith("x86"),
-            neon: qbs.architecture.startsWith("arm"),
-
-            opengl: "es2", // ### fixme... this needs to be no-opengl unless we can make a simple detection here
-
-            // default config
-            prefix: qbs.installRoot,
-
-            "c++11": true, // ### compiler/version test?
-
-            pcre: true,
-            zlib: true,
-
-            png: "qt",
-            qpa: qbs.targetOS.contains("linux") ? "xcb" : "windows", // ### fixme
-            accessibility: true,
-            cursor: true,
-            freetype: true,
-
-            androidstyle: qbs.targetOS.contains("android"),
-            macstyle: qbs.targetOS.contains("osx"),
-            windowscestyle: qbs.targetOS.contains("windowsce"),
-            windowsmobilestyle: qbs.targetOS.contains("windowsce"),
-            windowsvistastyle: qbs.targetOS.contains("windows"),
-            windowsxpstyle: qbs.targetOS.contains("windows"),
-        };
-
-        // ### in the case that there is a Qt attached to this profile, get these from Qt.core.config
-        var filePath = FileInfo.isAbsolutePath(propertiesFile)
-                       ? propertiesFile
-                       : configure.sourcePath + '/' + propertiesFile;
-        if (File.exists(filePath)) {
-            var configFile = new TextFile(filePath);
-            var configContents = "";
-            while (!configFile.atEof()) {
-                var line = configFile.readLine();
-                // Comments aren't valid JSON, but allow (and remove) them anyway
-                line = line.replace(/ +\/\/.*$/g, '');
-                configContents += line;
-            }
-            configFile.close();
-            // Allow a trailing comma
-            configContents = configContents.replace(/, *\}$/, '}');
-            var json = JSON.parse(configContents);
-            for (var i in json)
-                config[i] = json[i];
-        }
-        return config;
-    }
 
     readonly property stringList baseDefines: [
         "QT_ASCII_CAST_WARNINGS",
@@ -247,19 +148,49 @@ Module {
     }
 
     Probe {
-        id: qtVersionProbe
+        id: openglProbe
         property string version
+        condition: configureModule.opengl === undefined
         configure: {
-            var file = new TextFile(sourcePath + "/qtbase/src/corelib/global/qglobal.h");
-            var reVersion = /#define QT_VERSION_STR +"(\d\.\d\.\d)"/;
-            while (!file.atEof()) {
-                var line = file.readLine();
-                if (reVersion.test(line)) {
-                    version = line.match(reVersion)[1];
-                    break;
-                }
-            }
-            file.close();
+            if (!condition)
+                return;
         }
+    }
+
+    property path configuration: "qtconfig.json"
+    readonly property var properties: {
+        var config = { };
+        if (project.name == "qt-host-tools")
+            return { mkspec: project.host };
+        if (configuration == null) // allow for a null configuration
+            return config;
+        var filePaths = [
+            FileInfo.isAbsolutePath(configuration) ? configuration : project.sourceDirectory + '/' + configuration, // user-provided
+            qbs.installRoot + "/qtconfig.json", // installed
+            project.sourceDirectory + '/' + project.profile + '-' + qbs.buildVariant + "/qtconfig.json", // auto-generated
+        ];
+        // Loop through each file option in order of precedence to find the configuration.
+        for (var i in filePaths) {
+            var filePath = filePaths[i];
+            if (File.exists(filePath)) {
+                var configFile = new TextFile(filePath);
+                var configContents = "";
+                while (!configFile.atEof()) {
+                    var line = configFile.readLine();
+                    // Comments aren't valid JSON, but allow (and remove) them anyway
+                    line = line.replace(/ +\/\/.*$/g, '');
+                    configContents += line;
+                }
+                configFile.close();
+                // Allow a trailing comma
+                configContents = configContents.replace(/, *\}$/, '}');
+                return JSON.parse(configContents);
+            }
+        }
+        throw "You have not specified a configuration file. "
+            + "Please add qtconfig.json to the source directory "
+            + "or pass 'configure.configuration:<file-name>'. "
+            + "You may run 'qbs -f qt-configure.qbs to generate a new configuration. "
+            + "If you do not want to use a configuration file, pass 'configure.configuration:null'.";
     }
 }

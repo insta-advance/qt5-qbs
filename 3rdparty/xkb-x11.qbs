@@ -1,6 +1,6 @@
 import qbs
 import qbs.Probes
-import "../qbs/utils.js" as Utils
+import "../qbs/imports/QtUtils.js" as QtUtils
 
 Product {
     readonly property bool found: xkbProbe.found
@@ -16,7 +16,7 @@ Product {
     Export {
         Depends { name: "cpp" }
         cpp.cxxFlags: xkbProbe.cflags
-        cpp.libraryPaths: Utils.libraryPaths(xkbProbe.libs)
-        cpp.dynamicLibraries: Utils.dynamicLibraries(xkbProbe.libs)
+        cpp.libraryPaths: QtUtils.libraryPaths(xkbProbe.libs)
+        cpp.dynamicLibraries: QtUtils.dynamicLibraries(xkbProbe.libs)
     }
 }

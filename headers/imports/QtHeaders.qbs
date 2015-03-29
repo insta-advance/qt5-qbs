@@ -18,13 +18,13 @@ Product {
         fileTagsFilter: "hpp_private"
         qbs.install: true
         qbs.installDir: "include/" + product.module + "/"
-                        + configure.version + "/" + product.module
+                        + project.version + "/" + product.module
                         + "/private"
     }
 
     Group {
         fileTagsFilter: "hpp_qpa"
         qbs.install: true
-        qbs.installDir: "include/QtGui/" + configure.version + "/QtGui/qpa"
+        qbs.installDir: "include/QtGui/" + project.version + "/QtGui/qpa"
     }
 }

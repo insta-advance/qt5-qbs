@@ -17,7 +17,7 @@ QtModule {
 
     Group {
         name: "headers"
-        prefix: configure.sourcePath + "/qtmultimedia/src/"
+        prefix: project.sourcePath + "/qtmultimedia/src/"
         files: [
             "multimedia/qtmultimediaquicktools_headers/*.h",
             "qtmultimediaquicktools/*.h",
@@ -28,7 +28,7 @@ QtModule {
 
     Group {
         name: "sources"
-        prefix: configure.sourcePath + "/qtmultimedia/src/qtmultimediaquicktools/"
+        prefix: project.sourcePath + "/qtmultimedia/src/qtmultimediaquicktools/"
         files: "*.cpp"
         fileTags: "moc"
         overrideTags: false

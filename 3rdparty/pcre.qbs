@@ -13,12 +13,12 @@ QtProduct {
     ].concat(base)
 
     cpp.includePaths: [
-        configure.sourcePath + "/qtbase/src/3rdparty/pcre"
+        project.sourcePath + "/qtbase/src/3rdparty/pcre"
     ].concat(base)
 
     Group {
         name: "sources"
-        prefix: configure.sourcePath + "/qtbase/src/3rdparty/pcre/"
+        prefix: project.sourcePath + "/qtbase/src/3rdparty/pcre/"
         files: [
             "*.h",
             "pcre16_*.c",
@@ -27,7 +27,7 @@ QtProduct {
 
     Export {
         Depends { name: "cpp" }
-        cpp.includePaths: configure.sourcePath + "/qtbase/src/3rdparty/pcre"
+        cpp.includePaths: project.sourcePath + "/qtbase/src/3rdparty/pcre"
         cpp.defines: product.cpp.defines
     }
 }

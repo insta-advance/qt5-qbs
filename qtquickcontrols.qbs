@@ -9,7 +9,7 @@ Project {
         targetName: "qtquickcontrolsplugin"
         pluginPath: "QtQuick.2"
 
-        readonly property string basePath: configure.sourcePath + "/qtquickcontrols/src/controls"
+        readonly property string basePath: project.sourcePath + "/qtquickcontrols/src/controls"
 
         includeDependencies: ["QtCore-private", "QtGui-private", "QtQml-private", "QtQuick-private", "QtWidgets"]
 

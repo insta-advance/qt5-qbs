@@ -9,7 +9,7 @@ Project {
         name: "QtQml"
         condition: configure.qml
 
-        readonly property path basePath: configure.sourcePath
+        readonly property path basePath: project.sourcePath
                                          + "/qtdeclarative/src/qml"
 
         property bool disassembler: false

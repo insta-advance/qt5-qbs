@@ -1,10 +1,11 @@
 import qbs
 import qbs.Probes
-import "../qbs/utils.js" as Utils
+import "../qbs/imports/QtUtils.js" as QtUtils
 
 Product {
     readonly property bool found: eglProbe.found
     type: "hpp"
+    builtByDefault: false
 
     Depends { name: "cpp" }
 
@@ -16,7 +17,7 @@ Product {
     Export {
         Depends { name: "cpp" }
         cpp.cxxFlags: eglProbe.cflags
-        cpp.libraryPaths: Utils.libraryPaths(eglProbe.libs)
-        cpp.dynamicLibraries: Utils.dynamicLibraries(eglProbe.libs)
+        cpp.libraryPaths: QtUtils.libraryPaths(eglProbe.libs)
+        cpp.dynamicLibraries: QtUtils.dynamicLibraries(eglProbe.libs)
     }
 }

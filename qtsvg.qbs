@@ -10,7 +10,7 @@ Project {
     QtModule {
         name: "QtSvg"
         condition: configure.svg
-        readonly property path basePath: configure.sourcePath + "/qtsvg/src/svg"
+        readonly property path basePath: project.sourcePath + "/qtsvg/src/svg"
 
         includeDependencies: ["QtCore-private", "QtGui-private", "QtWidgets-private"]
 

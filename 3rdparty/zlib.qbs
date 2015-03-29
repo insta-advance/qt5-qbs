@@ -15,12 +15,12 @@ QtProduct {
     cpp.includePaths: [
         project.sourceDirectory + "/include",
         project.sourceDirectory + "/include/QtCore",
-        configure.sourcePath + "/qtbase/src/corelib/global",
+        project.sourcePath + "/qtbase/src/corelib/global",
     ].concat(base)
 
     Group {
         name: "headers"
-        prefix: configure.sourcePath + "/qtbase/src/3rdparty/zlib/"
+        prefix: project.sourcePath + "/qtbase/src/3rdparty/zlib/"
         files: [
             "zutil.h",
             "crc32.h",
@@ -38,7 +38,7 @@ QtProduct {
 
     Group {
         name: "sources"
-        prefix: configure.sourcePath + "/qtbase/src/3rdparty/zlib/"
+        prefix: project.sourcePath + "/qtbase/src/3rdparty/zlib/"
         files: [
             "zutil.c",
             "adler32.c",
@@ -61,6 +61,6 @@ QtProduct {
 
     Export {
         Depends { name: "cpp" }
-        cpp.includePaths: configure.sourcePath + "/qtbase/src/3rdparty/zlib"
+        cpp.includePaths: project.sourcePath + "/qtbase/src/3rdparty/zlib"
     }
 }

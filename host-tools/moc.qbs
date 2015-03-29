@@ -2,8 +2,8 @@ import qbs
 
 QtProduct {
     type: "application"
-
     destinationDirectory: project.buildDirectory + "/bin"
+
     includeDependencies: ["QtCore", "QtCore-private"]
 
     Depends { name: "QtBootstrap" }
@@ -16,7 +16,7 @@ QtProduct {
 
     Group {
         name: "source"
-        prefix: configure.sourcePath + "/qtbase/src/tools/moc/"
+        prefix: project.sourcePath + "/qtbase/src/tools/moc/"
         files: [
             "token.cpp",
             "generator.cpp",

@@ -5,7 +5,7 @@ import qbs.Process
 import qbs.TextFile
 
 QtProduct {
-    readonly property path basePath: configure.sourcePath + "/qtdeclarative/src/3rdparty/masm"
+    readonly property path basePath: project.sourcePath + "/qtdeclarative/src/3rdparty/masm"
     readonly property bool generateJitTables: pythonProbe.found
     type: "staticlibrary"
 
@@ -54,7 +54,7 @@ QtProduct {
     includeDependencies: ["QtCore", "QtQml-private"]
 
     cpp.includePaths: [
-        pythonProbe.found ? buildDirectory : configure.sourcePath + "/include/masm",
+        pythonProbe.found ? buildDirectory : project.sourcePath + "/include/masm",
     ].concat(includePaths).concat(base)
 
     Depends { name: "QtCoreHeaders" }

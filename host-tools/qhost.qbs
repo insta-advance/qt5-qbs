@@ -12,7 +12,9 @@ QtProduct {
 
     Properties {
         condition: qbs.toolchain.contains("gcc")
-        cpp.cxxFlags: ["-std=c++11"].concat(outer)
+        cpp.cxxFlags: [
+            "-std=c++11",
+        ]
     }
 
     Properties {
@@ -20,7 +22,7 @@ QtProduct {
         cpp.dynamicLibraries: [
             "shell32",
             "ole32",
-        ].concat(base)
+        ]
     }
 
     Group {

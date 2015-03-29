@@ -7,7 +7,7 @@ import "QtUtils.js" as QtUtils
 QtProduct {
     type: "dynamiclibrary"
     targetName: "Qt5" + name.slice(2)
-    version: configure.version
+    version: project.version
     destinationDirectory: project.buildDirectory + "/lib"
 
     Depends { name: "sync" }
@@ -61,9 +61,7 @@ QtProduct {
             cmd.includes = "$$QT_MODULE_INCLUDE_BASE";
             for (var i in product.includeDependencies) {
                 var module = product.includeDependencies[i];
-                cmd.includes += ' ' + QtUtils.includesForModule(
-                            module, "$$QT_MODULE_INCLUDE_BASE",
-                            product.moduleProperty("configure", "version")).join(' ');
+                cmd.includes += ' ' + QtUtils.includesForModule(module, "$$QT_MODULE_INCLUDE_BASE", project.version).join(' ');
             }
             cmd.sourceCode = function() {
                 var file = new TextFile(output.filePath, TextFile.WriteOnly);

@@ -1,6 +1,6 @@
 import qbs
 import qbs.Probes
-import "../qbs/utils.js" as Utils
+import "../qbs/imports/QtUtils.js" as QtUtils
 
 Product {
     readonly property bool found: gstreamerProbe.found && gstreamerAppProbe.found
@@ -43,13 +43,13 @@ Product {
     Export {
         Depends { name: "cpp" }
         cpp.cxxFlags: gstreamerProbe.cflags
-        cpp.libraryPaths: product.found ? Utils.libraryPaths(
+        cpp.libraryPaths: product.found ? QtUtils.libraryPaths(
                                   gstreamerProbe.libs.concat(
                                   gstreamerAppProbe.libs).concat(
                                   gstreamerVideoProbe.libs).concat(
                                   gstreamerAudioProbe.libs).concat(
                                   gstreamerPBUtilsProbe.libs)) : []
-        cpp.dynamicLibraries: product.found ? Utils.dynamicLibraries(
+        cpp.dynamicLibraries: product.found ? QtUtils.dynamicLibraries(
                                   gstreamerProbe.libs.concat(
                                   gstreamerAppProbe.libs).concat(
                                   gstreamerVideoProbe.libs).concat(

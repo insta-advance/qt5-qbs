@@ -1,6 +1,6 @@
 import qbs
 import qbs.Probes
-import "../qbs/utils.js" as Utils
+import "../qbs/imports/QtUtils.js" as QtUtils
 
 Project {
     readonly property string detectedVersion: {
@@ -41,16 +41,16 @@ Project {
             }
             cpp.libraryPaths: {
                 if (configure.opengl == "desktop")
-                    return Utils.libraryPaths(glDesktopProbe.libs);
+                    return QtUtils.libraryPaths(glDesktopProbe.libs);
                 if (configure.opengl == "es2")
-                    return Utils.libraryPaths(glEs2Probe.libs);
+                    return QtUtils.libraryPaths(glEs2Probe.libs);
                 // angle?
             }
             cpp.dynamicLibraries: {
                 if (configure.opengl == "desktop")
-                    return Utils.dynamicLibraries(glDesktopProbe.libs);
+                    return QtUtils.dynamicLibraries(glDesktopProbe.libs);
                 if (configure.opengl == "es2")
-                    return Utils.dynamicLibraries(glEs2Probe.libs);
+                    return QtUtils.dynamicLibraries(glEs2Probe.libs);
                 // angle?
             }
         }

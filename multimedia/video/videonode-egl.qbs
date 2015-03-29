@@ -22,14 +22,14 @@ QtPlugin {
 
     Group {
         name: "headers"
-        files: configure.sourcePath + "/qtmultimedia/src/plugins/videonode/egl/*.h"
+        files: project.sourcePath + "/qtmultimedia/src/plugins/videonode/egl/*.h"
         fileTags: "moc"
         overrideTags: false
     }
 
     Group {
         name: "sources"
-        files: configure.sourcePath + "/qtmultimedia/src/plugins/videonode/egl/*.cpp"
+        files: project.sourcePath + "/qtmultimedia/src/plugins/videonode/egl/*.cpp"
         fileTags: "moc"
         overrideTags: false
     }

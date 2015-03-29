@@ -1,7 +1,7 @@
 import qbs
 
 QtPlugin {
-    readonly property string basePath: configure.sourcePath + "/qtmultimedia/src/plugins/gstreamer/camerabin"
+    readonly property string basePath: project.sourcePath + "/qtmultimedia/src/plugins/gstreamer/camerabin"
 
     condition: configure.gstreamer
     targetName: "gstcamerabin"

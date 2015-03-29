@@ -1,9 +1,14 @@
-import qbs 1.0
+import qbs
+import qbs.File
 import qbs.TextFile
+import "qbs/imports/QtUtils.js" as QtUtils
 
 Project {
     id: root
     name: "Qt"
+
+    readonly property path sourcePath: sourceDirectory
+    readonly property string version: QtUtils.qtVersion(sourcePath)
 
     qbsSearchPaths: ["qbs", "headers"]
 

@@ -8,14 +8,14 @@ QtProduct {
     Depends { name: "zlib" }
 
     cpp.includePaths: [
-        configure.sourcePath + "/include",
-        configure.sourcePath + "/include/QtCore",
-        configure.sourcePath + "/qtbase/src/corelib/global",
+        project.sourcePath + "/include",
+        project.sourcePath + "/include/QtCore",
+        project.sourcePath + "/qtbase/src/corelib/global",
     ].concat(base)
 
     Group {
         name: "sources"
-        prefix: configure.sourcePath + "/qtbase/src/3rdparty/libpng/"
+        prefix: project.sourcePath + "/qtbase/src/3rdparty/libpng/"
         files: [
             "pngwutil.c",
             "png.c",

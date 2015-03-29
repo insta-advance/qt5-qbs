@@ -5,8 +5,8 @@ QtProduct {
     condition: qbs.targetOS.contains("unix")
 
     cpp.includePaths: [
-        configure.sourcePath + "/qtbase/src/3rdparty/xkbcommon",
-        configure.sourcePath + "/qtbase/src/3rdparty/xkbcommon/src",
+        project.sourcePath + "/qtbase/src/3rdparty/xkbcommon",
+        project.sourcePath + "/qtbase/src/3rdparty/xkbcommon/src",
     ].concat(base)
 
     cpp.cFlags: [
@@ -26,7 +26,7 @@ QtProduct {
 
     Group {
         name: "headers"
-        prefix: configure.sourcePath + "/qtbase/src/3rdparty/xkbcommon/src/"
+        prefix: project.sourcePath + "/qtbase/src/3rdparty/xkbcommon/src/"
         files: [
             "*.h",
             "xkbcomp/*.h",
@@ -35,7 +35,7 @@ QtProduct {
 
     Group {
         name: "sources"
-        prefix: configure.sourcePath + "/qtbase/src/3rdparty/xkbcommon/src/"
+        prefix: project.sourcePath + "/qtbase/src/3rdparty/xkbcommon/src/"
         files: [
             "*.c",
             "xkbcomp/*.c",
@@ -44,6 +44,6 @@ QtProduct {
 
     Export {
         Depends { name: "cpp" }
-        cpp.includePaths: configure.sourcePath + "/qtbase/src/3rdparty/xkbcommon"
+        cpp.includePaths: project.sourcePath + "/qtbase/src/3rdparty/xkbcommon"
     }
 }

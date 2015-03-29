@@ -1,10 +1,11 @@
 import qbs
 import qbs.Probes
-import "../qbs/utils.js" as Utils
+import "../qbs/imports/QtUtils.js" as QtUtils
 
 Product {
     readonly property bool found: glibProbe.found
     type: "hpp"
+    builtByDefault: false
 
     Depends { name: "cpp" }
 
@@ -16,7 +17,7 @@ Product {
     Export {
         Depends { name: "cpp" }
         cpp.cxxFlags: glibProbe.cflags
-        cpp.libraryPaths: Utils.libraryPaths(glibProbe.libs)
-        cpp.dynamicLibraries: Utils.dynamicLibraries(glibProbe.libs)
+        cpp.libraryPaths: QtUtils.libraryPaths(glibProbe.libs)
+        cpp.dynamicLibraries: QtUtils.dynamicLibraries(glibProbe.libs)
     }
 }

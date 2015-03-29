@@ -1,6 +1,6 @@
 import qbs
 import qbs.Probes
-import "../qbs/utils.js" as Utils
+import "../qbs/imports/QtUtils.js" as QtUtils
 
 Product {
     readonly property bool found: udevProbe.found
@@ -16,7 +16,7 @@ Product {
     Export {
         Depends { name: "cpp" }
         cpp.cxxFlags: udevProbe.cflags
-        cpp.libraryPaths: Utils.libraryPaths(udevProbe.libs)
-        cpp.dynamicLibraries: Utils.dynamicLibraries(udevProbe.libs)
+        cpp.libraryPaths: QtUtils.libraryPaths(udevProbe.libs)
+        cpp.dynamicLibraries: QtUtils.dynamicLibraries(udevProbe.libs)
     }
 }

@@ -1,10 +1,12 @@
 import qbs
 import qbs.File
+import qbs.TextFile
+import "qbs/imports/QtUtils.js" as QtUtils
 
 Project {
-    id: root
-
-    property string host: {
+    name: "qt-host-tools"
+    readonly property path sourcePath: sourceDirectory
+    readonly property string host: {
         var host;
         if (qbs.targetOS.contains("linux")) {
             if (qbs.toolchain.contains("clang"))
@@ -19,6 +21,7 @@ Project {
         }
         return host;
     }
+    readonly property string version: QtUtils.qtVersion(sourcePath)
 
     qbsSearchPaths: "qbs"
 

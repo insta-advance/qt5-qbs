@@ -12,12 +12,12 @@ QtProduct {
     ].concat(base)
 
     cpp.includePaths: [
-        configure.sourcePath + "/qtbase/src/3rdparty/freetype/include",
+        project.sourcePath + "/qtbase/src/3rdparty/freetype/include",
     ].concat(base)
 
     Group {
         name: "sources"
-        prefix: configure.sourcePath + "/qtbase/src/3rdparty/freetype/src/"
+        prefix: project.sourcePath + "/qtbase/src/3rdparty/freetype/src/"
         files: [
             "base/ftbase.c",
             "base/ftbbox.c",
@@ -57,7 +57,7 @@ QtProduct {
     Export {
         Depends { name: "cpp" }
         cpp.includePaths: [
-            configure.sourcePath + "/qtbase/src/3rdparty/freetype/include",
+            project.sourcePath + "/qtbase/src/3rdparty/freetype/include",
         ]
     }
 }

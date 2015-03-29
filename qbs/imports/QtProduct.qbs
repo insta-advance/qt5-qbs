@@ -9,18 +9,18 @@ Product {
         "QT_SELECT=qhost",
     ]
 
-    condition: configure.properties[name] !== false // Allows disabling any project from qtconfig.json
+    condition: configure[name] !== false
 
     cpp.includePaths: {
         var includes = [
             includeDirectory,
-            configure.sourcePath + "/qtbase/mkspecs/" + configure.mkspec,
+            project.sourcePath + "/qtbase/mkspecs/" + configure.mkspec,
             product.buildDirectory + "/.moc",
             product.buildDirectory + "/.uic",
         ].concat(base);
         for (var i in includeDependencies) {
             var module = includeDependencies[i];
-            Array.prototype.push.apply(includes, QtUtils.includesForModule(module, includeDirectory, configure.version));
+            Array.prototype.push.apply(includes, QtUtils.includesForModule(module, includeDirectory, project.version));
         }
         return includes;
     }
@@ -38,7 +38,7 @@ Product {
                 defines.push("_SCL_SECURE_NO_WARNINGS");
         }
 
-        if (configure.properties.qreal) {
+        if (configure.qreal !== undefined) {
             defines.push("QT_COORD_TYPE=" + properties.qreal);
             defines.push('QT_COORD_TYPE_STRING="' + properties.qreal + '"');
         }

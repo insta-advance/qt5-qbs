@@ -14,7 +14,7 @@ QtModule {
 
     Group {
         name: "headers"
-        prefix: configure.sourcePath + "/qtmultimedia/src/multimedia/gsttools_headers/"
+        prefix: project.sourcePath + "/qtmultimedia/src/multimedia/gsttools_headers/"
         files: [
             "*.h",
         ]
@@ -30,7 +30,7 @@ QtModule {
 
     Group {
         name: "sources"
-        prefix: configure.sourcePath + "/qtmultimedia/src/gsttools/"
+        prefix: project.sourcePath + "/qtmultimedia/src/gsttools/"
         files: "*.cpp"
         excludeFiles: [
             "qgstreamergltexturerenderer.cpp", // ### fixme: see above

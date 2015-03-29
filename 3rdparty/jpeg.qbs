@@ -13,7 +13,7 @@ QtProduct {
 
     Group {
         name: "sources"
-        prefix: configure.sourcePath + "/qtbase/src/3rdparty/libjpeg/"
+        prefix: project.sourcePath + "/qtbase/src/3rdparty/libjpeg/"
         files: [
             "cderror.h",
             "cdjpeg.h",
@@ -79,6 +79,6 @@ QtProduct {
 
     Export {
         Depends { name: "cpp" }
-        cpp.includePaths: configure.sourcePath + "/qtbase/src/3rdparty/libjpeg"
+        cpp.includePaths: project.sourcePath + "/qtbase/src/3rdparty/libjpeg"
     }
 }

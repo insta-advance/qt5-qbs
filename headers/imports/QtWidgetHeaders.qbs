@@ -2,7 +2,7 @@ import qbs
 
 Group {
     name: "headers"
-    prefix: configure.sourcePath + "/qtbase/src/widgets/"
+    prefix: project.sourcePath + "/qtbase/src/widgets/"
     files: [
         "accessible/*.h",
         "dialogs/*.h",

@@ -17,7 +17,7 @@ Project {
 
         Group {
             name: "sources"
-            prefix: configure.sourcePath + "/qtbase/src/plugins/platforms/eglfs/"
+            prefix: project.sourcePath + "/qtbase/src/plugins/platforms/eglfs/"
             files: "qeglfsmain.cpp"
             fileTags: "moc"
             overrideTags: false

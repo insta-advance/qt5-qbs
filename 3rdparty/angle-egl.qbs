@@ -6,7 +6,7 @@ DynamicLibrary {
     builtByDefault: false
     condition: configure.angle
 
-    readonly property path basePath: configure.sourcePath + "/qtbase/src/3rdparty/angle"
+    readonly property path basePath: project.sourcePath + "/qtbase/src/3rdparty/angle"
 
     cpp.dynamicLibraryPrefix: "lib"
 
@@ -59,6 +59,6 @@ DynamicLibrary {
 
     Export {
         Depends { name: "cpp" }
-        cpp.includePaths: configure.sourcePath + "/qtbase/src/3rdparty/angle/include"
+        cpp.includePaths: project.sourcePath + "/qtbase/src/3rdparty/angle/include"
     }
 }

@@ -6,7 +6,7 @@ Project {
         name: "QtWidgets"
         condition: configure.widgets
 
-        readonly property path basePath: configure.sourcePath + "/qtbase/src/widgets"
+        readonly property path basePath: project.sourcePath + "/qtbase/src/widgets"
 
         includeDependencies: ["QtCore-private", "QtGui-private", "QtWidgets-private"]
 

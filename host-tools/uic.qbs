@@ -2,7 +2,6 @@ import qbs
 
 QtProduct {
     type: "application"
-
     destinationDirectory: project.buildDirectory + "/bin"
 
     includeDependencies: ["QtCore"]
@@ -13,8 +12,8 @@ QtProduct {
     ].concat(base)
 
     cpp.includePaths: [
-        configure.sourcePath + "/qtbase/src/tools/uic",
-        configure.sourcePath + "/qtbase/src/tools/uic/cpp",
+        project.sourcePath + "/qtbase/src/tools/uic",
+        project.sourcePath + "/qtbase/src/tools/uic/cpp",
     ].concat(base)
 
     Depends { name: "QtBootstrap" }
@@ -35,7 +34,7 @@ QtProduct {
 
     Group {
         name: "headers"
-        prefix: configure.sourcePath + "/qtbase/src/tools/uic/"
+        prefix: project.sourcePath + "/qtbase/src/tools/uic/"
         files: [
             "*.h",
             "cpp/*.h",
@@ -44,7 +43,7 @@ QtProduct {
 
     Group {
         name: "sources"
-        prefix: configure.sourcePath + "/qtbase/src/tools/uic/"
+        prefix: project.sourcePath + "/qtbase/src/tools/uic/"
         files: [
             "*.cpp",
             "cpp/*.cpp",

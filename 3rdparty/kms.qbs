@@ -1,6 +1,6 @@
 import qbs
 import qbs.Probes
-import "../qbs/utils.js" as Utils
+import "../qbs/imports/QtUtils.js" as QtUtils
 
 Product {
     readonly property bool found: drmProbe.found && gbmProbe.found
@@ -21,7 +21,7 @@ Product {
     Export {
         Depends { name: "cpp" }
         cpp.cxxFlags: drmProbe.cflags
-        cpp.libraryPaths: product.found ? Utils.libraryPaths(drmProbe.libs.concat(gbmProbe.libs)) : []
-        cpp.dynamicLibraries: product.found ? Utils.dynamicLibraries(drmProbe.libs.concat(gbmProbe.libs)) : []
+        cpp.libraryPaths: product.found ? QtUtils.libraryPaths(drmProbe.libs.concat(gbmProbe.libs)) : []
+        cpp.dynamicLibraries: product.found ? QtUtils.dynamicLibraries(drmProbe.libs.concat(gbmProbe.libs)) : []
     }
 }

@@ -38,7 +38,7 @@ Project {
         condition: configure.multimedia
         name: "QtMultimedia"
 
-        readonly property path basePath: configure.sourcePath + "/qtmultimedia/src/multimedia"
+        readonly property path basePath: project.sourcePath + "/qtmultimedia/src/multimedia"
 
         includeDependencies: ["QtCore-private", "QtNetwork", "QtGui", "QtQuick", "QtMultimedia-private"]
 

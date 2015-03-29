@@ -2,7 +2,7 @@ import qbs
 
 Group {
     name: "headers"
-    prefix: configure.sourcePath + "/qtmultimedia/src/multimedia/"
+    prefix: project.sourcePath + "/qtmultimedia/src/multimedia/"
     files: [
         "*.h",
         "audio/*.h",

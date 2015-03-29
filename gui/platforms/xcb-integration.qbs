@@ -7,7 +7,7 @@ QtModule {
     name: "QtXcbQpa"
     condition: configure.xcb
 
-    readonly property path basePath: configure.sourcePath + "/qtbase/src/plugins/platforms/xcb"
+    readonly property path basePath: project.sourcePath + "/qtbase/src/plugins/platforms/xcb"
 
     includeDependencies: ["QtCore-private", "QtGui-private", "QtPlatformSupport-private"]
 
@@ -45,7 +45,7 @@ QtModule {
     cpp.includePaths: [
         basePath,
         basePath + "/gl_integrations",
-        configure.sourcePath + "/qtbase/src/3rdparty/freetype/include", // ### use Probe for system freetype
+        project.sourcePath + "/qtbase/src/3rdparty/freetype/include", // ### use Probe for system freetype
     ].concat(base)
 
     // ### move these to the xcb-x11 depends project

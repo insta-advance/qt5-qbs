@@ -1,16 +1,15 @@
 import qbs
 
 QtProduct {
-    name: "lrelease"
-
+    type: "application"
     destinationDirectory: project.buildDirectory + "/bin"
 
     Depends { name: "QtBootstrap" }
     includeDependencies: ["QtCore", "QtCore-private"]
 
     cpp.includePaths: [
-        configure.sourcePath + "/qttools/src/linguist/lrelease",
-        configure.sourcePath + "/qttools/src/linguist/shared",
+        project.sourcePath + "/qttools/src/linguist/lrelease",
+        project.sourcePath + "/qttools/src/linguist/shared",
     ].concat(base)
 
     cpp.defines: [
@@ -26,7 +25,7 @@ QtProduct {
 
     Group {
         name: "source"
-        prefix: configure.sourcePath + "/qttools/src/linguist/"
+        prefix: project.sourcePath + "/qttools/src/linguist/"
         files: [
             "lrelease/main.cpp",
             "lrelease/lrelease.1",

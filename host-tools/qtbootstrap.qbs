@@ -27,8 +27,8 @@ QtModule {
         "QT_USE_QSTRINGBUILDER",
     ]
 
-    property stringList bootstrapIncludes: [
-        configure.sourcePath + "/qtbase/mkspecs/" + project.host,
+    readonly property stringList bootstrapIncludes: [
+        project.sourcePath + "/qtbase/mkspecs/" + project.host,
     ]
 
     includeDependencies: ["QtCore", "QtCore-private", "QtXml", "QtXml-private"]
@@ -38,6 +38,7 @@ QtModule {
     ].concat(bootstrapDefines).concat(base)
 
     cpp.includePaths: bootstrapIncludes.concat(base)
+
 
     // ### mingw: cpp.cxxFlags: "-std=gnu++0x"
     Properties {
@@ -56,7 +57,7 @@ QtModule {
 
     Group {
         name: "sources"
-        prefix: configure.sourcePath + "/qtbase/src/corelib/"
+        prefix: project.sourcePath + "/qtbase/src/corelib/"
         files: [
             "codecs/qlatincodec.cpp",
             "codecs/qtextcodec.cpp",
@@ -129,7 +130,7 @@ QtModule {
     Group {
         name: "sources_windows"
         condition: qbs.targetOS.contains("windows")
-        prefix: configure.sourcePath + "/qtbase/src/corelib/"
+        prefix: project.sourcePath + "/qtbase/src/corelib/"
         files: [
             "io/qfilesystemengine_win.cpp",
             "io/qfilesystemiterator_win.cpp",
@@ -143,7 +144,7 @@ QtModule {
     Group {
         name: "sources_unix"
         condition: qbs.targetOS.contains("unix")
-        prefix: configure.sourcePath + "/qtbase/src/corelib/"
+        prefix: project.sourcePath + "/qtbase/src/corelib/"
         files: [
             "io/qfilesystemengine_unix.cpp",
             "io/qfilesystemiterator_unix.cpp",
@@ -154,7 +155,7 @@ QtModule {
 
     Group {
         name: "xml_sources"
-        prefix: configure.sourcePath + "/qtbase/src/xml/"
+        prefix: project.sourcePath + "/qtbase/src/xml/"
         files: [
             "dom/qdom.cpp",
             "sax/qxml.cpp",

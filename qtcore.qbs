@@ -1,13 +1,11 @@
 import qbs
-import qbs.Probes
 import qbs.TextFile
-import "qbs/utils.js" as Utils
 
 Project {
     name: "QtCore"
     QtModule {
         name: "QtCore"
-        property path basePath: configure.sourcePath + "/qtbase/src/corelib"
+        property path basePath: project.sourcePath + "/qtbase/src/corelib"
 
         includeDependencies: ["QtCore-private"]
 
@@ -37,7 +35,7 @@ Project {
         }
 
         cpp.includePaths: [
-            configure.sourcePath + "/qtbase/src/3rdparty/forkfd",
+            project.sourcePath + "/qtbase/src/3rdparty/forkfd",
         ].concat(base)
 
         Depends { name: "harfbuzz" }
@@ -444,7 +442,7 @@ Project {
                 }
                 if (properties.opengl == "es2")
                     cmd.qtconfig.push("opengles2");
-                cmd.qtVersionParts = product.moduleProperty("configure", "versionParts");
+                cmd.qtVersionParts = project.version.split('.');
                 cmd.sourceCode = function() {
                     var file = new TextFile(output.filePath, TextFile.WriteOnly);
                     file.writeLine("QT_MAJOR_VERSION = " + qtVersionParts[0]);
@@ -480,7 +478,7 @@ Project {
 
         Group {
             name: "mkspecs"
-            files: configure.sourcePath + "/qtbase/mkspecs"
+            files: project.sourcePath + "/qtbase/mkspecs"
             fileTags: []
             qbs.install: true
         }
