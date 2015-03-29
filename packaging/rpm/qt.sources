@@ -1,5 +1,5 @@
 https://github.com/intopalo/qt5-qbs/archive/master.tar.gz qt5-qbs.tar.gz
-https://github.com/qtproject/qtbase/archive/v${VERSION}.tar.gz qtbase~v${VERSION}.tar.gz
-https://github.com/qtproject/qtdeclarative/archive/v${VERSION}.tar.gz qtdeclarative~v${VERSION}.tar.gz
-https://github.com/qtproject/qtmultimedia/archive/v${VERSION}.tar.gz qtmultimedia~v${VERSION}.tar.gz
-https://github.com/qtproject/qttools/archive/v${VERSION}.tar.gz qttools~v${VERSION}.tar.gz
+https://github.com/qtproject/qtbase/archive/${VERSION}.tar.gz qtbase~${VERSION}.tar.gz
+https://github.com/qtproject/qtdeclarative/archive/${VERSION}.tar.gz qtdeclarative~${VERSION}.tar.gz
+https://github.com/qtproject/qtmultimedia/archive/${VERSION}.tar.gz qtmultimedia~${VERSION}.tar.gz
+https://github.com/qtproject/qttools/archive/${VERSION}.tar.gz qttools~${VERSION}.tar.gz
