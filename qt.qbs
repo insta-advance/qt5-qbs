@@ -11,6 +11,7 @@ Project {
     readonly property string version: QtUtils.qtVersion(sourcePath)
 
     qbsSearchPaths: ["qbs", "headers"]
+    minimumQbsVersion: "1.4.0"
 
     references: [
         "3rdparty/3rdparty.qbs",
