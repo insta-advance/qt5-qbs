@@ -20,7 +20,7 @@ Project {
 
     Product {
         name: "autoconfigure"
-        type: "json"
+        type: "autoconfigure"
 
         readonly property var autoconfig: ({
             egl: egl.found,
@@ -40,6 +40,11 @@ Project {
         Probes.PkgConfigProbe {
             id: glDesktopProbe
             name: "gl"
+        }
+
+        Group {
+            fileTagsFilter: "json"
+            qbs.install: true
         }
 
         Transformer {
