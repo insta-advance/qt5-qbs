@@ -1,14 +1,8 @@
 # Qt on QBS
 
-## About the repository
-
-This repository is designed as an alternative to the qt5.git(link) repository,
-with a similar structure of submodules. Only those which have been ported to
-QBS are contained here.
-
 ## About the project
 
-This project explores the usefulness of building Qt(link) with QBS(link), with
+This project explores the usefulness of building Qt using QBS(link), with
 the goal of creating faster base builds, faster iteration times when developing
 Qt, benefiting from the improved developer experience Qt Creator provides when
 using QBS, and to make porting to new platforms easier by bypassing the
@@ -24,22 +18,35 @@ A command-line host tool, qhost(link), is used to emulate the query
 functionality of qmake. This allows QBS to in turn use the Qt builds created by
 this set of QBS files.
 
+*QBS >=1.4.0 is required.*
+
 ## Usage
 
-This assumes you have a non-Qt profile(link) installed in your QBS settings.
+This assumes you have a non-Qt profile installed in your QBS settings.
 This can be, for example, your system toolchain profile.
 
 Prequisites are the same for Qt itself, except that Perl is not required.
 
 ### Build the host tools:
-    qbs build -f qt-host-tools.qbs profile:<your host profile>
-
-Install the host tools:
-    qbs install -f qt-host-tools.qbs profile:<your host profile> --install-root /path/of/your/choice
+    qbs build -f qt-host-tools.qbs project.sourcePath:<path to qt sources> qbs.installRoot:<somewhere to install the tools> profile:<your host profile>
 
 You may, for example, install the tools to the local usr directory. This will
 overwrite any existing tools in that directory, so use a subdirectory if you
 want to manage multiple host tool versions.
+
+### Configure Qt
+To reduce the overhead of repeatedly evaluating probes between builds, a
+separate configuration project is used. This will create a JSON file
+auto-detected configuration options. Feel free to edit this file
+and save it for later. You can rename the file to qtconfig.json, but it is
+recommended that you place it in a specific directory (for example, your HOME
+directory), and pass this file to QBS when building Qt.
+
+    qbs build -f qt-configure.qbs
+
+You can save this to your profile by executing
+    cp <profile>-<buildVariant>/qtconfig.json ~/qtconfig-<profile>.json
+    qbs-config <profile>.qbs.qtconfig ~/qtconfig-<profile>.json
 
 ### Build Qt
 It is best to add the host tools' install-root bin directory to your PATH if
@@ -51,22 +58,19 @@ selected Qt version:
     qtchooser -install qhost <path-to-qhost>
     export QT_SELECT=qhost
 
-Now, build Qt using your target profile:
-    qbs build -f qt.qbs profile:<your target profile>
+Now, build Qt using your configuration and target profile:
+    qbs build -f qt.qbs profile:<your target profile> qbs.installRoot:/path/of/your/choice
 
-You may now install Qt:
+*Note*: remember to also pass configure.configuration:<path to qconfig.json> if
+you did not set a default configuration or add a qconfig.json to your source directory.
+Or you can pass configure.configuration:null to disable loading from a configuration file.
+
+You may also pass configuration arguments on the command line, for example:
+    qbs [...] configure.opengl:"desktop" # enables desktop OpenGL
+    qbs [...] configure.widgets: false   # disables widgets
+
+Alternatively, install Qt as a separete step by adding --no-install to the build method above and then running:
     qbs install -f qt.qbs profile:<your target profile> --install-root /path/of/your/choice
-
-### Configuring Qt
-The previous instructions build Qt with default options, with some configuration
-being detected based on availability of packages. For more fine-grained control,
-set any of the following configuration options on the command line:
-
-...
-
-For example, to set the OpenGL configuration to "desktop", use:
-    qbs build -f qt.qbs QtHost.config.opengl:desktop
-
 
 ### FAQ
 Q: Does this project build qmake?
