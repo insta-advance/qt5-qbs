@@ -10,7 +10,10 @@ QtProduct {
     ].concat(base)
 
     cpp.cFlags: [
+        "-std=c99",
+        "-Wno-conditional-type-mismatch",
         "-Wno-implicit-function-declaration",
+        "-Wno-int-conversion",
         "-Wno-missing-field-initializers",
         "-Wno-unused-parameter",
     ].concat(base)
