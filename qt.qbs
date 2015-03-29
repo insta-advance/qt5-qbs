@@ -9,6 +9,7 @@ Project {
 
     readonly property path sourcePath: sourceDirectory
     readonly property string version: QtUtils.qtVersion(sourcePath)
+    readonly property bool developerBuild: false
 
     qbsSearchPaths: ["qbs", "headers"]
     minimumQbsVersion: "1.4.0"

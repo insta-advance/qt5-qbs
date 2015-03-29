@@ -254,12 +254,13 @@ Module {
         prepare: {
             var cmd = new JavaScriptCommand();
             cmd.description = "syncing " + input.fileName;
+            cmd.developerBuild = project.developerBuild;
             cmd.sourceCode = function() {
                 for (var i in outputs.hpp) {
                     var header = outputs.hpp[i];
 
                     // uncomment to aid duplicate finding
-                    if (File.exists(header.filePath)) { // Helpful for debugging duplicates
+                    /*if (File.exists(header.filePath)) { // Helpful for debugging duplicates
                         var file = new TextFile(header.filePath, TextFile.ReadOnly);
                         var contents = file.readAll();
                         file.close();
@@ -268,10 +269,21 @@ Module {
                               + 'The new forwarding header is "' + input.fileName
                               + '" and the current content is "' + contents + '"';
                         return;
+                    }*/
+
+                    if (developerBuild) {
+                        var file = new TextFile(header.filePath, TextFile.WriteOnly);
+                        file.writeLine("#include \"" + input.filePath + "\"");
+                        file.close();
+                        return;
                     }
 
+                    if (input.fileName == header.fileName) {
+                        File.copy(input.filePath, header.filePath);
+                        return;
+                    }
                     var file = new TextFile(header.filePath, TextFile.WriteOnly);
-                    file.writeLine("#include \"" + input.filePath + "\"");
+                    file.writeLine("#include \"" + input.fileName + "\"");
                     file.close();
                 }
             };
