@@ -21,6 +21,7 @@ Project {
         "qtcore.qbs",
         "qtgui.qbs",
         "qtmultimedia.qbs",
+        "qtmultimediawidgets.qbs",
         "qtnetwork.qbs",
         "qtqml.qbs",
         "qtquick.qbs",

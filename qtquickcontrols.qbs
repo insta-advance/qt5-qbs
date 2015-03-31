@@ -26,7 +26,7 @@ Project {
         Depends { name: "QtGui" }
         Depends { name: "QtQml" }
         Depends { name: "QtQuick" }
-        Depends { name: "QtWidgets"; required: false }
+        Depends { name: "QtWidgets"; condition: configure.widgets }
 
         Group {
             name: "headers"
