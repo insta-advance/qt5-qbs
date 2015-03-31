@@ -1,21 +1,24 @@
 import qbs
 import qbs.File
 
-QmlPlugin {
+Project {
     name: "QtGraphicalEffects"
     condition: File.exists(project.sourcePath + "/qtgraphicaleffects")
-    pluginPath: "QtGraphicalEffects"
-    type: "qml"
+    QmlPlugin {
+        name: "QtGraphicalEffects"
+        pluginPath: "QtGraphicalEffects"
+        type: "qml"
 
-    Group {
-        name: "qml"
-        prefix: project.sourcePath + "/qtgraphicaleffects/src/effects/"
-        files: [
-            "*.qml",
-            "private",
-            "qmldir",
-        ]
-        qbs.install: true
-        qbs.installDir: "qml/" + pluginPath
+        Group {
+            name: "qml"
+            prefix: project.sourcePath + "/qtgraphicaleffects/src/effects/"
+            files: [
+                "*.qml",
+                "private",
+                "qmldir",
+            ]
+            qbs.install: true
+            qbs.installDir: "qml/" + pluginPath
+        }
     }
 }
