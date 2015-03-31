@@ -165,7 +165,8 @@ Module {
         if (configuration == null) // allow for a null configuration
             return config;
         var filePaths = [
-            FileInfo.isAbsolutePath(configuration) ? configuration : project.sourceDirectory + '/' + configuration, // user-provided
+            configuration, // user-provided
+            project.sourceDirectory + '/' + configuration,
             qbs.qtconfig, // profile-installed
             project.sourceDirectory + '/' + project.profile + '-' + qbs.buildVariant + "/qtconfig.json", // auto-generated
         ];
