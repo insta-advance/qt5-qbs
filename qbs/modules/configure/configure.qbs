@@ -157,16 +157,15 @@ Module {
         }
     }
 
-    property path configuration: "qtconfig.json"
     readonly property var properties: {
         var config = { };
         if (project.name == "qt-host-tools")
             return { mkspec: project.host };
-        if (configuration == null) // allow for a null configuration
+        if (!project.configuration == null) // allow for a null configuration
             return config;
         var filePaths = [
-            configuration, // user-provided
-            project.sourceDirectory + '/' + configuration,
+            project.configuration, // user-provided
+            project.sourceDirectory + '/' + project.configuration,
             qbs.qtconfig, // profile-installed
             project.sourceDirectory + '/' + project.profile + '-' + qbs.buildVariant + "/qtconfig.json", // auto-generated
         ];
@@ -190,8 +189,8 @@ Module {
         }
         throw "You have not specified a configuration file. "
             + "Please add qtconfig.json to the source directory "
-            + "or pass 'configure.configuration:<file-name>'. "
+            + "or pass 'project.configuration:<file-name>'. "
             + "You may run 'qbs -f qt-configure.qbs to generate a new configuration. "
-            + "If you do not want to use a configuration file, pass 'configure.configuration:null'.";
+            + "If you do not want to use a configuration file, pass 'project.configuration:null'.";
     }
 }
