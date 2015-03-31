@@ -13,13 +13,10 @@ Project {
             var defines = [
                 "QT_BUILD_CORE_LIB",
             ];
-
             if (!configure.glib)
                 defines.push("QT_NO_GLIB");
-
             if (!configure.iconv)
                 defines.push("QT_NO_ICONV");
-
             return defines.concat(base);
         }
 
@@ -45,7 +42,7 @@ Project {
         Depends { name: "glib"; condition: configure.glib }
 
         Properties {
-            condition: qbs.targetOS.contains("windows")
+            condition: qbs.targetOS.contains("windows") && !qbs.targetOS.contains("winrt")
             cpp.dynamicLibraries: [
                 "shell32",
                 "user32",
@@ -57,47 +54,52 @@ Project {
             ].concat(base)
         }
 
+        Properties {
+            condition: qbs.targetOS.contains("winrt")
+            cpp.dynamicLibraries: [
+                "shell32",
+                "user32",
+                "ole32",
+                "runtimeobject",
+            ].concat(base)
+        }
+
         QtCoreHeaders {
             name: "headers"
             excludeFiles: {
-                var files = [];
-
+                var excludeFiles = [];
                 if (!qbs.targetOS.contains("blackberry")) {
-                    files.push("kernel/qeventdispatcher_blackberry_p.h");
-                    files.push("kernel/qppsobject_p.h");
-                    files.push("tools/qlocale_blackberry.h");
+                    excludeFiles.push("kernel/qeventdispatcher_blackberry_p.h");
+                    excludeFiles.push("kernel/qppsobject_p.h");
+                    excludeFiles.push("tools/qlocale_blackberry.h");
                 }
-
                 if (!qbs.targetOS.contains("osx")) {
-                    files.push("io/qfilesystemwatcher_fsevents_p.h");
+                    excludeFiles.push("io/qfilesystemwatcher_fsevents_p.h");
                 }
-
                 if (!qbs.targetOS.contains("unix")) {
-                    files.push("io/qfilesystemwatcher_inotify_p.h"),
-                            files.push("kernel/qeventdispatcher_unix_p.h");
+                    excludeFiles.push("io/qfilesystemwatcher_inotify_p.h"),
+                    excludeFiles.push("kernel/qeventdispatcher_unix_p.h");
                 }
-
-                if (!qbs.targetOS.contains("windows")) {
-                    files.push("io/qwindowspipereader_p.h");
-                    files.push("io/qwindowspipewriter_p.h");
-                    files.push("io/qfilesystemwatcher_win_p.h");
-                    files.push("io/qwinoverlappedionotifier_p.h");
-                    files.push("kernel/qeventdispatcher_win_p.h");
+                if (!qbs.targetOS.contains("windows") || qbs.targetOS.contains("winrt")) {
+                    excludeFiles.push("io/qwindowspipereader_p.h");
+                    excludeFiles.push("io/qwindowspipewriter_p.h");
+                    excludeFiles.push("io/qfilesystemwatcher_win_p.h");
+                    excludeFiles.push("io/qwinoverlappedionotifier_p.h");
+                    excludeFiles.push("kernel/qeventdispatcher_win_p.h");
                 }
-
+                if (qbs.targetOS.contains("winrt")) {
+                    excludeFiles.push("io/qfilesystemwatcher*.h");
+                }
                 if (!qbs.targetOS.contains("winrt")) {
-                    files.push("kernel/qeventdispatcher_winrt_p.h");
+                    excludeFiles.push("kernel/qeventdispatcher_winrt_p.h");
                 }
-
                 if (!configure.glib) {
-                    files.push("kernel/qeventdispatcher_glib_p.h");
+                    excludeFiles.push("kernel/qeventdispatcher_glib_p.h");
                 }
-
                 if (!configure.kqueue) {
-                    files.push("io/qfilesystemwatcher_kqueue_p.h");
+                    excludeFiles.push("io/qfilesystemwatcher_kqueue_p.h");
                 }
-
-                return files;
+                return excludeFiles;
             }
             fileTags: "moc"
             overrideTags: false
@@ -128,20 +130,15 @@ Project {
                     "io/qfilesystemwatcher_kqueue.cpp",  // ### mac
                     "io/qprocess_wince.cpp",             // ### wince
                     "io/qsettings_mac.cpp",              // ### mac
-                    "io/qsettings_winrt.cpp",            // ### winrt
                     "io/qstandardpaths_android.cpp",     // ### android
                     "io/qstandardpaths_blackberry.cpp",  // ### blackberry
-                    "io/qstandardpaths_winrt.cpp",       // ### winrt
                     "io/qstorageinfo_mac.cpp",           // ### mac
-                    "io/qstorageinfo_stub.cpp",          // ### all-else-fails
                     "kernel/qcoreapplication_mac.cpp",   // ### mac
                     "kernel/qcore_mac.cpp",              // ### mac
                     "kernel/qeventdispatcher_blackberry.cpp", // ### bb
-                    "kernel/qeventdispatcher_winrt.cpp", // ### winrt
                     "kernel/qfunctions_nacl.cpp",        // ### nacl
                     "kernel/qfunctions_vxworks.cpp",     // ### vxworks
                     "kernel/qfunctions_wince.cpp",       // ### wince
-                    "kernel/qfunctions_winrt.cpp",       // ### winrt
                     "kernel/qjni.cpp",                   // ### jni
                     "kernel/qjnihelpers.cpp",            // ### jni
                     "kernel/qjnionload.cpp",             // ### jni
@@ -150,7 +147,6 @@ Project {
                     "kernel/qsharedmemory_android.cpp",  // ### android
                     "kernel/qsystemsemaphore_android.cpp",//### android
                     "kernel/qtcore_eval.cpp",            // ### needs to be handled by config, and use licensing
-                    "thread/qthread_winrt.cpp",  // ### winrt
                     "tools/qcollator_icu.cpp",     // ### icu
                     "tools/qcollator_macx.cpp",    // ### macx
                     "tools/qelapsedtimer_generic.cpp", // ### !win32
@@ -168,7 +164,6 @@ Project {
                     "tools/qunicodetables.cpp",
                     "tools/qstringmatcher.cpp",
                 ];
-
                 if (!qbs.targetOS.contains("unix")) {
                     Array.prototype.push.apply(excludeFiles, [
                         "io/forkfd_qt.cpp",
@@ -199,7 +194,6 @@ Project {
                         "tools/qtimezoneprivate_tz.cpp",
                     ]);
                 }
-
                 if (!qbs.targetOS.contains("windows")) {
                     Array.prototype.push.apply(excludeFiles, [
                         "codecs/qwindowscodec.cpp",
@@ -232,19 +226,40 @@ Project {
                         "tools/qvector_msvc.cpp",
                     ]);
                 }
-
+                if (qbs.targetOS.contains("winrt")) {
+                    Array.prototype.push.apply(excludeFiles, [
+                        "io/qfilesystemwatcher*.cpp",
+                        "io/qprocess_win.cpp",
+                        "io/qsettings_win.cpp",
+                        "io/qstandardpaths_win.cpp",
+                        "io/qstorageinfo_win.cpp",
+                        "io/qwinoverlappedionotifier.cpp",
+                        "io/qwindowspipe*.cpp",
+                        "kernel/qeventdispatcher_win.cpp",
+                        "thread/qthread_win.cpp",
+                        "tools/qtimezoneprivate_win.cpp",
+                    ]);
+                }
+                if (!qbs.targetOS.contains("winrt")) {
+                    Array.prototype.push.apply(excludeFiles, [
+                        "io/qsettings_winrt.cpp",
+                        "io/qstandardpaths_winrt.cpp",
+                        "io/qstorageinfo_stub.cpp",
+                        "kernel/qeventdispatcher_winrt.cpp",
+                        "kernel/qfunctions_winrt.cpp",
+                        "thread/qthread_winrt.cpp",
+                    ]);
+                }
                 if (!qbs.targetOS.contains("haiku")) {
                     Array.prototype.push.apply(excludeFiles, [
                         "io/qstandardpaths_haiku.cpp",
                     ]);
                 }
-
                 if (!configure.glib) {
                     Array.prototype.push.apply(excludeFiles, [
                         "kernel/qeventdispatcher_glib.cpp",
                     ]);
                 }
-
                 return excludeFiles;
             }
             fileTags: "moc"

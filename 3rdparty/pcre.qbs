@@ -7,10 +7,15 @@ QtProduct {
 
     Depends { name: "cpp" }
 
-    cpp.defines: [
-        "HAVE_CONFIG_H",
-        "PCRE_STATIC",
-    ].concat(base)
+    cpp.defines: {
+        var defines = [
+            "HAVE_CONFIG_H",
+            "PCRE_STATIC",
+        ].concat(base);
+        if (qbs.targetOS.contains("winrt"))
+            defines.push("PCRE_DISABLE_JIT");
+        return defines;
+    }
 
     cpp.includePaths: [
         project.sourcePath + "/qtbase/src/3rdparty/pcre"
