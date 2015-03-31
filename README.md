@@ -65,9 +65,9 @@ Now, build Qt using your configuration and target profile:
 
     qbs build -f qt.qbs profile:<your target profile> qbs.installRoot:/path/of/your/choice
 
-*Note*: remember to also pass `configure.configuration:<path to qconfig.json>` if
+*Note*: remember to also pass `project.configuration:<path to qconfig.json>` if
 you did not set a default configuration or add a qconfig.json to your source directory.
-Or you can pass `configure.configuration:null` to disable loading from a configuration file.
+Or you can pass `project.configuration:null` to disable loading from a configuration file.
 
 You may also pass configuration arguments on the command line, for example:
 
