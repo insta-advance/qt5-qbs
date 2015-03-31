@@ -15,11 +15,18 @@ Project {
 
         includeDependencies: ["QtCore-private", "QtGui-private", "QtQml-private", "QtQuick-private", "QtWidgets"]
 
+        cpp.defines: {
+            var defines = base;
+            if (!configure.widgets)
+                defines.push("QT_NO_WIDGETS");
+            return defines;
+        }
+
         Depends { name: "QtCore" }
         Depends { name: "QtGui" }
         Depends { name: "QtQml" }
         Depends { name: "QtQuick" }
-        Depends { name: "QtWidgets" }
+        Depends { name: "QtWidgets"; required: false }
 
         Group {
             name: "headers"
@@ -28,6 +35,13 @@ Project {
                 "*.h",
                 "Private/*.h",
             ]
+            excludeFiles: {
+                var excludeFiles = [];
+                if (!configure.widgets) {
+                    excludeFiles.push("Private/qquickstyleitem_p.h");
+                }
+                return excludeFiles;
+            }
             fileTags: "moc"
             overrideTags: false
         }
@@ -39,8 +53,22 @@ Project {
                 "*.cpp",
                 "Private/*.cpp",
             ]
+            excludeFiles: {
+                var excludeFiles = [];
+                if (!configure.widgets) {
+                    excludeFiles.push("Private/qquickstyleitem.cpp");
+                }
+                return excludeFiles;
+            }
             fileTags: "moc"
             overrideTags: false
+        }
+
+        Group {
+            name: "qmldir"
+            prefix: basePath + '/'
+            files: "qmldir"
+            qbs.install: true
         }
 
         Group {
@@ -48,7 +76,6 @@ Project {
             prefix: basePath + '/'
             files: [
                 "*.qml",
-                //"qmldir",
                 "Styles/Base/*.qml",
             ]
             fileTags: "qml"
