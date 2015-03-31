@@ -8,6 +8,7 @@ QtProduct {
     readonly property path basePath: project.sourcePath + "/qtdeclarative/src/3rdparty/masm"
     readonly property bool generateJitTables: pythonProbe.found
     type: "staticlibrary"
+    builtByDefault: false
 
     cpp.defines: {
         var defines = [
@@ -54,7 +55,7 @@ QtProduct {
     includeDependencies: ["QtCore", "QtQml-private"]
 
     cpp.includePaths: [
-        pythonProbe.found ? buildDirectory : project.sourcePath + "/include/masm",
+        pythonProbe.found ? buildDirectory : project.sourceDirectory + "/include/masm",
     ].concat(includePaths).concat(base)
 
     Depends { name: "QtCoreHeaders" }
