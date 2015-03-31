@@ -1,9 +1,10 @@
 function qtVersion(sourcePath)
 {
     if (!File.exists(sourcePath + "/qtbase")) {
-        throw "\nThe qtbase repository is required for detecting the Qt version. Please do one of the following:\n"
+        throw "The qtbase repository is required for detecting the Qt version. Please do one of the following:\n"
               + " - Specify project.sourcePath:<path to Qt sources> on the command line.\n"
-              + " - Clone/unpack the qtbase repository into this directory.\n";
+              + " - Set an environment variable named QT_SOURCE containing the path to your Qt sources.\n"
+              + " - Clone/unpack the qtbase repository into the qt5-qbs directory.\n";
     }
 
     var version = "";

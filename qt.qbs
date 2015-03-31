@@ -8,7 +8,7 @@ Project {
     name: "Qt"
 
     readonly property string configuration: "qtconfig.json"
-    readonly property string sourcePath: sourceDirectory
+    readonly property string sourcePath: qbs.getEnv("QT_SOURCE") || sourceDirectory
     readonly property string version: QtUtils.qtVersion(sourcePath)
     readonly property bool developerBuild: false
 

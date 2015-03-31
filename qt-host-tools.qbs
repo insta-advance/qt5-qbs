@@ -5,7 +5,7 @@ import "qbs/imports/QtUtils.js" as QtUtils
 
 Project {
     name: "qt-host-tools"
-    readonly property path sourcePath: sourceDirectory
+    readonly property path sourcePath: qbs.getEnv("QT_SOURCE") || sourceDirectory
     readonly property string host: {
         var host;
         if (qbs.targetOS.contains("linux")) {
