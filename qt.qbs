@@ -7,7 +7,7 @@ Project {
     id: root
     name: "Qt"
 
-    readonly property path sourcePath: sourceDirectory
+    readonly property string sourcePath: sourceDirectory
     readonly property string version: QtUtils.qtVersion(sourcePath)
     readonly property bool developerBuild: false
 
