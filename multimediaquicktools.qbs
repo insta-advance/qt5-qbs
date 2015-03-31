@@ -2,6 +2,7 @@ import qbs
 
 QtModule {
     name: "QtMultimediaQuickTools"
+    condition: configure.multimedia
 
     includeDependencies: ["QtCore", "QtMultimedia-private"]
 

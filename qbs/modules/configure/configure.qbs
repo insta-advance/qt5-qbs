@@ -161,7 +161,7 @@ Module {
         var config = { };
         if (project.name == "qt-host-tools")
             return { mkspec: project.host };
-        if (!project.configuration == null) // allow for a null configuration
+        if (!project.configuration.length) // allow for a null configuration
             return config;
         var filePaths = [
             project.configuration, // user-provided

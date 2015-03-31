@@ -2,6 +2,7 @@ import qbs
 
 QmlPlugin {
     readonly property path basePath: project.sourcePath + "/qtdeclarative/src/imports/qtquick2"
+    condition: configure.quick
     targetName: "qtquick2plugin"
     pluginPath: "QtQuick.2"
 

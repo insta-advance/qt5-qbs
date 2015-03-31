@@ -67,7 +67,7 @@ Now, build Qt using your configuration and target profile:
 
 *Note*: remember to also pass `project.configuration:<path to qconfig.json>` if
 you did not set a default configuration or add a qconfig.json to your source directory.
-Or you can pass `project.configuration:null` to disable loading from a configuration file.
+Or you can pass `project.configuration:""` to disable loading from a configuration file.
 
 You may also pass configuration arguments on the command line, for example:
 

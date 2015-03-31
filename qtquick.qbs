@@ -18,8 +18,7 @@ Project {
         name: "QtQuick"
         condition: configure.quick
 
-        readonly property path basePath: project.sourcePath
-                                         + "/qtdeclarative/src/quick"
+        readonly property path basePath: project.sourcePath + "/qtdeclarative/src/quick"
 
         includeDependencies: [
             "QtCore-private",

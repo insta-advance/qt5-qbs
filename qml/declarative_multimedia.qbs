@@ -2,6 +2,7 @@ import qbs
 
 QmlPlugin {
     readonly property path basePath: project.sourcePath + "/qtmultimedia/src/imports/multimedia"
+    condition: configure.multimedia
     pluginPath: "QtMultimedia"
 
     includeDependencies: ["QtCore", "QtQml", "QtMultimedia-private"]
