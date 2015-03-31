@@ -107,6 +107,7 @@ Project {
                 config.quickcontrols = true;
                 config.svg = true;
                 config.qpa = targetOS.contains("linux") ? "xcb" : "windows"; // ### fixme
+                config[config.qpa] = true;
 
                 // Compiler/architecture features
                 // ### These all need real tests
