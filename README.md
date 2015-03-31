@@ -14,7 +14,7 @@ be rebuilt for each copy of Qt then compiled (as long as the version of Qt is
 kept in sync between the host tools and the libraries). This has the
 advantage that the host tools are not tied with any single target Qt build.
 
-A command-line host tool, qhost(link), is used to emulate the query
+A command-line host tool, qhost, is used to emulate the query
 functionality of qmake. This allows QBS to in turn use the Qt builds created by
 this set of QBS files.
 
@@ -28,6 +28,7 @@ This can be, for example, your system toolchain profile.
 Prequisites are the same for Qt itself, except that Perl is not required.
 
 ### Build the host tools:
+
     qbs build -f qt-host-tools.qbs project.sourcePath:<path to qt sources> qbs.installRoot:<somewhere to install the tools> profile:<your host profile>
 
 You may, for example, install the tools to the local usr directory. This will
@@ -45,6 +46,7 @@ directory), and pass this file to QBS when building Qt.
     qbs build -f qt-configure.qbs
 
 You can save this to your profile by executing
+
     cp <profile>-<buildVariant>/qtconfig.json ~/qtconfig-<profile>.json
     qbs-config <profile>.qbs.qtconfig ~/qtconfig-<profile>.json
 
@@ -55,24 +57,29 @@ they are not already there. Check that e.g. qhost is available using:
 
 Alternatively, on systems with qtchooser installed, you can set qhost as your
 selected Qt version:
+
     qtchooser -install qhost <path-to-qhost>
     export QT_SELECT=qhost
 
 Now, build Qt using your configuration and target profile:
+
     qbs build -f qt.qbs profile:<your target profile> qbs.installRoot:/path/of/your/choice
 
-*Note*: remember to also pass configure.configuration:<path to qconfig.json> if
+*Note*: remember to also pass `configure.configuration:<path to qconfig.json>` if
 you did not set a default configuration or add a qconfig.json to your source directory.
-Or you can pass configure.configuration:null to disable loading from a configuration file.
+Or you can pass `configure.configuration:null` to disable loading from a configuration file.
 
 You may also pass configuration arguments on the command line, for example:
+
     qbs [...] configure.opengl:"desktop" # enables desktop OpenGL
     qbs [...] configure.widgets: false   # disables widgets
 
-Alternatively, install Qt as a separete step by adding --no-install to the build method above and then running:
+Alternatively, install Qt as a separate step by adding --no-install to the build method above and then running:
     qbs install -f qt.qbs profile:<your target profile> --install-root /path/of/your/choice
 
 ### FAQ
+
 Q: Does this project build qmake?
+
 A: No, and we would like to keep it that way. If you are building Qt with QBS,
 you should also be using it in your projects.
