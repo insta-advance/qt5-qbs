@@ -60,41 +60,6 @@ Project {
                 var targetOS = product.moduleProperty("qbs", "targetOS");
                 var toolchain = product.moduleProperty("qbs", "toolchain");
                 var architecture = product.moduleProperty("qbs", "architecture");
-                if (targetOS.contains("linux")) {
-                    if (toolchain.contains("clang"))
-                        config.mkspec = "linux-clang";
-                    else if (toolchain.contains("gcc"))
-                        config.mkspec = "linux-g++";
-                } else if (targetOS.contains("winphone")) {
-                    switch (architecture) {
-                    case "x86":
-                        config.mkspec = "winphone-x86-msvc2013";
-                        break;
-                    case "x86_64":
-                        config.mkspec = "winphone-x64-msvc2013";
-                        break;
-                    case "arm":
-                        config.mkspec = "winphone-arm-msvc2013";
-                        break;
-                    }
-                } else if (targetOS.contains("winrt")) {
-                    switch (architecture) {
-                    case "x86":
-                        config.mkspec = "winrt-x86-msvc2013";
-                        break;
-                    case "x86_64":
-                        config.mkspec = "winrt-x64-msvc2013";
-                        break;
-                    case "arm":
-                        config.mkspec = "winrt-arm-msvc2013";
-                        break;
-                    }
-                } else if (targetOS.contains("windows")) {
-                    if (toolchain.contains("mingw"))
-                        config.mkspec = "win32-g++";
-                    else if (toolchain.contains("msvc"))
-                        config.mkspec = "win32-msvc2013";
-                }
 
                 // Qt modules
                 config.gui = true;

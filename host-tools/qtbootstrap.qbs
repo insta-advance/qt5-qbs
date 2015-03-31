@@ -27,18 +27,11 @@ QtModule {
         "QT_USE_QSTRINGBUILDER",
     ]
 
-    readonly property stringList bootstrapIncludes: [
-        project.sourcePath + "/qtbase/mkspecs/" + project.host,
-    ]
-
     includeDependencies: ["QtCore", "QtCore-private", "QtXml", "QtXml-private"]
 
     cpp.defines: [
         "QT_BUILD_BOOTSTRAP_LIB",
     ].concat(bootstrapDefines).concat(base)
-
-    cpp.includePaths: bootstrapIncludes.concat(base)
-
 
     // ### mingw: cpp.cxxFlags: "-std=gnu++0x"
     Properties {
@@ -165,6 +158,5 @@ QtModule {
     Export {
         Depends { name: "cpp" }
         cpp.defines: bootstrapDefines
-        cpp.includePaths: bootstrapIncludes
     }
 }

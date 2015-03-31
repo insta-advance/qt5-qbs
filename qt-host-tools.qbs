@@ -6,22 +6,8 @@ import "qbs/imports/QtUtils.js" as QtUtils
 Project {
     name: "qt-host-tools"
     readonly property path sourcePath: qbs.getEnv("QT_SOURCE") || sourceDirectory
-    readonly property string host: {
-        var host;
-        if (qbs.targetOS.contains("linux")) {
-            if (qbs.toolchain.contains("clang"))
-                host = "linux-clang";
-            else if (qbs.toolchain.contains("gcc"))
-                host = "linux-g++";
-        } else if (qbs.targetOS.contains("windows")) {
-            if (qbs.toolchain.contains("mingw"))
-                host = "win32-g++";
-            else if (qbs.toolchain.contains("msvc"))
-                host = "win32-msvc2013";
-        }
-        return host;
-    }
     readonly property string version: QtUtils.qtVersion(sourcePath)
+    readonly property string mkspec: QtUtils.detectTargetMkspec(qbs.targetOS, qbs.toolchain, qbs.architecture)
 
     qbsSearchPaths: "qbs"
 

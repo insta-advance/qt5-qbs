@@ -25,6 +25,40 @@ function qtVersion(sourcePath)
     return version;
 }
 
+function detectTargetMkspec(targetOS, toolchain, architecture)
+{
+    if (targetOS.contains("linux")) {
+        if (toolchain.contains("clang"))
+            return "linux-clang";
+        else if (toolchain.contains("gcc"))
+            return "linux-g++";
+    } else if (targetOS.contains("winphone")) {
+        switch (architecture) {
+        case "x86":
+            return "winphone-x86-msvc2013";
+        case "x86_64":
+            return "winphone-x64-msvc2013";
+        case "arm":
+            return "winphone-arm-msvc2013";
+        }
+    } else if (targetOS.contains("winrt")) {
+        switch (architecture) {
+        case "x86":
+            return "winrt-x86-msvc2013";
+        case "x86_64":
+            return "winrt-x64-msvc2013";
+        case "arm":
+            return "winrt-arm-msvc2013";
+        }
+    } else if (targetOS.contains("windows")) {
+        if (toolchain.contains("mingw"))
+            return "win32-g++";
+        else if (toolchain.contains("msvc"))
+            return "win32-msvc2013";
+    }
+    return "";
+}
+
 function includesForModule(module, base, qtVersion) {
     var includes = [];
     if (module.endsWith("-private")) {

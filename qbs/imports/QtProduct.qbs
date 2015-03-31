@@ -14,7 +14,7 @@ Product {
     cpp.includePaths: {
         var includes = [
             includeDirectory,
-            project.sourcePath + "/qtbase/mkspecs/" + configure.mkspec,
+            project.sourcePath + "/qtbase/mkspecs/" + project.mkspec,
             product.buildDirectory + "/.moc",
             product.buildDirectory + "/.uic",
         ].concat(base);

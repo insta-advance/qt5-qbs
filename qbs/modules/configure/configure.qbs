@@ -24,7 +24,6 @@ Module {
 
     // Common
     readonly property string prefix: properties.prefix
-    readonly property string mkspec: properties.mkspec
     readonly property bool cxx11: properties["c++11"]
     readonly property bool sse2: properties.sse2
     readonly property bool sse3: properties.sse3
@@ -159,9 +158,7 @@ Module {
 
     readonly property var properties: {
         var config = { };
-        if (project.name == "qt-host-tools")
-            return { mkspec: project.host };
-        if (!project.configuration.length) // allow for a null configuration
+        if (project.name == "qt-host-tools" || !project.configuration.length) // allow for a null configuration
             return config;
         var filePaths = [
             project.configuration, // user-provided
