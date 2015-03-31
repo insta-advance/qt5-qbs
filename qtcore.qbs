@@ -405,7 +405,8 @@ Project {
             }
             prepare: {
                 var cmd = new JavaScriptCommand();
-                cmd.description = "creating qhost JSON configuration file"
+                cmd.description = "creating qhost JSON configuration file";
+                cmd.version = project.version;
                 cmd.sourceCode = function() {
                     var file = new TextFile(output.filePath, TextFile.WriteOnly);
                     file.writeLine('{');
@@ -418,7 +419,7 @@ Project {
                     file.writeLine('    "QT_INSTALL_HEADERS": "../include",');
                     file.writeLine('    "QT_INSTALL_LIBS": "../lib",');
                     file.writeLine('    "QT_INSTALL_PLUGINS": "../plugins",');
-                    file.writeLine('    "QT_VERSION": "' + project.qtVersion + '"');
+                    file.writeLine('    "QT_VERSION": "' + version + '"');
                     file.writeLine('}');
                 };
                 return cmd;
