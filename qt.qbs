@@ -13,7 +13,6 @@ Project {
     readonly property string mkspec: QtUtils.detectTargetMkspec(qbs.targetOS, qbs.toolchain, qbs.architecture)
     readonly property bool developerBuild: false
 
-
     qbsSearchPaths: ["qbs", "headers"]
     minimumQbsVersion: "1.4.0"
 
