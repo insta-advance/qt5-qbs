@@ -13,15 +13,15 @@ QtModule {
             "QT_BUILD_EGL_DEVICE_LIB",
             "MESA_EGL_NO_X11_HEADERS",
             "QT_NO_EVDEV", // ### build the evdev plugins separately
-            "EGL_API_FB", // ### from imx6, not sure if this is compatible. we want to build an ARM binary that works with multiple boards
         ].concat(base);
-
+        if (configure.imx6) {
+            defines.push("LINUX");
+            defines.push("EGL_API_FB");
+        }
         if (!configure.cursor)
             defines.push("QT_NO_CURSOR");
-
         if (!configure.glib)
             defines.push("QT_NO_GLIB");
-
         return defines;
     }
 

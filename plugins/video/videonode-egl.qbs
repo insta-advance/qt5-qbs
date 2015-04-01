@@ -12,6 +12,15 @@ QtPlugin {
         "QtQuick-private",
     ]
 
+    cpp.defines: {
+        var defines = base;
+        if (configure.imx6) {
+            defines.push("LINUX");
+            defines.push("EGL_API_FB");
+        }
+        return defines;
+    }
+
     Depends { name: "egl" }
     Depends { name: "opengl" }
     Depends { name: "QtCore" }

@@ -4,6 +4,7 @@ QtEglDeviceIntegrationPlugin {
     condition: configure.imx6
 
     cpp.defines: [
+        "LINUX",
         "EGL_API_FB",
     ].concat(base)
 
