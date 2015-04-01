@@ -425,7 +425,7 @@ Project {
                 cmd.sourceCode = function() {
                     var file = new TextFile(output.filePath, TextFile.WriteOnly);
                     file.writeLine('{');
-                    file.writeLine('    "QMAKE_XSPEC": "' + product.moduleProperty("configure", "mkspec") + '",');
+                    file.writeLine('    "QMAKE_XSPEC": "' + project.mkspec + '",');
                     file.writeLine('    "QT_HOST_BINS": "../bin",');
                     file.writeLine('    "QT_HOST_DATA": "..",');
                     file.writeLine('    "QT_HOST_LIBS": "../lib",');

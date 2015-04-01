@@ -61,7 +61,6 @@ QtProduct {
         prepare: {
             var cmd = new JavaScriptCommand();
             cmd.description = "generating module pri for " + product.name;
-            cmd.includes = "$$QT_MODULE_INCLUDE_BASE";
             cmd.depends = ""; // ### fixme
             cmd.defines = product.moduleProperty("cpp", "defines").join(' ');
             cmd.version = project.version;
@@ -70,12 +69,12 @@ QtProduct {
                 for (var o in outputs.pri) {
                     var output = outputs.pri[o];
                     var isPublic = !output.baseName.endsWith("_private");
-                    var modulePrefix = "QT." + output.baseName.slice(7, isPublic ? 0 : 8) + '.';
-                    var includes = [];
+                    var modulePrefix = "QT." + output.fileName.slice(7, isPublic ? -4 : -12) + '.';
+                    var includes = "$$QT_MODULE_INCLUDE_BASE";
                     for (var i in product.includeDependencies) {
                         var module = product.includeDependencies[i];
                         if (isPublic && module.endsWith("-private"))
-                            continue;
+                            module = module.slice(0, -8);
                         includes += ' ' + QtUtils.includesForModule(module, "$$QT_MODULE_INCLUDE_BASE", project.version).join(' ');
                     }
 

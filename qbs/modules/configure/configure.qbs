@@ -7,8 +7,6 @@ import qbs.Probes
 Module {
     id: configureModule
 
-    // Essentials
-
     // Modules
     readonly property bool concurrent: properties.concurrent
     readonly property bool dbus: properties.dbus
