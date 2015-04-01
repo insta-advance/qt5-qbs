@@ -62,7 +62,7 @@ QtProduct {
             var cmd = new JavaScriptCommand();
             cmd.description = "generating module pri for " + product.name;
             cmd.depends = ""; // ### fixme
-            cmd.defines = product.moduleProperty("cpp", "defines").join(' ');
+            cmd.defines = "QT_" + product.name.slice(2).toUpperCase() + "_LIB";
             cmd.version = project.version;
             cmd.versionParts = project.version.split('.');
             cmd.sourceCode = function() {
