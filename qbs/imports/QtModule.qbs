@@ -69,7 +69,7 @@ QtProduct {
                 for (var o in outputs.pri) {
                     var output = outputs.pri[o];
                     var isPublic = !output.baseName.endsWith("_private");
-                    var modulePrefix = "QT." + output.fileName.slice(7, isPublic ? -4 : -12) + '.';
+                    var modulePrefix = "QT." + output.baseName.slice(7) + '.';
                     var includes = "$$QT_MODULE_INCLUDE_BASE";
                     for (var i in product.includeDependencies) {
                         var module = product.includeDependencies[i];
