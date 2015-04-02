@@ -94,14 +94,20 @@ QtModule {
     Group {
         name: "headers"
         prefix: basePath + "/"
-        files: [
-            "*.h",
-            "gl_integrations/*.h",
-            "../../../platformsupport/eventdispatchers/qgenericunixeventdispatcher_p.h",
-            "../../../platformsupport/eventdispatchers/qunixeventdispatcher_qpa_p.h",
-            "../../../platformsupport/themes/genericunix/qgenericunixthemes_p.h",
-            "../../../platformsupport/services/genericunix/qgenericunixservices.cpp",
-        ]
+        files: {
+            var files = [
+                "*.h",
+                "gl_integrations/*.h",
+                "../../../platformsupport/eventdispatchers/qgenericunixeventdispatcher_p.h",
+                "../../../platformsupport/eventdispatchers/qunixeventdispatcher_qpa_p.h",
+                "../../../platformsupport/themes/genericunix/qgenericunixthemes_p.h",
+                "../../../platformsupport/services/genericunix/qgenericunixservices.cpp",
+            ]
+            if (configure.glib) {
+                files.push("../../../platformsupport/eventdispatchers/qeventdispatcher_glib_p.h");
+            }
+            return files;
+        }
         excludeFiles: {
             var excludeFiles = [];
             if (!configure["xcb-sm"])
@@ -115,14 +121,20 @@ QtModule {
     Group {
         name: "sources"
         prefix: basePath + "/"
-        files: [
-            "*.cpp",
-            "gl_integrations/*.cpp",
-            "../../../platformsupport/eventdispatchers/qgenericunixeventdispatcher.cpp",
-            "../../../platformsupport/eventdispatchers/qunixeventdispatcher.cpp",
-            "../../../platformsupport/themes/genericunix/qgenericunixthemes.cpp",
-            "../../../platformsupport/fontdatabases/basic/qbasicfontdatabase.cpp",
-        ]
+        files: {
+            var files = [
+                "*.cpp",
+                "gl_integrations/*.cpp",
+                "../../../platformsupport/eventdispatchers/qgenericunixeventdispatcher.cpp",
+                "../../../platformsupport/eventdispatchers/qunixeventdispatcher.cpp",
+                "../../../platformsupport/themes/genericunix/qgenericunixthemes.cpp",
+                "../../../platformsupport/fontdatabases/basic/qbasicfontdatabase.cpp",
+            ];
+            if (configure.glib) {
+                files.push("../../../platformsupport/eventdispatchers/qeventdispatcher_glib.cpp");
+            }
+            return files;
+        }
         excludeFiles: {
             var excludeFiles = [];
             if (!configure["xcb-sm"])
