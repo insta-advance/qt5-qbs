@@ -8,6 +8,7 @@ Project {
 
     QmlPlugin {
         name: "QtQuickControls"
+        condition: configure.quickcontrols
         targetName: "qtquickcontrolsplugin"
         pluginPath: "QtQuick.2"
 

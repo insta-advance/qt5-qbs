@@ -47,6 +47,7 @@ Module {
 
     // QtGui
     readonly property bool accessibility: properties.accessibility
+    readonly property bool angle: properties.angle
     readonly property bool cursor: properties.cursor
     readonly property bool egl: properties.egl
     readonly property bool evdev: properties.evdev
