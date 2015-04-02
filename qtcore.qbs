@@ -451,7 +451,7 @@ Project {
                 cmd.description = "generating qconfig.pri";
                 cmd.config = ["shared", product.moduleProperty("qbs", "buildVariant")];
                 var properties = product.moduleProperty("configure", "properties");
-                cmd.qtconfig = [];
+                cmd.qtconfig = [product.moduleProperty("qbs", "buildVariant")];
                 for (var i in properties) {
                     if (properties[i])
                         cmd.qtconfig.push(i);
