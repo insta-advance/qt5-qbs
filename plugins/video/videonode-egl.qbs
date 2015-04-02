@@ -1,7 +1,7 @@
 import qbs
 
 QtPlugin {
-    category: "video"
+    category: "video/videonode"
     condition: configure.egl && configure.opengl == "es2"
 
     includeDependencies: [
