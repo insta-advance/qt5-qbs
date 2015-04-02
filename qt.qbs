@@ -28,6 +28,7 @@ Project {
         "qtquick.qbs",
         "qtquickcontrols.qbs",
         "qtsvg.qbs",
+        "qttest.qbs",
         "qtwidgets.qbs",
     ]
 }

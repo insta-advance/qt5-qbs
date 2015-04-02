@@ -93,4 +93,10 @@ Project {
         module: "QtSvg"
         QtSvgHeaders { fileTags: "header_sync" }
     }
+
+    QtHeaders {
+        name: "QtTestHeaders"
+        module: "QtTest"
+        QtTestHeaders { fileTags: "header_sync" }
+    }
 }

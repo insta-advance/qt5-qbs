@@ -18,6 +18,7 @@ Module {
     readonly property bool quick: properties.quick
     readonly property bool quickcontrols: properties.quickcontrols
     readonly property bool svg: properties.svg
+    readonly property bool testlib: properties.testlib
     readonly property bool widgets: properties.widgets
 
     // Common
