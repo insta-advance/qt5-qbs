@@ -99,4 +99,10 @@ Project {
         module: "QtTest"
         QtTestHeaders { fileTags: "header_sync" }
     }
+
+    QtHeaders {
+        name: "QtQuickTestHeaders"
+        module: "QtQuickTest"
+        QtQuickTestHeaders { fileTags: "header_sync" }
+    }
 }

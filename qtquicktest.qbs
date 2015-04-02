@@ -3,22 +3,25 @@ import qbs.File
 import qbs.Probes
 
 Project {
-    name: "QtTest"
+    name: "QtQuickTest"
 
     QtModule {
-        name: "QtTest"
-        condition: configure.testlib
+        name: "QtQuickTest"
+        condition: configure.quicktest
 
-        readonly property path basePath: project.sourcePath + "/qtbase/src/testlib"
+        readonly property path basePath: project.sourcePath + "/qtdeclarative/src/qmltest"
 
-        includeDependencies: ["QtCore-private", "QtTest-private"]
+        includeDependencies: ["QtCore-private", "QtGui", "QtQml-private", "QtQuick", "QtQmlTest-private", "QtTest-private"]
 
         cpp.defines: [
-            "QT_GUI_LIB",
+            "QT_QUICKTEST_LIB", "QT_GUI_LIB",
         ].concat(base)
 
-        Depends { name: "QtTestHeaders" }
+        Depends { name: "QtQuickTestHeaders" }
         Depends { name: "QtCore" }
+        Depends { name: "QtGui" }
+        Depends { name: "QtQuick" }
+        Depends { name: "QtTest" }
 
         QtTestHeaders {
             name: "headers"
