@@ -40,6 +40,7 @@ Project {
                 "io/qbuffer.h",
                 "io/qdatastream.h",
                 "io/qdebug.h",
+                "io/qdebug_p.h",
                 "io/qdir.h",
                 "io/qdiriterator.h",
                 "io/qfiledevice.h",
