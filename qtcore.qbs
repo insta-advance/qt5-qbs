@@ -478,6 +478,7 @@ Project {
         Group {
             name: "bin"
             files: [ // Scripts to forward host tools commands
+                "bin/lrelease",
                 "bin/moc",
                 "bin/qmake",
                 "bin/rcc",
