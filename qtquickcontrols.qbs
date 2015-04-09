@@ -10,7 +10,7 @@ Project {
         name: "QtQuickControls"
         condition: configure.quickcontrols
         targetName: "qtquickcontrolsplugin"
-        pluginPath: "QtQuick.2"
+        pluginPath: "QtQuick/Controls"
 
         readonly property string basePath: project.sourcePath + "/qtquickcontrols/src/controls"
 
@@ -66,10 +66,11 @@ Project {
         }
 
         Group {
-            name: "qmldir"
-            prefix: basePath + '/'
+            name: "qml"
+            prefix: basePath + "/"
             files: "qmldir"
             qbs.install: true
+            qbs.installDir: "qml/" + pluginPath
         }
 
         Group {
