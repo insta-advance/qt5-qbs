@@ -14,7 +14,19 @@ Project {
         condition: configure.svg
         readonly property path basePath: project.sourcePath + "/qtsvg/src/svg"
 
-        includeDependencies: ["QtCore-private", "QtGui-private", "QtWidgets-private"]
+        includeDependencies: {
+            var includeDependencies = ["QtCore-private", "QtGui-private", "QtSvg-private"];
+            if (configure.widgets)
+                includeDependencies.push("QtWidgets-private");
+            return includeDependencies;
+        }
+
+        cpp.defines: {
+            var defines = base;
+            if (!configure.widgets)
+                defines.push("QT_NO_WIDGETS");
+            return defines;
+        }
 
         Depends { name: "zlib" }
         Depends { name: "QtSvgHeaders" }

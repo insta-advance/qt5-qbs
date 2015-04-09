@@ -17,7 +17,7 @@ Module {
     readonly property bool qml: properties.qml
     readonly property bool quick: properties.quick
     readonly property bool quickcontrols: properties.quickcontrols
-    readonly property bool quicktest: properties.quicktest
+    readonly property bool qmltest: properties.qmltest
     readonly property bool svg: properties.svg
     readonly property bool testlib: properties.testlib
     readonly property bool widgets: properties.widgets

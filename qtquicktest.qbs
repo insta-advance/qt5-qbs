@@ -7,11 +7,12 @@ Project {
 
     QtModule {
         name: "QtQuickTest"
-        condition: configure.quicktest
+        simpleName: "qmltest"
+        condition: configure.qmltest
 
         readonly property path basePath: project.sourcePath + "/qtdeclarative/src/qmltest"
 
-        includeDependencies: ["QtCore-private", "QtGui", "QtQml-private", "QtQuick", "QtQmlTest-private", "QtTest-private"]
+        includeDependencies: ["QtCore-private", "QtGui", "QtQml-private", "QtQuick", "QtQuickTest-private", "QtTest-private"]
 
         cpp.defines: [
             "QT_QUICKTEST_LIB", "QT_GUI_LIB",
@@ -20,10 +21,11 @@ Project {
         Depends { name: "QtQuickTestHeaders" }
         Depends { name: "QtCore" }
         Depends { name: "QtGui" }
+        Depends { name: "QtQml" }
         Depends { name: "QtQuick" }
         Depends { name: "QtTest" }
 
-        QtTestHeaders {
+        QtQuickTestHeaders {
             name: "headers"
             fileTags: "moc"
             overrideTags: false

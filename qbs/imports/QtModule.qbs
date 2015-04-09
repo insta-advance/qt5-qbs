@@ -10,6 +10,8 @@ QtProduct {
     version: project.version
     destinationDirectory: project.buildDirectory + "/lib"
 
+    property string simpleName: name.slice(2).toLowerCase()
+
     Depends { name: "sync" }
 
     Group {
@@ -51,17 +53,16 @@ QtProduct {
 
     Transformer {
         Artifact {
-            filePath: "qt_lib_" + product.name.slice(2).toLowerCase() + ".pri"
+            filePath: "qt_lib_" + product.simpleName + ".pri"
             fileTags: "pri"
         }
         Artifact {
-            filePath: "qt_lib_" + product.name.slice(2).toLowerCase() + "_private.pri"
+            filePath: "qt_lib_" + product.simpleName + "_private.pri"
             fileTags: "pri"
         }
         prepare: {
             var cmd = new JavaScriptCommand();
             cmd.description = "generating module pri for " + product.name;
-            cmd.depends = ""; // ### fixme
             cmd.defines = "QT_" + product.name.slice(2).toUpperCase() + "_LIB";
             cmd.version = project.version;
             cmd.versionParts = project.version.split('.');
@@ -70,12 +71,16 @@ QtProduct {
                     var output = outputs.pri[o];
                     var isPublic = !output.baseName.endsWith("_private");
                     var modulePrefix = "QT." + output.baseName.slice(7) + '.';
+                    var depends = "";
                     var includes = "$$QT_MODULE_INCLUDE_BASE";
                     for (var i in product.includeDependencies) {
                         var module = product.includeDependencies[i];
                         if (isPublic && module.endsWith("-private"))
                             module = module.slice(0, -8);
                         includes += ' ' + QtUtils.includesForModule(module, "$$QT_MODULE_INCLUDE_BASE", project.version).join(' ');
+
+                        if (isPublic && module != product.name)
+                            depends += ' ' + module.slice(2).toLowerCase();
                     }
 
                     var file = new TextFile(output.filePath, TextFile.WriteOnly);

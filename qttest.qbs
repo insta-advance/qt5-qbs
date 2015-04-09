@@ -7,6 +7,7 @@ Project {
 
     QtModule {
         name: "QtTest"
+        simpleName: "testlib"
         condition: configure.testlib
 
         readonly property path basePath: project.sourcePath + "/qtbase/src/testlib"

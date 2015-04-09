@@ -69,6 +69,9 @@ Module {
             case "qnumeric.h":
                 classes.push("QtNumeric");
                 break;
+            case "qtest.h":
+                classes.push("QTest"); // ### handle in namespace expression (?)
+                break;
             default:
                 break;
             }
@@ -299,7 +302,7 @@ Module {
                 var module = product.moduleProperty("sync", "module");
                 return project.buildDirectory + "/include/" + module + "/" + module;
             }
-            fileTags: "hpp"
+            fileTags: ["hpp", "hpp_public"]
         }
         prepare: {
             var cmd = new JavaScriptCommand();
