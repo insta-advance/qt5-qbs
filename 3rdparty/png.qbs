@@ -8,8 +8,8 @@ QtProduct {
     Depends { name: "zlib" }
 
     cpp.includePaths: [
-        project.sourcePath + "/include",
-        project.sourcePath + "/include/QtCore",
+        project.sourceDirectory + "/include",
+        project.sourceDirectory + "/include/QtCore",
         project.sourcePath + "/qtbase/src/corelib/global",
     ].concat(base)
 

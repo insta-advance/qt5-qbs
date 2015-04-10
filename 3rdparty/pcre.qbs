@@ -10,6 +10,7 @@ QtProduct {
     cpp.defines: {
         var defines = [
             "HAVE_CONFIG_H",
+            "PCRE_HAVE_CONFIG_H",
             "PCRE_STATIC",
         ].concat(base);
         if (qbs.targetOS.contains("winrt"))
