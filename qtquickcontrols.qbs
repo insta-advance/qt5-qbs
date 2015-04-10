@@ -1,5 +1,6 @@
 import qbs
 import qbs.File
+import qbs.FileInfo
 import qbs.TextFile
 
 Project {
@@ -76,16 +77,24 @@ Project {
         Group {
             name: "qml"
             prefix: basePath + '/'
-            files: [
-                "*.qml",
-                "Styles/Base/*.qml",
-            ]
+            files: "**/*.qml"
             fileTags: "qml"
+            excludeFiles: {
+                var excludeFiles = ["doc/**"];
+                if (!qbs.targetOS.contains("android"))
+                    excludeFiles.push("Styles/Android/**");
+                if (!qbs.targetOS.contains("winrt"))
+                    excludeFiles.push("Styles/WinRT/**");
+                if (!qbs.targetOS.contains("iOS"))
+                    excludeFiles.push("Styles/iOS/**");
+                return excludeFiles;
+            }
             overrideTags: false
         }
 
         Rule {
             inputs: "qml"
+            multiplex: true
             Artifact {
                 filePath: "controls.qrc"
                 fileTags: "qrc"
@@ -99,7 +108,9 @@ Project {
                     file.writeLine("<RCC>");
                     file.writeLine('<qresource prefix="/QtQuick/Controls">');
                     for (var i in inputs.qml) {
-                        file.writeLine('<file alias="' + inputs.qml[i].fileName + '">' + inputs.qml[i].filePath + '</file>');
+                        var relativeIn = FileInfo.relativePath(product.basePath, inputs.qml[i].filePath);
+                        var relativeOut = FileInfo.relativePath(product.buildDirectory, inputs.qml[i].filePath);
+                        file.writeLine('    <file alias="' + relativeIn + '">' + relativeOut + '</file>');
                     }
                     file.writeLine("</qresource>");
                     file.writeLine("</RCC>");
