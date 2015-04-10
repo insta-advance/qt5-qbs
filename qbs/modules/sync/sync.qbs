@@ -278,12 +278,12 @@ Module {
                         var file = new TextFile(header.filePath, TextFile.WriteOnly);
                         file.writeLine("#include \"" + input.filePath + "\"");
                         file.close();
-                        return;
+                        continue;
                     }
 
                     if (input.fileName == header.fileName) {
                         File.copy(input.filePath, header.filePath);
-                        return;
+                        continue;
                     }
                     var file = new TextFile(header.filePath, TextFile.WriteOnly);
                     file.writeLine("#include \"" + input.fileName + "\"");
