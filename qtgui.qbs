@@ -57,7 +57,7 @@ Project {
         QtGuiHeaders {
             name: "headers"
             excludeFiles: {
-                var excludeFiles = [];
+                var excludeFiles = ["doc/**"];
                 if (configure.opengl == "es2")
                     excludeFiles.push("opengl/qopengltimerquery.h");
                 return excludeFiles;

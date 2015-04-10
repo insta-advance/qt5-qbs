@@ -3,7 +3,6 @@ import qbs
 Group {
     name: "headers"
     prefix: project.sourcePath + "/qtsvg/src/svg/"
-    files: [
-        "*.h",
-    ]
+    files: "**/*.h"
+    excludeFiles: "doc/**"
 }

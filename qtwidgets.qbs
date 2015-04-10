@@ -51,7 +51,7 @@ Project {
         QtWidgetHeaders {
             name: "headers"
             excludeFiles: {
-                var excludeFiles = [];
+                var excludeFiles = ["doc/**"];
                 if (!qbs.targetOS.contains("osx")) {
                     excludeFiles.push("widgets/qmaccocoaviewcontainer_mac.h");
                     excludeFiles.push("widgets/qmacnativewidget_mac.h");

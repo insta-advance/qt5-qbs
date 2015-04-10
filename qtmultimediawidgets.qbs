@@ -26,6 +26,7 @@ Project {
             name: "headers"
             fileTags: "moc"
             excludeFiles: [
+                "doc/**",
                 "qeglimagetexturesurface_p.h", // QtOpenGL
             ]
             overrideTags: false

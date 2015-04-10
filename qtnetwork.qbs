@@ -36,7 +36,7 @@ Project {
 
         QtNetworkHeaders {
             excludeFiles: {
-                var excludeFiles = [];
+                var excludeFiles = ["doc/**"];
 
                 if (!qbs.targetOS.contains("winrt"))
                     excludeFiles.push("socket/qnativesocketengine_winrt_p.h");

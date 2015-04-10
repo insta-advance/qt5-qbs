@@ -67,7 +67,7 @@ Project {
         QtCoreHeaders {
             name: "headers"
             excludeFiles: {
-                var excludeFiles = [];
+                var excludeFiles = ["doc/**"];
                 if (!qbs.targetOS.contains("blackberry")) {
                     excludeFiles.push("kernel/qeventdispatcher_blackberry_p.h");
                     excludeFiles.push("kernel/qppsobject_p.h");

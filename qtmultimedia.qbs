@@ -61,6 +61,7 @@ Project {
             name: "headers"
             excludeFiles: {
                 var excludeFiles = [
+                    "doc/**",
                     "qtmultimediaquicktools_headers/*.h", // moc'd by QtMultimediaTools
                     "gsttools_headers/*.h",               // moc'd by QtGstTools
                 ];
