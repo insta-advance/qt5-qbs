@@ -4,5 +4,6 @@ https://github.com/qtproject/qtdeclarative/archive/${VERSION}.tar.gz qtdeclarati
 https://github.com/qtproject/qtgraphicaleffects/archive/${VERSION}.tar.gz qtgraphicaleffects.tar.gz
 https://github.com/qtproject/qtmultimedia/archive/${VERSION}.tar.gz qtmultimedia.tar.gz
 https://github.com/qtproject/qtquickcontrols/archive/${VERSION}.tar.gz qtquickcontrols.tar.gz
+https://github.com/qtproject/qtsvg/archive/${VERSION}.tar.gz qtsvg.tar.gz
 https://github.com/qtproject/qttools/archive/${VERSION}.tar.gz qttools.tar.gz
 https://github.com/qtproject/qtwayland/archive/${VERSION}.tar.gz qtwayland.tar.gz
