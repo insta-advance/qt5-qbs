@@ -9,6 +9,7 @@ Product {
 
     Probes.PkgConfigProbe {
         id: gbmProbe
+        executable: cpp.toolchainInstallPath + "/pkg-config"
         name: "gbm"
     }
 

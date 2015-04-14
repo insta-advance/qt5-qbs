@@ -11,6 +11,7 @@ Product {
 
     Probes.PkgConfigProbe {
         id: eglProbe
+        executable: cpp.toolchainInstallPath + "/pkg-config"
         name: "egl"
     }
 

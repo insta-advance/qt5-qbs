@@ -12,31 +12,37 @@ Product {
 
     Probes.PkgConfigProbe {
         id: gstreamerProbe
+        executable: cpp.toolchainInstallPath + "/pkg-config"
         name: "gstreamer-1.0"
     }
 
     Probes.PkgConfigProbe {
         id: gstreamerAppProbe
+        executable: cpp.toolchainInstallPath + "/pkg-config"
         name: "gstreamer-app-1.0"
     }
 
     Probes.PkgConfigProbe {
         id: gstreamerPluginProbe
+        executable: cpp.toolchainInstallPath + "/pkg-config"
         name: "gstreamer-app-1.0"
     }
 
     Probes.PkgConfigProbe {
         id: gstreamerVideoProbe
+        executable: cpp.toolchainInstallPath + "/pkg-config"
         name: "gstreamer-video-1.0"
     }
 
     Probes.PkgConfigProbe {
         id: gstreamerAudioProbe
+        executable: cpp.toolchainInstallPath + "/pkg-config"
         name: "gstreamer-audio-1.0"
     }
 
     Probes.PkgConfigProbe {
         id: gstreamerPBUtilsProbe
+        executable: cpp.toolchainInstallPath + "/pkg-config"
         name: "gstreamer-pbutils-1.0"
     }
 

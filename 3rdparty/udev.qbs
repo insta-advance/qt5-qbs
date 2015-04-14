@@ -10,6 +10,7 @@ Product {
 
     Probes.PkgConfigProbe {
         id: udevProbe
+        executable: cpp.toolchainInstallPath + "/pkg-config"
         name: "libudev"
     }
 

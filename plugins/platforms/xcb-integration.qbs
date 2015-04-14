@@ -51,31 +51,37 @@ QtModule {
     // ### move these to the xcb-x11 depends project
     Probes.PkgConfigProbe {
         id: xcbImageProbe
+        executable: cpp.toolchainInstallPath + "/pkg-config"
         name: "xcb-image"
     }
 
     Probes.PkgConfigProbe {
         id: xcbXfixesProbe
+        executable: cpp.toolchainInstallPath + "/pkg-config"
         name: "xcb-xfixes"
     }
 
     Probes.PkgConfigProbe {
         id: xcbRandrProbe
+        executable: cpp.toolchainInstallPath + "/pkg-config"
         name: "xcb-randr"
     }
 
     Probes.PkgConfigProbe {
         id: xcbSyncProbe
+        executable: cpp.toolchainInstallPath + "/pkg-config"
         name: "xcb-sync"
     }
 
     Probes.PkgConfigProbe {
         id: xcbKeysymsProbe
+        executable: cpp.toolchainInstallPath + "/pkg-config"
         name: "xcb-keysyms"
     }
 
     Probes.PkgConfigProbe {
         id: xcbIcccmProbe
+        executable: cpp.toolchainInstallPath + "/pkg-config"
         name: "xcb-icccm"
     }
 

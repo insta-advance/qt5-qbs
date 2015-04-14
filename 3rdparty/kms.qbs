@@ -10,11 +10,13 @@ Product {
 
     Probes.PkgConfigProbe {
         id: drmProbe
+        executable: cpp.toolchainInstallPath + "/pkg-config"
         name: "libdrm"
     }
 
     Probes.PkgConfigProbe {
         id: gbmProbe
+        executable: cpp.toolchainInstallPath + "/pkg-config"
         name: "gbm"
     }
 

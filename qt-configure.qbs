@@ -34,11 +34,13 @@ Project {
 
         Probes.PkgConfigProbe {
             id: glEs2Probe
+            executable: cpp.toolchainInstallPath + "/pkg-config"
             name: "glesv2"
         }
 
         Probes.PkgConfigProbe {
             id: glDesktopProbe
+            executable: cpp.toolchainInstallPath + "/pkg-config"
             name: "gl"
         }
 

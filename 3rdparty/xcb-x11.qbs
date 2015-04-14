@@ -10,6 +10,7 @@ Product {
 
     Probes.PkgConfigProbe {
         id: xcbProbe
+        executable: cpp.toolchainInstallPath + "/pkg-config"
         name: "x11-xcb"
     }
 
