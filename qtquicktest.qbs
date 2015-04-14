@@ -8,7 +8,7 @@ Project {
     QtModule {
         name: "QtQuickTest"
         simpleName: "qmltest"
-        condition: configure.qmltest
+        condition: configure.qmltest !== false
 
         readonly property path basePath: project.sourcePath + "/qtdeclarative/src/qmltest"
 
@@ -39,6 +39,41 @@ Project {
             ]
             fileTags: "moc"
             overrideTags: false
+        }
+    }
+
+    Project {
+        name: "imports"
+        QmlPlugin {
+            condition: configure.qmltest !== false
+            targetName: "qmltestplugin"
+            pluginPath: "QtTest"
+
+            readonly property string basePath: project.sourcePath + "/qtdeclarative/src/imports/testlib"
+
+            includeDependencies: ["QtCore-private", "QtQml-private", "QtQuickTest-private"]
+
+            Depends { name: "QtCore" }
+            Depends { name: "QtGui" }
+            Depends { name: "QtQml" }
+            Depends { name: "QtTest" }
+            Depends { name: "QtQuickTest" }
+
+            Group {
+                name: "sources"
+                prefix: basePath + "/"
+                files: "main.cpp"
+                fileTags: "moc"
+                overrideTags: false
+            }
+
+            Group {
+                name: "qml"
+                prefix: basePath + "/"
+                files: ["qmldir", "*.qml", "*.js"]
+                qbs.install: true
+                qbs.installDir: "qml/" + pluginPath
+            }
         }
     }
 }
