@@ -9,17 +9,22 @@ Project {
 
     QmlPlugin {
         name: "QtQuickControls"
-        condition: configure.quickcontrols
+        condition: configure.quickcontrols !== false
         targetName: "qtquickcontrolsplugin"
         pluginPath: "QtQuick/Controls"
 
         readonly property string basePath: project.sourcePath + "/qtquickcontrols/src/controls"
 
-        includeDependencies: ["QtCore-private", "QtGui-private", "QtQml-private", "QtQuick-private", "QtWidgets"]
+        includeDependencies: {
+            var includeDependencies = ["QtCore-private", "QtGui-private", "QtQml-private", "QtQuick-private"];
+            if (configure.widgets !== false)
+                includeDependencies.push("QtWidgets");
+            return includeDependencies;
+        }
 
         cpp.defines: {
             var defines = base;
-            if (!configure.widgets)
+            if (configure.widgets !== false)
                 defines.push("QT_NO_WIDGETS");
             return defines;
         }
@@ -67,7 +72,7 @@ Project {
         }
 
         Group {
-            name: "qml"
+            name: "qmldir"
             prefix: basePath + "/"
             files: "qmldir"
             qbs.install: true
@@ -77,18 +82,8 @@ Project {
         Group {
             name: "qml"
             prefix: basePath + '/'
-            files: "**/*.qml"
+            files: "*.qml"
             fileTags: "qml"
-            excludeFiles: {
-                var excludeFiles = ["doc/**"];
-                if (!qbs.targetOS.contains("android"))
-                    excludeFiles.push("Styles/Android/**");
-                if (!qbs.targetOS.contains("winrt"))
-                    excludeFiles.push("Styles/WinRT/**");
-                if (!qbs.targetOS.contains("iOS"))
-                    excludeFiles.push("Styles/iOS/**");
-                return excludeFiles;
-            }
             overrideTags: false
         }
 
@@ -118,6 +113,98 @@ Project {
                 };
                 return cmd;
             }
+        }
+    }
+
+    QmlPlugin {
+        name: "QtQuickControls.Private"
+        condition: configure.quickcontrols !== false
+        type: "qml" // no library, only installs
+        pluginPath: "QtQuick/Controls/Private"
+
+        readonly property string basePath: project.sourcePath + "/qtquickcontrols/src/controls/Private"
+
+        Group {
+            name: "qml"
+            prefix: basePath + "/"
+            files: ["qmldir", "**/*.qml", "**/*.js"]
+            qbs.install: true
+            qbs.installDir: "qml/" + pluginPath
+        }
+    }
+
+    QmlPlugin {
+        name: "QtQuick.Controls.Styles"
+        condition: configure.quickcontrols !== false
+        type: "qml" // no library, only installs
+        pluginPath: "QtQuick/Controls/Styles"
+
+        readonly property string basePath: project.sourcePath + "/qtquickcontrols/src/controls/Styles"
+
+        /*Group {
+            name: "qml"
+            prefix: basePath + "/"
+            files: ["qmldir", "*.qml"]
+            excludeFiles: {
+                var excludeFiles = ["doc/**"];
+                if (!qbs.targetOS.contains("android"))
+                    excludeFiles.push("Android/**");
+                if (!qbs.targetOS.contains("winrt"))
+                    excludeFiles.push("WinRT/**");
+                if (!qbs.targetOS.contains("iOS"))
+                    excludeFiles.push("iOS/**");
+                return excludeFiles;
+            }
+            qbs.install: true
+            qbs.installDir: "qml/" + pluginPath
+        }*/
+
+        Group {
+            name: "files"
+            prefix: basePath + "/"
+            files: ["qmldir", "Base"]
+            qbs.install: true
+            qbs.installDir: "qml/" + pluginPath
+        }
+    }
+
+    QmlPlugin {
+        name: "QtQuick.Layouts"
+        condition: configure.quickcontrols !== false
+        targetName: "qquicklayoutsplugin"
+        pluginPath: "QtQuick/Layouts"
+
+        readonly property string basePath: project.sourcePath + "/qtquickcontrols/src/layouts"
+
+        includeDependencies: ["QtCore-private", "QtGui-private", "QtQml-private", "QtQuick-private"]
+
+        Depends { name: "QtCore" }
+        Depends { name: "QtGui" }
+        Depends { name: "QtQml" }
+        Depends { name: "QtQuick" }
+
+        Group {
+            name: "headers"
+            prefix: basePath + '/'
+            files: "*.h"
+            fileTags: "moc"
+            overrideTags: false
+        }
+
+        Group {
+            name: "sources"
+            prefix: basePath + '/'
+            files: "*.cpp"
+            fileTags: "moc"
+            overrideTags: false
+        }
+
+        Group {
+            name: "qmldir"
+            prefix: basePath + "/"
+            files: "qmldir"
+            qbs.install: true
+            qbs.installDir: "qml/" + pluginPath
         }
     }
 }
