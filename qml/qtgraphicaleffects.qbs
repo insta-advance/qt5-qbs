@@ -6,6 +6,7 @@ Project {
     condition: File.exists(project.sourcePath + "/qtgraphicaleffects")
     QmlPlugin {
         name: "QtGraphicalEffects"
+        condition: configure.graphicaleffects !== false
         pluginPath: "QtGraphicalEffects"
         type: "qml"
 

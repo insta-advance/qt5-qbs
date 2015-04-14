@@ -9,7 +9,7 @@ Project {
 
     QtModule {
         name: "QtQml"
-        condition: configure.qml
+        condition: configure.qml !== false
 
         readonly property path basePath: project.sourcePath
                                          + "/qtdeclarative/src/qml"

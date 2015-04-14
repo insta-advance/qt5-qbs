@@ -2,7 +2,7 @@ import qbs
 
 QmlPlugin {
     readonly property path basePath: project.sourcePath + "/qtdeclarative/src/imports/window"
-    condition: configure.quick
+    condition: configure.quick !== false
     targetName: "windowplugin"
     pluginPath: "QtQuick/Window.2"
 

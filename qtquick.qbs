@@ -16,7 +16,7 @@ Project {
 
     QtModule {
         name: "QtQuick"
-        condition: configure.quick
+        condition: configure.quick !== false
 
         readonly property path basePath: project.sourcePath + "/qtdeclarative/src/quick"
 

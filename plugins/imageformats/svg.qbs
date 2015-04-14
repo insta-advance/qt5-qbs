@@ -3,7 +3,7 @@ import qbs
 QtPlugin {
     targetName: "qsvg"
     category: "imageformats"
-    condition: configure.svg
+    condition: configure.svg !== false
 
     includeDependencies: ["QtCore", "QtGui", "QtSvg"]
 

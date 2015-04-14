@@ -14,9 +14,16 @@ Project {
         ]
     }
 
+    Project {
+        name: "input"
+        references: [
+            "plugins/input/evdevtouch.qbs",
+        ]
+    }
+
     QtModule {
         name: "QtGui"
-        condition: configure.gui
+        condition: configure.gui !== false
 
         readonly property path basePath: project.sourcePath + "/qtbase/src/gui"
 
@@ -27,13 +34,10 @@ Project {
                 "QT_BUILD_GUI_LIB",
                 'QT_QPA_DEFAULT_PLATFORM_NAME="' + configure.qpa + '"',
             ];
-
             if (configure.png == "qt")
                 defines.push("QT_USE_BUNDLED_LIBPNG");
-
             if (!configure.cursor)
                 defines.push("QT_NO_CURSOR");
-
             return defines.concat(base).concat(configure.simdDefines).concat(configure.openglDefines);
         }
 

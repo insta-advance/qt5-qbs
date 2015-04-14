@@ -4,7 +4,7 @@ Project {
     name: "QtNetwork"
     QtModule {
         name: "QtNetwork"
-        condition: configure.network
+        condition: configure.network !== false
 
         readonly property path basePath: project.sourcePath + "/qtbase/src/network"
 

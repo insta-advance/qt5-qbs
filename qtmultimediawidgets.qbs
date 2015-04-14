@@ -4,7 +4,7 @@ Project {
     name: "QtMultimediaWidgets"
 
     QtModule {
-        condition: configure.multimedia && configure.widgets
+        condition: configure.multimedia !== false && configure.widgets && configure.multimediawidgets !== false
         name: "QtMultimediaWidgets"
 
         readonly property path basePath: project.sourcePath + "/qtmultimedia/src/multimediawidgets"

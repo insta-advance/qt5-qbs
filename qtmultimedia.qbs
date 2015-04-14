@@ -37,7 +37,7 @@ Project {
 
     QtModule {
         id: qtmultimedia
-        condition: configure.multimedia
+        condition: configure.multimedia !== false
         name: "QtMultimedia"
 
         readonly property path basePath: project.sourcePath + "/qtmultimedia/src/multimedia"
