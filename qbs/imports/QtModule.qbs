@@ -99,7 +99,7 @@ QtProduct {
                         file.writeLine(modulePrefix + "plugins = $$QT_MODULE_PLUGIN_BASE");
                         file.writeLine(modulePrefix + "imports = $$QT_MODULE_IMPORT_BASE");
                         file.writeLine(modulePrefix + "qml = $$QT_MODULE_QML_BASE");
-                        file.writeLine(modulePrefix + "rpath = " + product.moduleProperty("configure", "prefix") + "/lib");
+                        file.writeLine(modulePrefix + "rpath = " + project.prefix + "/lib");
                         file.writeLine("QT_MODULES += " + module);
                     }
 

@@ -292,7 +292,7 @@ Project {
                     outputFile.writeLine('static const char qt_configure_installation          [11 + 12]    = "qt_instdate=2012-12-20";'); //### qhost could patch this, too
                     outputFile.writeLine('');
                     outputFile.writeLine('/* Installation Info */');
-                    outputFile.writeLine('static const char qt_configure_prefix_path_str       [256 + 12] = "qt_prfxpath=' + product.moduleProperty("configure", "prefix") + '";'); // ###FIXME: qhost must be able to patch this; like an -install option.
+                    outputFile.writeLine('static const char qt_configure_prefix_path_str       [256 + 12] = "qt_prfxpath=' + project.prefix + '";'); // ###FIXME: qhost must be able to patch this; like an -install option.
                     outputFile.writeLine('');
                     outputFile.writeLine("static const short qt_configure_str_offsets[] = { 0, 4, 12, 16, 24, 28, 36, 44, 48, 50, 52, 65, 74 };");
                     outputFile.writeLine('static const char  qt_configure_strs[] =');

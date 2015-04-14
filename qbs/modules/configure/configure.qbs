@@ -23,7 +23,6 @@ Module {
     readonly property bool widgets: properties.widgets
 
     // Common
-    readonly property string prefix: properties.prefix
     readonly property bool cxx11: properties["c++11"]
     readonly property bool sse2: properties.sse2
     readonly property bool sse3: properties.sse3

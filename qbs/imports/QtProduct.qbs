@@ -64,7 +64,7 @@ Product {
                 cxxFlags.push("-std=c++11");
             return cxxFlags;
         }
-        cpp.rpaths: configure.prefix + "/lib"
+        cpp.rpaths: project.prefix + "/lib"
     }
 
     Rule {
