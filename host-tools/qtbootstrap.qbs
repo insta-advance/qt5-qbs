@@ -2,7 +2,7 @@ import qbs
 import qbs.File
 import qbs.FileInfo
 
-QtModule {
+QtProduct {
     type: "staticlibrary"
     name: "QtBootstrap"
 
