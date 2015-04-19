@@ -30,8 +30,8 @@ QtPlugin {
         name: "sources"
         files: [
             product.basePath + "/main.cpp",
-            project.sourcePath + "/qtbase/src/platformsupport/input/evdevtouch/qevdevtouch_p.h",
-            project.sourcePath + "/qtbase/src/platformsupport/input/evdevtouch/qevdevtouch.cpp",
+            project.sourcePath + "/qtbase/src/platformsupport/input/evdevtouch/*.h",
+            project.sourcePath + "/qtbase/src/platformsupport/input/evdevtouch/*.cpp",
             project.sourcePath + "/qtbase/src/platformsupport/devicediscovery/qdevicediscovery_p.h",
             project.sourcePath + "/qtbase/src/platformsupport/devicediscovery/qdevicediscovery_static_p.h",
             project.sourcePath + "/qtbase/src/platformsupport/devicediscovery/qdevicediscovery_static.cpp",
