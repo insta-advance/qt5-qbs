@@ -1,5 +1,5 @@
-Summary: Qt
-Name: Qt
+Summary: Qt host tools
+Name: Qt-host-tools
 Version: %{qtversion}
 Release: git+%(git --git-dir=%{_sourcedir}/qt5/.git rev-parse --short HEAD)
 License: LGPL2.1
@@ -20,13 +20,8 @@ This package was built using QBS, the Qt Build Suite.
 %prep
 
 %build
-qbs install --install-root %{_buildrootdir}/%{name}-%{version}-%{release}.%{_arch}/opt/Qt/%{qtversion} \
-    -f %{_sourcedir}/qt5-qbs/qt.qbs project.sourcePath:%{_sourcedir}/qt5 project.prefix:/opt/Qt/%{qtversion} %{qbsargs}
+qbs install --install-root %{_buildrootdir}/%{name}-%{version}-%{release}.%{_arch}/opt/Qt/host-tools \
+    -f %{_sourcedir}/qt5-qbs/qt-host-tools.qbs project.sourcePath:%{_sourcedir}/qt5 project.prefix:/opt/Qt/host-tools %{qbsargs}
 
 %files
-/opt/Qt/%{qtversion}/bin/*
-/opt/Qt/%{qtversion}/include/*
-/opt/Qt/%{qtversion}/lib/*
-/opt/Qt/%{qtversion}/mkspecs/*
-/opt/Qt/%{qtversion}/plugins/*
-/opt/Qt/%{qtversion}/qml/*
+/opt/Qt/host-tools/bin/*
