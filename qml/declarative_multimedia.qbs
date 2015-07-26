@@ -1,17 +1,20 @@
 import qbs
 
 QmlPlugin {
-    readonly property path basePath: project.sourcePath + "/qtmultimedia/src/imports/multimedia"
-    condition: configure.multimedia !== false
+    readonly property path basePath: project.sourceDirectory + "/qtmultimedia/src/imports/multimedia"
+    condition: project.multimedia !== false
     pluginPath: "QtMultimedia"
-
-    includeDependencies: ["QtCore", "QtQml", "QtMultimedia-private"]
 
     Depends { name: "QtCore" }
     Depends { name: "QtGui" }
     Depends { name: "QtQml" }
     Depends { name: "QtQuick" }
     Depends { name: "QtMultimedia" }
+    Depends { name: "QtCoreHeaders" }
+    Depends { name: "QtGuiHeaders" }
+    Depends { name: "QtQmlHeaders" }
+    Depends { name: "QtQuickHeaders" }
+    Depends { name: "QtMultimediaHeaders" }
     Depends { name: "QtMultimediaQuickTools" }
 
     Group {
@@ -20,28 +23,38 @@ QmlPlugin {
         files: [
             "*.h"
         ]
-        fileTags: "moc"
-        overrideTags: false
     }
 
     Group {
         name: "sources"
         prefix: basePath + "/"
         files: [
-            "*.cpp"
+            "multimedia.cpp",
+            "qdeclarativeaudio.cpp",
+            "qdeclarativecamera.cpp",
+            "qdeclarativecameracapture.cpp",
+            "qdeclarativecameraexposure.cpp",
+            "qdeclarativecameraflash.cpp",
+            "qdeclarativecamerafocus.cpp",
+            "qdeclarativecameraimageprocessing.cpp",
+            "qdeclarativecamerapreviewprovider.cpp",
+            "qdeclarativecamerarecorder.cpp",
+            "qdeclarativecameraviewfinder.cpp",
+            "qdeclarativemultimediaglobal.cpp",
+            "qdeclarativeradio.cpp",
+            "qdeclarativeradiodata.cpp",
+            "qdeclarativetorch.cpp",
         ]
-        fileTags: "moc"
-        overrideTags: false
     }
 
     Group {
         name: "qml"
         prefix: basePath + "/"
         files: [
+            "plugins.qmltypes",
             "qmldir",
-            "*.qml"
+            "Video.qml",
         ]
-        qbs.install: true
-        qbs.installDir: "qml/" + pluginPath
+        fileTags: "qml"
     }
 }

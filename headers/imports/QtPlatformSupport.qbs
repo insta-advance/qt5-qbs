@@ -2,7 +2,7 @@ import qbs
 
 Group {
     name: "headers"
-    prefix: project.sourcePath + "/qtbase/src/platformsupport/"
+    prefix: project.sourceDirectory + "/qtbase/src/platformsupport/"
     files: "**/*.h"
     excludeFiles: "doc/**"
 }

@@ -3,10 +3,11 @@ import qbs.ModUtils
 import qbs.Probes
 
 QtModule {
-    condition: configure.egl
+    condition: project.eglfs
     name: "QtEglDeviceIntegration"
 
-    includeDependencies: ["QtCore-private", "QtGui-private", "QtPlatformSupport-private"]
+    readonly property string basePath: project.sourceDirectory + "/qtbase/src/plugins/platforms/eglfs/"
+    readonly property string platformSupportPath: project.sourceDirectory + "/qtbase/src/platformsupport/"
 
     cpp.defines: {
         var defines = [
@@ -14,14 +15,10 @@ QtModule {
             "MESA_EGL_NO_X11_HEADERS",
             "QT_NO_EVDEV", // ### build the evdev plugins separately
         ].concat(base);
-        if (configure.imx6) {
+        if (project.eglfs_viv) {
             defines.push("LINUX");
             defines.push("EGL_API_FB");
         }
-        if (!configure.cursor)
-            defines.push("QT_NO_CURSOR");
-        if (!configure.glib)
-            defines.push("QT_NO_GLIB");
         return defines;
     }
 
@@ -30,104 +27,103 @@ QtModule {
     ].concat(base)
 
     cpp.includePaths: [
-        project.sourcePath + "/qtbase/src/3rdparty/freetype/include", // ### use Probe for system freetype
+        project.sourceDirectory + "/qtbase/src/3rdparty/freetype/include", // ### use Probe for system freetype
     ].concat(base)
 
     Depends { name: "egl" }
-    Depends { name: "glib"; condition: configure.glib }
-    Depends { name: "opengl" }
-    Depends { name: "udev"; condition: configure.udev }
+    Depends { name: "glib"; condition: project.glib }
+    Depends { name: "gl"; condition: project.opengl }
+    Depends { name: "libudev"; condition: project.libudev }
     Depends { name: "QtCore" }
     Depends { name: "QtGui" }
+    Depends { name: "QtCoreHeaders" }
+    Depends { name: "QtGuiHeaders" }
     Depends { name: "QtPlatformHeaders" }
     Depends { name: "QtPlatformSupport" }
 
     Group {
         name: "headers"
-        prefix: project.sourcePath + "/qtbase/src/"
+        prefix: basePath
+        files: [
+            "qeglfscontext.h",
+            "qeglfsdeviceintegration.h",
+            "qeglfshooks.h",
+            "qeglfsintegration.h",
+            "qeglfsoffscreenwindow.h",
+            "qeglfsscreen.h",
+            "qeglfswindow.h",
+            "qeglfscursor.h",
+        ]
+    }
+
+    Group {
+        name: "headers_platformsupport"
+        prefix: platformSupportPath
         files: {
             var files = [
-                "plugins/platforms/eglfs/qeglfscontext.h",
-                "plugins/platforms/eglfs/qeglfsdeviceintegration.h",
-                "plugins/platforms/eglfs/qeglfshooks.h",
-                "plugins/platforms/eglfs/qeglfsintegration.h",
-                "plugins/platforms/eglfs/qeglfsoffscreenwindow.h",
-                "plugins/platforms/eglfs/qeglfsscreen.h",
-                "plugins/platforms/eglfs/qeglfswindow.h",
-                "platformsupport/eglconvenience/qeglplatformcursor_p.h", // ### to be excluded for QT_NO_CURSOR
-                "platformsupport/eventdispatchers/qunixeventdispatcher_qpa_p.h",
-                "platformsupport/fbconvenience/qfbvthandler_p.h",
-                "platformsupport/platformcompositor/qopenglcompositorbackingstore_p.h",
-                "platformsupport/platformcompositor/qopenglcompositor_p.h",
+                "eglconvenience/qeglconvenience_p.h",
+                "eglconvenience/qeglplatformcontext_p.h",
+                "eglconvenience/qeglpbuffer_p.h",
+                "eventdispatchers/qunixeventdispatcher_qpa_p.h",
+                "fbconvenience/qfbvthandler_p.h",
+                "platformcompositor/qopenglcompositorbackingstore_p.h",
+                "platformcompositor/qopenglcompositor_p.h",
             ];
-
-            if (configure.glib) {
-                files.push("platformsupport/eventdispatchers/qeventdispatcher_glib_p.h");
+            if (project.glib) {
+                files.push("eventdispatchers/qeventdispatcher_glib_p.h");
             }
-
-            if (configure.udev) {
-                files.push("platformsupport/devicediscovery/qdevicediscovery_p.h");
-                files.push("platformsupport/devicediscovery/qdevicediscovery_udev_p.h");
+            if (project.libudev) {
+                files.push("devicediscovery/qdevicediscovery_p.h");
+                files.push("devicediscovery/qdevicediscovery_udev_p.h");
             }
-
             return files;
         }
-        fileTags: "moc"
-        overrideTags: false
     }
 
     Group {
         name: "sources"
-        prefix: project.sourcePath + "/qtbase/src/"
-        files: {
-            var files = [
-                "plugins/platforms/eglfs/qeglfscontext.cpp",
-                "plugins/platforms/eglfs/qeglfsdeviceintegration.cpp",
-                "plugins/platforms/eglfs/qeglfshooks.cpp",
-                "plugins/platforms/eglfs/qeglfsintegration.cpp",
-                "plugins/platforms/eglfs/qeglfsoffscreenwindow.cpp",
-                "plugins/platforms/eglfs/qeglfsscreen.cpp",
-                "plugins/platforms/eglfs/qeglfswindow.cpp",
-                "platformsupport/eglconvenience/qeglconvenience.cpp",
-                "platformsupport/eglconvenience/qeglpbuffer.cpp",
-                "platformsupport/eglconvenience/qeglplatformcursor.cpp", // ### QT_NO_CURSOR
-                "platformsupport/eglconvenience/qeglplatformcontext.cpp",
-                "platformsupport/eglconvenience/qeglplatformintegration.cpp",
-                "platformsupport/eglconvenience/qeglplatformscreen.cpp",
-                "platformsupport/eglconvenience/qeglplatformwindow.cpp",
-                "platformsupport/eventdispatchers/qgenericunixeventdispatcher.cpp",
-                "platformsupport/eventdispatchers/qunixeventdispatcher.cpp",
-                "platformsupport/fbconvenience/qfbvthandler.cpp",
-                "platformsupport/fontdatabases/basic/qbasicfontdatabase.cpp",
-                "platformsupport/platformcompositor/qopenglcompositorbackingstore.cpp",
-                "platformsupport/platformcompositor/qopenglcompositor.cpp",
-                "platformsupport/services/genericunix/qgenericunixservices.cpp",
-            ];
-
-            if (configure.udev) {
-                files.push("platformsupport/devicediscovery/qdevicediscovery_udev.cpp");
-            }
-
-            if (configure.glib) {
-                files.push("platformsupport/eventdispatchers/qeventdispatcher_glib.cpp");
-            }
-
-            // ### QT_NO_EVDEV
-            /*"platformsupport/input/evdevmouse/*.cpp",
-            "platformsupport/input/evdevkeyboard/*.cpp",
-            "platformsupport/input/evdevtouch/*.cpp",
-            "platformsupport/input/tslib/*.cpp",*/
-
-            return files;
-        }
-        fileTags: "moc"
-        overrideTags: false
+        prefix: basePath
+        files: [
+            "qeglfscontext.cpp",
+            "qeglfsdeviceintegration.cpp",
+            "qeglfshooks.cpp",
+            "qeglfsintegration.cpp",
+            "qeglfsoffscreenwindow.cpp",
+            "qeglfsscreen.cpp",
+            "qeglfswindow.cpp",
+            "qeglfscursor.cpp",
+        ]
     }
 
     Group {
-        condition: configure.cursor
+        name: "sources_platformsupport"
+        prefix: platformSupportPath
+        files: {
+            var files = [
+                "eglconvenience/qeglconvenience.cpp",
+                "eglconvenience/qeglpbuffer.cpp",
+                "eglconvenience/qeglplatformcontext.cpp",
+                "eventdispatchers/qgenericunixeventdispatcher.cpp",
+                "eventdispatchers/qunixeventdispatcher.cpp",
+                "fbconvenience/qfbvthandler.cpp",
+                "fontdatabases/basic/qbasicfontdatabase.cpp",
+                "platformcompositor/qopenglcompositorbackingstore.cpp",
+                "platformcompositor/qopenglcompositor.cpp",
+                "services/genericunix/qgenericunixservices.cpp",
+            ];
+            if (project.libudev) {
+                files.push("devicediscovery/qdevicediscovery_udev.cpp");
+            }
+            if (project.glib) {
+                files.push("eventdispatchers/qeventdispatcher_glib.cpp");
+            }
+            return files;
+        }
+    }
+
+    Group {
         name: "cursor.qrc"
-        files: project.sourcePath + "/qtbase/src/plugins/platforms/eglfs/cursor.qrc"
-        fileTags: "qrc"
+        condition: project.cursor
+        files: project.sourceDirectory + "/qtbase/src/plugins/platforms/eglfs/cursor.qrc"
     }
 }

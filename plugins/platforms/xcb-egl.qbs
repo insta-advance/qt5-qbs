@@ -1,7 +1,7 @@
 import qbs
 
 QtXcbGlIntegrationPlugin {
-    condition: configure.xcb && configure.egl
+    condition: project.xcb && project.egl
 
     cpp.defines: [
         "MESA_EGL_NO_X11_HEADERS",
@@ -12,7 +12,7 @@ QtXcbGlIntegrationPlugin {
     ].concat(base)
 
     Depends { name: "egl" }
-    Depends { name: "opengl" }
+    Depends { name: "gl"; condition: project.opengl }
 
     Group {
         name: "headers"
@@ -21,8 +21,6 @@ QtXcbGlIntegrationPlugin {
             "*.h",
             "",
         ]
-        fileTags: "moc"
-        overrideTags: false
     }
 
     Group {
@@ -34,7 +32,5 @@ QtXcbGlIntegrationPlugin {
             "../../../../../platformsupport/eglconvenience/qeglpbuffer.cpp",
             "../../../../../platformsupport/eglconvenience/qeglconvenience.cpp",
         ]
-        fileTags: "moc"
-        overrideTags: false
     }
 }

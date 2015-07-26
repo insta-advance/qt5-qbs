@@ -1,10 +1,13 @@
 import qbs
 
-QtProduct {
-    type: "staticlibrary"
-    condition: qbs.targetOS.contains("linux") && !qbs.targetOS.contains("android")
+StaticLibrary {
+    condition: project.xcb
+    destinationDirectory: project.buildDirectory + "/lib"
+    profiles: project.targetProfiles
 
-    readonly property path basePath: project.sourcePath + "/qtbase/src/3rdparty/xcb"
+    readonly property path basePath: project.sourceDirectory + "/qtbase/src/3rdparty/xcb"
+
+    Depends { name: "cpp" }
 
     cpp.cFlags: [
         "-Wno-implicit-function-declaration",
@@ -42,8 +45,8 @@ QtProduct {
     Export {
         Depends { name: "cpp" }
         cpp.includePaths: [
-            project.sourcePath + "/qtbase/src/3rdparty/xcb/include",
-            project.sourcePath + "/qtbase/src/3rdparty/xcb/sysinclude",
+            project.sourceDirectory + "/qtbase/src/3rdparty/xcb/include",
+            project.sourceDirectory + "/qtbase/src/3rdparty/xcb/sysinclude",
         ]
     }
 }

@@ -1,25 +1,58 @@
 import qbs
-import qbs.File
 
-Project {
+QmlPlugin {
     name: "QtGraphicalEffects"
-    condition: File.exists(project.sourcePath + "/qtgraphicaleffects")
-    QmlPlugin {
-        name: "QtGraphicalEffects"
-        condition: configure.graphicaleffects !== false
-        pluginPath: "QtGraphicalEffects"
-        type: "qml"
+    pluginPath: "QtGraphicalEffects"
+    type: "qml"
 
-        Group {
-            name: "qml"
-            prefix: project.sourcePath + "/qtgraphicaleffects/src/effects/"
-            files: [
-                "*.qml",
-                "private",
-                "qmldir",
-            ]
-            qbs.install: true
-            qbs.installDir: "qml/" + pluginPath
-        }
+    Group {
+        name: "qml"
+        prefix: project.sourceDirectory + "/qtgraphicaleffects/src/effects/"
+        files: [
+            "qmldir",
+            "Blend.qml",
+            "BrightnessContrast.qml",
+            "Colorize.qml",
+            "ColorOverlay.qml",
+            "ConicalGradient.qml",
+            "Desaturate.qml",
+            "DirectionalBlur.qml",
+            "Displace.qml",
+            "DropShadow.qml",
+            "FastBlur.qml",
+            "GammaAdjust.qml",
+            "GaussianBlur.qml",
+            "Glow.qml",
+            "HueSaturation.qml",
+            "InnerShadow.qml",
+            "LevelAdjust.qml",
+            "LinearGradient.qml",
+            "MaskedBlur.qml",
+            "OpacityMask.qml",
+            "RadialBlur.qml",
+            "RadialGradient.qml",
+            "RectangularGlow.qml",
+            "RecursiveBlur.qml",
+            "ThresholdMask.qml",
+            "ZoomBlur.qml",
+        ]
+        qbs.install: true
+        qbs.installDir: "qml/" + pluginPath
+    }
+
+    Group {
+        name: "qml_private"
+        prefix: project.sourceDirectory + "/qtgraphicaleffects/src/effects/private/"
+        files: [
+            "FastGlow.qml",
+            "FastInnerShadow.qml",
+            "FastMaskedBlur.qml",
+            "GaussianDirectionalBlur.qml",
+            "GaussianGlow.qml",
+            "GaussianInnerShadow.qml",
+            "GaussianMaskedBlur.qml",
+        ]
+        qbs.install: true
+        qbs.installDir: "qml/" + pluginPath + "/private"
     }
 }

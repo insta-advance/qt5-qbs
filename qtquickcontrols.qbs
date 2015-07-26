@@ -5,26 +5,19 @@ import qbs.TextFile
 
 Project {
     name: "QtQuickControls"
-    condition: File.exists(project.sourcePath + "/qtquickcontrols")
+    condition: File.exists(project.sourceDirectory + "/qtquickcontrols")
 
     QmlPlugin {
         name: "QtQuickControls"
-        condition: configure.quickcontrols !== false
+        condition: project.quickcontrols !== false
         targetName: "qtquickcontrolsplugin"
         pluginPath: "QtQuick/Controls"
 
-        readonly property string basePath: project.sourcePath + "/qtquickcontrols/src/controls"
-
-        includeDependencies: {
-            var includeDependencies = ["QtCore-private", "QtGui-private", "QtQml-private", "QtQuick-private"];
-            if (configure.widgets !== false)
-                includeDependencies.push("QtWidgets");
-            return includeDependencies;
-        }
+        readonly property string basePath: project.sourceDirectory + "/qtquickcontrols/src/controls"
 
         cpp.defines: {
             var defines = base;
-            if (configure.widgets !== false)
+            if (project.widgets !== false)
                 defines.push("QT_NO_WIDGETS");
             return defines;
         }
@@ -33,7 +26,7 @@ Project {
         Depends { name: "QtGui" }
         Depends { name: "QtQml" }
         Depends { name: "QtQuick" }
-        Depends { name: "QtWidgets"; condition: configure.widgets }
+        Depends { name: "QtWidgets"; condition: project.widgets }
 
         Group {
             name: "headers"
@@ -44,13 +37,11 @@ Project {
             ]
             excludeFiles: {
                 var excludeFiles = [];
-                if (!configure.widgets) {
+                if (!project.widgets) {
                     excludeFiles.push("Private/qquickstyleitem_p.h");
                 }
                 return excludeFiles;
             }
-            fileTags: "moc"
-            overrideTags: false
         }
 
         Group {
@@ -62,13 +53,11 @@ Project {
             ]
             excludeFiles: {
                 var excludeFiles = [];
-                if (!configure.widgets) {
+                if (!project.widgets) {
                     excludeFiles.push("Private/qquickstyleitem.cpp");
                 }
                 return excludeFiles;
             }
-            fileTags: "moc"
-            overrideTags: false
         }
 
         Group {
@@ -118,11 +107,11 @@ Project {
 
     QmlPlugin {
         name: "QtQuickControls.Private"
-        condition: configure.quickcontrols !== false
+        condition: project.quickcontrols !== false
         type: "qml" // no library, only installs
         pluginPath: "QtQuick/Controls/Private"
 
-        readonly property string basePath: project.sourcePath + "/qtquickcontrols/src/controls/Private"
+        readonly property string basePath: project.sourceDirectory + "/qtquickcontrols/src/controls/Private"
 
         Group {
             name: "qml"
@@ -135,11 +124,11 @@ Project {
 
     QmlPlugin {
         name: "QtQuick.Controls.Styles"
-        condition: configure.quickcontrols !== false
+        condition: project.quickcontrols !== false
         type: "qml" // no library, only installs
         pluginPath: "QtQuick/Controls/Styles"
 
-        readonly property string basePath: project.sourcePath + "/qtquickcontrols/src/controls/Styles"
+        readonly property string basePath: project.sourceDirectory + "/qtquickcontrols/src/controls/Styles"
 
         /*Group {
             name: "qml"
@@ -170,13 +159,11 @@ Project {
 
     QmlPlugin {
         name: "QtQuick.Layouts"
-        condition: configure.quickcontrols !== false
+        condition: project.quickcontrols !== false
         targetName: "qquicklayoutsplugin"
         pluginPath: "QtQuick/Layouts"
 
-        readonly property string basePath: project.sourcePath + "/qtquickcontrols/src/layouts"
-
-        includeDependencies: ["QtCore-private", "QtGui-private", "QtQml-private", "QtQuick-private"]
+        readonly property string basePath: project.sourceDirectory + "/qtquickcontrols/src/layouts"
 
         Depends { name: "QtCore" }
         Depends { name: "QtGui" }
@@ -187,16 +174,12 @@ Project {
             name: "headers"
             prefix: basePath + '/'
             files: "*.h"
-            fileTags: "moc"
-            overrideTags: false
         }
 
         Group {
             name: "sources"
             prefix: basePath + '/'
             files: "*.cpp"
-            fileTags: "moc"
-            overrideTags: false
         }
 
         Group {

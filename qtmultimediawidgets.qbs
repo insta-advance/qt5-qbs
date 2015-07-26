@@ -4,12 +4,10 @@ Project {
     name: "QtMultimediaWidgets"
 
     QtModule {
-        condition: configure.multimedia !== false && configure.widgets && configure.multimediawidgets !== false
+        condition: project.multimedia !== false && project.widgets && project.multimediawidgets !== false
         name: "QtMultimediaWidgets"
 
-        readonly property path basePath: project.sourcePath + "/qtmultimedia/src/multimediawidgets"
-
-        includeDependencies: ["QtCore", "QtGui", "QtWidgets", "QtMultimedia-private", "QtMultimediaWidgets-private"]
+        readonly property path basePath: project.sourceDirectory + "/qtmultimedia/src/multimediawidgets"
 
         cpp.defines: [
             "QT_BUILD_MULTIMEDIAWIDGETS_LIB",
@@ -24,12 +22,10 @@ Project {
 
         QtMultimediaWidgetsHeaders {
             name: "headers"
-            fileTags: "moc"
             excludeFiles: [
                 "doc/**",
                 "qeglimagetexturesurface_p.h", // QtOpenGL
             ]
-            overrideTags: false
         }
 
         Group {
@@ -42,8 +38,6 @@ Project {
                 "qeglimagetexturesurface.cpp", // QtOpenGL
                 "qgraphicsvideoitem_maemo6.cpp", // maemo
             ]
-            fileTags: "moc"
-            overrideTags: false
         }
     }
 }

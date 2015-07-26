@@ -1,14 +1,14 @@
-function qtVersion(sourcePath)
+function qtVersion(sourceDirectory)
 {
-    if (!File.exists(sourcePath + "/qtbase")) {
-        throw "The qtbase repository is required for detecting the Qt version. Please do one of the following:\n"
-              + " - Specify project.sourcePath:<path to Qt sources> on the command line.\n"
+    if (!File.exists(sourceDirectory + "/qtbase")) {
+        throw "The qtbase source directory is required for detecting the Qt version. Please do one of the following:\n"
+              + " - Specify project.sourceDirectory:<path to Qt sources> on the command line.\n"
               + " - Set an environment variable named QT_SOURCE containing the path to your Qt sources.\n"
               + " - Clone/unpack the qtbase repository into the qt5-qbs directory.\n";
     }
 
     var version = "";
-    var file = new TextFile(sourcePath + "/qtbase/src/corelib/global/qglobal.h");
+    var file = new TextFile(sourceDirectory + "/qtbase/src/corelib/global/qglobal.h");
     var reVersion = /#define QT_VERSION_STR +"(\d\.\d\.\d)"/;
     while (!file.atEof()) {
         var line = file.readLine();
@@ -25,9 +25,30 @@ function qtVersion(sourcePath)
     return version;
 }
 
+function detectHostMkspec(hostOS, toolchain)
+{
+    if (hostOS.contains("linux")) {
+        if (toolchain.contains("icc"))
+            return "linux-icc";
+        if (toolchain.contains("clang"))
+           return "linux-clang";
+        if (toolchain.contains("gcc"))
+            return "linux-g++";
+    } else if (hostOS.contains("windows")) {
+        if (toolchain.contains("msvc"))
+            return "win32-msvc2005"; // All msvc mkspecs point to the same platformdefs
+        if (toolchain.contains("mingw"))
+            return "win32-g++";
+    }
+    print("Unable to determine host mkspec.");
+    return "unknown";
+}
+
 function detectTargetMkspec(targetOS, toolchain, architecture)
 {
-    if (targetOS.contains("linux")) {
+    if (targetOS.contains("android")) {
+        return "android-g++";
+    } else if (targetOS.contains("linux")) {
         if (toolchain.contains("clang"))
             return "linux-clang";
         else if (toolchain.contains("gcc"))
@@ -54,23 +75,32 @@ function detectTargetMkspec(targetOS, toolchain, architecture)
         if (toolchain.contains("mingw"))
             return "win32-g++";
         else if (toolchain.contains("msvc"))
-            return "win32-msvc2013";
+            return "win32-msvc2005"; // All msvc mkspecs point to the same platformdefs
     }
     return "";
 }
 
 function includesForModule(module, base, qtVersion) {
-    var includes = [];
+    var includes = [base];
     if (module.endsWith("-private")) {
         module = module.slice(0, -8);
         includes.push(base + "/" + module + "/" + qtVersion);
         includes.push(base + "/" + module + "/" + qtVersion + "/" + module);
         includes.push(base + "/" + module + "/" + qtVersion + "/" + module + "/private");
-        if (module == "QtGui")
+        if (module === "QtGui")
             includes.push(base + "/" + module + "/" + qtVersion + "/" + module + "/qpa");
     }
     includes.push(base + '/' + module);
     return includes;
+}
+
+function includePaths(cflags) {
+    var includePaths = [];
+    for (var i in cflags) {
+        if (cflags[i].startsWith("-I"))
+            includePaths.push(cflags[i].slice(2));
+    }
+    return includePaths;
 }
 
 function libraryPaths(libs) {

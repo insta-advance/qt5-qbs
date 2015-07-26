@@ -3,7 +3,7 @@ import qbs.File
 
 Project {
     name: "QtSvg"
-    condition: File.exists(project.sourcePath + "/qtsvg")
+    condition: File.exists(project.sourceDirectory + "/qtsvg")
 
     references: [
         "plugins/imageformats/svg.qbs",
@@ -11,33 +11,21 @@ Project {
 
     QtModule {
         name: "QtSvg"
-        condition: configure.svg !== false
-        readonly property path basePath: project.sourcePath + "/qtsvg/src/svg"
+        condition: project.svg !== false
+        readonly property path basePath: project.sourceDirectory + "/qtsvg/src/svg"
 
-        includeDependencies: {
-            var includeDependencies = ["QtCore-private", "QtGui-private", "QtSvg-private"];
-            if (configure.widgets)
-                includeDependencies.push("QtWidgets-private");
-            return includeDependencies;
-        }
-
-        cpp.defines: {
-            var defines = base;
-            if (!configure.widgets)
-                defines.push("QT_NO_WIDGETS");
-            return defines;
-        }
+        cpp.defines: [
+            "QT_BUILD_SVG_LIB",
+        ].concat(base)
 
         Depends { name: "zlib" }
         Depends { name: "QtSvgHeaders" }
         Depends { name: "QtCore" }
         Depends { name: "QtGui" }
-        Depends { name: "QtWidgets"; condition: configure.widgets }
+        Depends { name: "QtWidgets"; condition: project.widgets }
 
         QtSvgHeaders {
             name: "headers"
-            fileTags: "moc"
-            overrideTags: false
         }
 
         Group {
@@ -46,8 +34,6 @@ Project {
             files: [
                 "*.cpp",
             ]
-            fileTags: "moc"
-            overrideTags: false
         }
     }
 }

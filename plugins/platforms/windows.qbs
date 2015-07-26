@@ -1,51 +1,74 @@
 import qbs
 
 QtPlugin {
-    condition: configure.gui && qbs.targetOS.contains("windows")
+    condition: project.gui && qbs.targetOS.contains("windows")
     category: "platforms"
     targetName: "qwindows"
 
-    readonly property path basePath: project.sourcePath + "/qtbase/src/plugins/platforms/windows"
-
-    includeDependencies: ["QtCore-private", "QtGui-private", "QtPlatformSupport-private"]
-
-    cpp.includePaths: [
-        basePath,
-    ].concat(base)
-
-    cpp.defines: [
-        "QT_NO_TABLETEVENT", // ### qwindowstabletsupport fails to find wintab.h (?)
-    ].concat(base)
+    readonly property path basePath: project.sourceDirectory + "/qtbase/src/plugins/platforms/windows/"
 
     cpp.dynamicLibraries: [
         "gdi32",
-    ]
+    ].concat(base)
 
-    Depends { name: "angle-gles2"; condition: configure.angle; required: false }
+    cpp.includePaths: [
+        project.sourceDirectory + "/qtbase/src/3rdparty/wintab",
+    ].concat(base)
+
+    Depends { name: "angle-egl"; condition: project.egl }
+    Depends { name: "angle-gles2"; condition: project.angle }
     Depends { name: "freetype" }
     Depends { name: "QtCore" }
     Depends { name: "QtGui" }
-
-    Group {
-        name: "headers"
-        prefix: basePath + "/"
-        files: [
-            "*.h",
-        ]
-        fileTags: "moc"
-        overrideTags: false
-    }
+    Depends { name: "QtCoreHeaders" }
+    Depends { name: "QtGuiHeaders" }
+    Depends { name: "QtPlatformSupport" }
 
     Group {
         name: "sources"
-        prefix: basePath + "/"
+        prefix: basePath
         files: [
-            "*.cpp",
+            "main.cpp",
+            "qwindowsbackingstore.cpp",
+            "qwindowsclipboard.cpp",
+            "qwindowscontext.cpp",
+            "qwindowscursor.cpp",
+            "qwindowsdialoghelpers.cpp",
+            "qwindowsdrag.cpp",
+            "qwindowsfontdatabase.cpp",
+            "qwindowsfontdatabase_ft.cpp",
+            "qwindowsfontengine.cpp",
+            "qwindowsfontenginedirectwrite.cpp",
+            "qwindowsgdiintegration.cpp",
+            "qwindowsgdinativeinterface.cpp",
+            "qwindowsglcontext.cpp",
+            "qwindowsguieventdispatcher.cpp",
+            "qwindowsinputcontext.cpp",
+            "qwindowsintegration.cpp",
+            "qwindowsinternalmimedata.cpp",
+            "qwindowskeymapper.cpp",
+            "qwindowsmime.cpp",
+            "qwindowsmousehandler.cpp",
+            "qwindowsnativeimage.cpp",
+            "qwindowsnativeinterface.cpp",
+            "qwindowsole.cpp",
+            "qwindowsopengltester.cpp",
+            "qwindowsscaling.cpp",
+            "qwindowsscreen.cpp",
+            "qwindowsservices.cpp",
+            "qwindowssessionmanager.cpp",
+            "qwindowstabletsupport.cpp",
+            "qwindowstheme.cpp",
+            "qwindowswindow.cpp",
         ]
-        excludeFiles: [
-            "qwindowsglcontext.cpp", // ### fixme
+    }
+
+    Group {
+        name: "sources_egl"
+        condition: project.egl
+        prefix: basePath
+        files: [
+            "qwindowseglcontext.cpp",
         ]
-        fileTags: "moc"
-        overrideTags: false
     }
 }

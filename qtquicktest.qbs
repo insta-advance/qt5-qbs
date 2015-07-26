@@ -8,11 +8,9 @@ Project {
     QtModule {
         name: "QtQuickTest"
         simpleName: "qmltest"
-        condition: configure.qmltest !== false
+        condition: project.qmltest !== false
 
-        readonly property path basePath: project.sourcePath + "/qtdeclarative/src/qmltest"
-
-        includeDependencies: ["QtCore-private", "QtGui", "QtQml-private", "QtQuick", "QtQuickTest-private", "QtTest-private"]
+        readonly property path basePath: project.sourceDirectory + "/qtdeclarative/src/qmltest"
 
         cpp.defines: [
             "QT_QUICKTEST_LIB", "QT_GUI_LIB",
@@ -27,8 +25,6 @@ Project {
 
         QtQuickTestHeaders {
             name: "headers"
-            fileTags: "moc"
-            overrideTags: false
         }
 
         Group {
@@ -37,21 +33,17 @@ Project {
             files: [
                 "*.cpp",
             ]
-            fileTags: "moc"
-            overrideTags: false
         }
     }
 
     Project {
         name: "imports"
         QmlPlugin {
-            condition: configure.qmltest !== false
+            condition: project.qmltest !== false
             targetName: "qmltestplugin"
             pluginPath: "QtTest"
 
-            readonly property string basePath: project.sourcePath + "/qtdeclarative/src/imports/testlib"
-
-            includeDependencies: ["QtCore-private", "QtQml-private", "QtQuickTest-private"]
+            readonly property string basePath: project.sourceDirectory + "/qtdeclarative/src/imports/testlib"
 
             Depends { name: "QtCore" }
             Depends { name: "QtGui" }
@@ -63,8 +55,6 @@ Project {
                 name: "sources"
                 prefix: basePath + "/"
                 files: "main.cpp"
-                fileTags: "moc"
-                overrideTags: false
             }
 
             Group {

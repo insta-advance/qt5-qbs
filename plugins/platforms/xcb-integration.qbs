@@ -1,101 +1,52 @@
 import qbs
-import qbs.ModUtils
-import qbs.Probes
-import "../../qbs/imports/QtUtils.js" as QtUtils
 
 QtModule {
     name: "QtXcbQpa"
-    condition: configure.xcb
+    condition: project.xcb
 
-    readonly property path basePath: project.sourcePath + "/qtbase/src/plugins/platforms/xcb"
+    readonly property path basePath: project.sourceDirectory + "/qtbase/src/plugins/platforms/xcb"
 
-    includeDependencies: ["QtCore-private", "QtGui-private", "QtPlatformSupport-private"]
-
-    readonly property stringList defines: {
-        var defines = [];
-        if (!configure.dbus) {
-            defines.push("QT_NO_DBUS");
-            defines.push("QT_NO_ACCESSIBILITY_ATSPI_BRIDGE");
-        }
-        if (!configure.xkb)
-            defines.push("QT_NO_XKB");
-        if (!configure.cursor)
-            defines.push("QT_NO_CURSOR");
-        if (!configure.glib)
-            defines.push("QT_NO_GLIB");
-        return defines;
-    }
+    Depends { name: "egl" }
+    Depends { name: "freetype2" }
+    Depends { name: "qt-xcb" }
+    Depends { name: "xkbcommon" }
+    Depends { name: "glib"; condition: project.glib }
+    Depends { name: "gl"; condition: project.opengl }
+    Depends { name: "libudev"; condition: project.libudev }
+    Depends { name: "ice"; condition: project.xcb_sm }
+    Depends { name: "sm"; condition: project.xcb_sm }
+    Depends { name: "xcb-image" }
+    Depends { name: "xcb-xfixes" }
+    Depends { name: "xcb-randr" }
+    Depends { name: "xcb-sync" }
+    Depends { name: "xcb-keysyms" }
+    Depends { name: "xcb-icccm" }
+    Depends { name: "QtCoreHeaders" }
+    Depends { name: "QtCore" }
+    Depends { name: "QtGuiHeaders" }
+    Depends { name: "QtGui" }
+    Depends { name: "QtPlatformHeaders" }
+    Depends { name: "QtPlatformSupport" }
+    Depends { name: "QtDBusHeaders"; condition: project.dbus }
 
     cpp.defines: [
         "QT_BUILD_XCB_DEVICE_LIB",
         "MESA_EGL_NO_X11_HEADERS",
-    ].concat(base).concat(product.defines)
+        "QT_NO_DBUS", // ### fixme
+        "QT_NO_ACCESSIBILITY_ATSPI_BRIDGE", // ### fixme
+    ].concat(base)
 
     cpp.dynamicLibraries: [
         "pthread",
         "dl",
-    ].concat(QtUtils.dynamicLibraries(xcbImageProbe.libs)).concat(
-             QtUtils.dynamicLibraries(xcbKeysymsProbe.libs)).concat(
-             QtUtils.dynamicLibraries(xcbRandrProbe.libs)).concat(
-             QtUtils.dynamicLibraries(xcbSyncProbe.libs)).concat(
-             QtUtils.dynamicLibraries(xcbIcccmProbe.libs)).concat(
-             QtUtils.dynamicLibraries(xcbXfixesProbe.libs)).concat(base)
+    ].concat(base)
 
 
     cpp.includePaths: [
         basePath,
         basePath + "/gl_integrations",
-        project.sourcePath + "/qtbase/src/3rdparty/freetype/include", // ### use Probe for system freetype
+        project.sourceDirectory + "/qtbase/src/3rdparty/freetype/include", // ### use Probe for system freetype
     ].concat(base)
-
-    // ### move these to the xcb-x11 depends project
-    Probes.PkgConfigProbe {
-        id: xcbImageProbe
-        executable: cpp.toolchainInstallPath + "/pkg-config"
-        name: "xcb-image"
-    }
-
-    Probes.PkgConfigProbe {
-        id: xcbXfixesProbe
-        executable: cpp.toolchainInstallPath + "/pkg-config"
-        name: "xcb-xfixes"
-    }
-
-    Probes.PkgConfigProbe {
-        id: xcbRandrProbe
-        executable: cpp.toolchainInstallPath + "/pkg-config"
-        name: "xcb-randr"
-    }
-
-    Probes.PkgConfigProbe {
-        id: xcbSyncProbe
-        executable: cpp.toolchainInstallPath + "/pkg-config"
-        name: "xcb-sync"
-    }
-
-    Probes.PkgConfigProbe {
-        id: xcbKeysymsProbe
-        executable: cpp.toolchainInstallPath + "/pkg-config"
-        name: "xcb-keysyms"
-    }
-
-    Probes.PkgConfigProbe {
-        id: xcbIcccmProbe
-        executable: cpp.toolchainInstallPath + "/pkg-config"
-        name: "xcb-icccm"
-    }
-
-    Depends { name: "egl" }
-    Depends { name: "qt-xcb" }
-    //Depends { name: "xcb-x11" }
-    Depends { name: "xkbcommon" }
-    Depends { name: "glib"; condition: configure.glib }
-    Depends { name: "opengl" }
-    Depends { name: "udev"; condition: configure.udev }
-    Depends { name: "QtCore" }
-    Depends { name: "QtGui" }
-    Depends { name: "QtPlatformHeaders" }
-    Depends { name: "QtPlatformSupport" }
 
     Group {
         name: "headers"
@@ -109,19 +60,17 @@ QtModule {
                 "../../../platformsupport/themes/genericunix/qgenericunixthemes_p.h",
                 "../../../platformsupport/services/genericunix/qgenericunixservices.cpp",
             ]
-            if (configure.glib) {
+            if (project.glib) {
                 files.push("../../../platformsupport/eventdispatchers/qeventdispatcher_glib_p.h");
             }
             return files;
         }
         excludeFiles: {
             var excludeFiles = [];
-            if (!configure["xcb-sm"])
+            if (!project.xcb_sm)
                 excludeFiles.push("qxcbsessionmanager.h");
             return excludeFiles;
         }
-        fileTags: "moc"
-        overrideTags: false
     }
 
     Group {
@@ -136,19 +85,17 @@ QtModule {
                 "../../../platformsupport/themes/genericunix/qgenericunixthemes.cpp",
                 "../../../platformsupport/fontdatabases/basic/qbasicfontdatabase.cpp",
             ];
-            if (configure.glib) {
+            if (project.glib) {
                 files.push("../../../platformsupport/eventdispatchers/qeventdispatcher_glib.cpp");
             }
             return files;
         }
         excludeFiles: {
             var excludeFiles = [];
-            if (!configure["xcb-sm"])
+            if (!project.xcb_sm)
                 excludeFiles.push("qxcbsessionmanager.cpp");
             return excludeFiles;
         }
-        fileTags: "moc"
-        overrideTags: false
     }
 
     Export {

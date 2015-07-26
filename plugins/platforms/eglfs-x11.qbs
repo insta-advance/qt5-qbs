@@ -1,7 +1,7 @@
 import qbs
 
 QtEglDeviceIntegrationPlugin {
-    condition: configure.egl && configure.x11
+    condition: project.eglfs_x11
 
     cpp.defines: [
         "MESA_EGL_NO_X11_HEADERS", // for Mesa
@@ -16,8 +16,6 @@ QtEglDeviceIntegrationPlugin {
         files: [
             "*.h",
         ]
-        fileTags: "moc"
-        overrideTags: false
     }
 
     Group {
@@ -26,7 +24,5 @@ QtEglDeviceIntegrationPlugin {
         files: [
             "*.cpp",
         ]
-        fileTags: "moc"
-        overrideTags: false
     }
 }

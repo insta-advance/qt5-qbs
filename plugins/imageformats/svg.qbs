@@ -3,9 +3,7 @@ import qbs
 QtPlugin {
     targetName: "qsvg"
     category: "imageformats"
-    condition: configure.svg !== false
-
-    includeDependencies: ["QtCore", "QtGui", "QtSvg"]
+    condition: project.svg !== false
 
     Depends { name: "QtCore" }
     Depends { name: "QtGui" }
@@ -13,17 +11,13 @@ QtPlugin {
 
     Group {
         name: "headers"
-        prefix: project.sourcePath + "/qtsvg/src/plugins/imageformats/svg/"
+        prefix: project.sourceDirectory + "/qtsvg/src/plugins/imageformats/svg/"
         files: "*.h"
-        fileTags: "moc"
-        overrideTags: false
     }
 
     Group {
         name: "sources"
-        prefix: project.sourcePath + "/qtsvg/src/plugins/imageformats/svg/"
+        prefix: project.sourceDirectory + "/qtsvg/src/plugins/imageformats/svg/"
         files: "*.cpp"
-        fileTags: "moc"
-        overrideTags: false
     }
 }

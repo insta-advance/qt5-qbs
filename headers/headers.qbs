@@ -4,105 +4,131 @@ import qbs.File
 Project {
     name: "headers"
 
+    /*QtHeaders {
+        name: "QtBootstrapHeaders"
+        sync.module: "QtCore"
+        profiles: project.hostProfile
+        QtBootstrapHeaders { fileTags: "header_sync" }
+    }*/
+
+    QtHeaders {
+        name: "QtConcurrentHeaders"
+        sync.module: "QtConcurrent"
+        sync.classNames: ({
+            "qtconcurrentmap.h": ["QtConcurrentMap"],
+            "qtconcurrentfilter.h": ["QtConcurrentFilter"],
+            "qtconcurrentrun.h": ["QtConcurrentRun"],
+        })
+        QtConcurrentHeaders { fileTags: "header_sync" }
+    }
+
     QtHeaders {
         name: "QtCoreHeaders"
-        module: "QtCore"
+        sync.module: "QtCore"
+        sync.classNames: ({
+            "qglobal.h": ["QtGlobal"],
+            "qendian.h": ["QtEndian"],
+            "qconfig.h": ["QtConfig"],
+            "qplugin.h": ["QtPlugin"],
+            "qalgorithms.h": ["QtAlgorithms"],
+            "qcontainerfwd.h": ["QtContainerFwd"],
+            "qdebug.h": ["QtDebug"],
+            "qevent.h": ["QtEvents"],
+            "qnamespace.h": ["Qt"],
+            "qnumeric.h": ["QtNumeric"],
+            "qvariant.h": ["QVariantHash", "QVariantList", "QVariantMap"],
+            "qbytearray.h": ["QByteArrayData"],
+            "qbytearraylist.h": ["QByteArrayList"],
+            /*"qgl.h": ["QGL"],
+            "qsql.h": ["QSql"],
+            "qssl.h": ["QSsl"],
+            "qtest.h": ["QTest"],
+            */
+        })
         QtCoreHeaders { fileTags: "header_sync" }
+    }
 
-        // Copy dummy headers
-        Group {
-            name: "dummy headers"
-            prefix: project.sourceDirectory + "/include/QtCore/"
-            files: [ "qconfig.h", "qfeatures.h" ]
-            fileTags: "hpp_dummy"
-        }
-
-        Rule {
-            inputs: "hpp_dummy"
-            Artifact {
-                filePath: project.buildDirectory + "/include/QtCore/" + input.fileName
-                fileTags: "hpp"
-            }
-            prepare: {
-                var cmd = new JavaScriptCommand();
-                cmd.silent = true;
-                cmd.sourceCode = function() {
-                    File.copy(input.filePath, output.filePath);
-                };
-                return cmd;
-            }
-        }
+    QtHeaders {
+        name: "QtDBusHeaders"
+        sync.module: "QtDBus"
+        QtDBusHeaders { fileTags: "header_sync" }
     }
 
     QtHeaders {
         name: "QtGuiHeaders"
-        module: "QtGui"
+        sync.module: "QtGui"
         QtGuiHeaders { fileTags: "header_sync" }
     }
 
     QtHeaders {
         name: "QtNetworkHeaders"
-        module: "QtNetwork"
+        sync.module: "QtNetwork"
         QtNetworkHeaders { fileTags: "header_sync" }
     }
 
     QtHeaders {
         name: "QtWidgetHeaders"
-        module: "QtWidgets"
+        sync.module: "QtWidgets"
         QtWidgetHeaders { fileTags: "header_sync" }
     }
 
     QtHeaders {
         name: "QtPlatformHeaders"
-        module: "QtPlatformHeaders"
+        sync.module: "QtPlatformHeaders"
         QtPlatformHeaders { fileTags: "header_sync" }
     }
 
     QtHeaders {
         name: "QtPlatformSupport"
-        module: "QtPlatformSupport"
+        sync.module: "QtPlatformSupport"
         QtPlatformSupport { fileTags: "header_sync" }
     }
 
     QtHeaders {
         name: "QtQmlHeaders"
-        module: "QtQml"
+        sync.module: "QtQml"
         QtQmlHeaders { fileTags: "header_sync" }
     }
 
     QtHeaders {
         name: "QtQuickHeaders"
-        module: "QtQuick"
+        sync.module: "QtQuick"
         QtQuickHeaders { fileTags: "header_sync" }
     }
 
     QtHeaders {
         name: "QtMultimediaHeaders"
-        module: "QtMultimedia"
+        sync.module: "QtMultimedia"
         QtMultimediaHeaders { fileTags: "header_sync" }
     }
 
     QtHeaders {
         name: "QtMultimediaWidgetsHeaders"
-        module: "QtMultimediaWidgets"
+        sync.module: "QtMultimediaWidgets"
         QtMultimediaWidgetsHeaders { fileTags: "header_sync" }
     }
 
     QtHeaders {
         name: "QtSvgHeaders"
-        module: "QtSvg"
+        sync.module: "QtSvg"
         QtSvgHeaders { fileTags: "header_sync" }
     }
 
     QtHeaders {
         name: "QtTestHeaders"
-        module: "QtTest"
+        sync.module: "QtTest"
         QtTestHeaders { fileTags: "header_sync" }
     }
 
     QtHeaders {
         name: "QtQuickTestHeaders"
-        module: "QtQuickTest"
+        sync.module: "QtQuickTest"
         QtQuickTestHeaders { fileTags: "header_sync" }
+    }
+
+    QtHeaders {
+        name: "QtXmlHeaders"
+        sync.module: "QtXml"
+        QtXmlHeaders { fileTags: "header_sync" }
     }
 }

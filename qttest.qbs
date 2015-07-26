@@ -2,39 +2,50 @@ import qbs
 import qbs.File
 import qbs.Probes
 
-Project {
+QtModule {
     name: "QtTest"
+    simpleName: "testlib"
 
-    QtModule {
-        name: "QtTest"
-        simpleName: "testlib"
-        condition: configure.testlib !== false
+    readonly property path basePath: project.sourceDirectory + "/qtbase/src/testlib/"
 
-        readonly property path basePath: project.sourcePath + "/qtbase/src/testlib"
+    cpp.defines: [
+        "QT_BUILD_TESTLIB_LIB",
+    ].concat(base)
 
-        includeDependencies: ["QtCore-private", "QtTest-private"]
+    Depends { name: "QtCoreHeaders" }
+    Depends { name: "QtTestHeaders" }
+    Depends { name: "QtCore" }
 
-        cpp.defines: [
-            "QT_GUI_LIB",
-        ].concat(base)
+    QtTestHeaders {
+        name: "headers"
+    }
 
-        Depends { name: "QtTestHeaders" }
-        Depends { name: "QtCore" }
-
-        QtTestHeaders {
-            name: "headers"
-            fileTags: "moc"
-            overrideTags: false
-        }
-
-        Group {
-            name: "sources"
-            prefix: basePath + "/"
-            files: [
-                "*.cpp",
-            ]
-            fileTags: "moc"
-            overrideTags: false
-        }
+    Group {
+        name: "sources"
+        prefix: basePath
+        files: [
+            "qabstracttestlogger.cpp",
+            "qasciikey.cpp",
+            "qbenchmark.cpp",
+            "qbenchmarkevent.cpp",
+            "qbenchmarkmeasurement.cpp",
+            "qbenchmarkmetric.cpp",
+            "qbenchmarkperfevents.cpp",
+            "qbenchmarkvalgrind.cpp",
+            "qcsvbenchmarklogger.cpp",
+            "qplaintestlogger.cpp",
+            "qsignaldumper.cpp",
+            "qtestblacklist.cpp",
+            "qtestcase.cpp",
+            "qtestdata.cpp",
+            "qtestelement.cpp",
+            "qtestelementattribute.cpp",
+            "qtestlog.cpp",
+            "qtestresult.cpp",
+            "qtesttable.cpp",
+            "qtestxunitstreamer.cpp",
+            "qxmltestlogger.cpp",
+            "qxunittestlogger.cpp",
+        ]
     }
 }

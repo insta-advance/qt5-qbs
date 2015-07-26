@@ -2,7 +2,10 @@ import qbs
 
 Group {
     name: "headers"
-    prefix: project.sourcePath + "/qtbase/src/corelib/"
-    files: "**/*.h"
+    files: [
+        project.sourceDirectory + "/qtbase/src/corelib/**/*.h",
+        project.configDirectory + "/src/corelib/global/qconfig.h",
+        project.configDirectory + "/src/corelib/global/qfeatures.h",
+    ]
     excludeFiles: "doc/**"
 }

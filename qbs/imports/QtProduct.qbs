@@ -3,26 +3,42 @@ import qbs.FileInfo
 import "QtUtils.js" as QtUtils
 
 Product {
-    readonly property path includeDirectory: project.buildDirectory + "/include"
-    property stringList includeDependencies: []
-    property stringList hostToolsEnvironment: [
-        "QT_SELECT=qhost",
-    ]
+    Depends { name: "cpp" }
+    Depends { name: "rcc"; profiles: project.hostProfile }
+    Depends { name: "moc"; profiles: project.hostProfile }
 
-    condition: configure[name] !== false
+    profiles: project.targetProfiles
 
-    cpp.includePaths: {
-        var includes = [
-            includeDirectory,
-            project.sourcePath + "/qtbase/mkspecs/" + project.mkspec,
-            product.buildDirectory + "/.moc",
-            product.buildDirectory + "/.uic",
-        ].concat(base);
-        for (var i in includeDependencies) {
-            var module = includeDependencies[i];
-            Array.prototype.push.apply(includes, QtUtils.includesForModule(module, includeDirectory, project.version));
+    // ### fixme: this causes a lot of warnings for non-Android. For now, require
+    // it be passed on the command line or set in the profile
+    /*Properties {
+        condition: qbs.targetOS.contains("android")
+        Android.ndk.appStl: "gnustl_shared"
+    }*/
+
+    cpp.cxxFlags: {
+        var cxxFlags = [];
+        if (qbs.toolchain.contains("gcc")) {
+            if (sse2)
+                cxxFlags.push("-msse2");
+            if (sse3)
+                cxxFlags.push("-msse3");
+            if (ssse3)
+                cxxFlags.push("-mssse3");
+            if (sse4_1)
+                cxxFlags.push("-msse4.1");
+            if (sse4_2)
+                cxxFlags.push("-msse4.2");
+            if (avx)
+                cxxFlags.push("-mavx");
+            if (avx2)
+                cxxFlags.push("-mavx2");
+            if (neon)
+                cxxFlags.push("-mfpu=neon");
+            if (cxx11)
+                cxxFlags.push("-std=c++11");
         }
-        return includes;
+        return cxxFlags;
     }
 
     cpp.defines: {
@@ -30,6 +46,10 @@ Product {
             "QT_BUILDING_QT",
             "QT_MOC_COMPAT",
             "_USE_MATH_DEFINES",
+            "QT_ASCII_CAST_WARNINGS",
+            "QT_DEPRECATED_WARNINGS",
+            "QT_DISABLE_DEPRECATED_BEFORE=0x040800",
+            "QT_USE_QSTRINGBUILDER",
         ];
 
         if (qbs.targetOS.contains("windows")) {
@@ -38,33 +58,19 @@ Product {
                 defines.push("_SCL_SECURE_NO_WARNINGS");
         }
 
-        if (configure.qreal !== undefined) {
-            defines.push("QT_COORD_TYPE=" + properties.qreal);
-            defines.push('QT_COORD_TYPE_STRING="' + properties.qreal + '"');
-        }
-
-        return defines.concat(configure.baseDefines);
+        return defines;
     }
 
-    Depends { name: "configure" }
-    Depends { name: "cpp" }
+    cpp.includePaths: [
+        project.sourceDirectory + "/qtbase/mkspecs/" + project.targetMkspec,
+        product.buildDirectory + "/.moc",
+        product.buildDirectory + "/.uic",
+        project.buildDirectory + "/include",
+    ]
 
     Properties {
-        condition: qbs.toolchain.contains("gcc") && !qbs.toolchain.contains("clang")
-        cpp.cxxFlags: [
-            "-Wno-psabi"
-        ].concat(base)
-    }
-
-    Properties {
-        condition: qbs.toolchain.contains("gcc")
-        cpp.cxxFlags: {
-            var cxxFlags = base;
-            if (configure.cxx11)
-                cxxFlags.push("-std=c++11");
-            return cxxFlags;
-        }
-        cpp.rpaths: project.prefix + "/lib"
+        condition: qbs.toolchain.contains("gcc") && project.rpath
+        cpp.rpaths: qbs.installRoot + "/lib"
     }
 
     Rule {
@@ -103,7 +109,7 @@ Product {
         }
         prepare: {
             var arguments = [
-                "--no-warnings",
+                //"--no-warnings",
             ];
 
             var defines = product.moduleProperty("cpp", "defines");
@@ -128,11 +134,10 @@ Product {
 
             var commands = [];
             for (var i in allOutputs) {
-                var cmd = new Command("moc", arguments.concat([
+                var cmd = new Command(project.buildDirectory + "/bin/moc", arguments.concat([
                     input.fileName, "-o", allOutputs[i].filePath,
                 ]));
                 cmd.workingDirectory = FileInfo.path(input.filePath);
-                cmd.environment = product.hostToolsEnvironment;
                 cmd.description = "moc " + input.fileName;
                 cmd.highlight = "codegen";
                 commands.push(cmd);
@@ -142,18 +147,17 @@ Product {
     }
 
     Rule {
-        inputs: "qrc"
+        inputs: "rcc"
         Artifact {
             fileTags: "cpp"
             filePath: product.buildDirectory + "/.rcc/" + input.baseName + "_rcc.cpp"
         }
         prepare: {
-            var cmd = new Command("rcc", [
+            var cmd = new Command(project.buildDirectory  + "/bin/rcc", [
                 input.filePath,
                 "--name", input.baseName,
                 "-o", output.filePath,
             ]);
-            cmd.environment = product.hostToolsEnvironment;
             cmd.description = "rcc " + input.fileName;
             cmd.highlight = "codegen";
             return cmd;
@@ -167,14 +171,28 @@ Product {
             filePath: product.buildDirectory + "/.uic/ui_" + input.baseName + ".h"
         }
         prepare: {
-            var cmd = new Command("uic", [
+            var cmd = new Command(project.buildDirectory  + "/bin/uic", [
                 "-o", output.filePath,
                 input.filePath,
             ]);
-            cmd.environment = product.hostToolsEnvironment;
             cmd.description = "uic " + input.fileName;
             cmd.highlight = "codegen";
             return cmd;
         }
+    }
+
+    FileTagger {
+        patterns: ["*.h", "*.cpp"]
+        fileTags: "moc"
+    }
+
+    FileTagger {
+        patterns: "*.qrc"
+        fileTags: "rcc"
+    }
+
+    FileTagger {
+        patterns: "*.ui"
+        fileTags: "uic"
     }
 }

@@ -2,7 +2,7 @@ import qbs
 
 Group {
     name: "headers"
-    prefix: project.sourcePath + "/qtbase/src/gui/"
+    prefix: project.sourceDirectory + "/qtbase/src/gui/"
     files: "**/*.h"
     excludeFiles: "doc/**"
 }

@@ -3,9 +3,7 @@ import qbs
 QtModule {
     id: gsttools
     name: "QtGstTools"
-    condition: configure.gstreamer
-
-    includeDependencies: ["QtCore-private", "QtNetwork", "QtGui", "QtQuick", "QtMultimedia-private"]
+    condition: project.gstreamer
 
     Depends { name: "gstreamer" }
     Depends { name: "QtCore" }
@@ -14,7 +12,7 @@ QtModule {
 
     Group {
         name: "headers"
-        prefix: project.sourcePath + "/qtmultimedia/src/multimedia/gsttools_headers/"
+        prefix: project.sourceDirectory + "/qtmultimedia/src/multimedia/gsttools_headers/"
         files: [
             "*.h",
         ]
@@ -24,13 +22,11 @@ QtModule {
             "qvideosurfacegstsink_p.h", // gst 0.1
             "qgstreamermirtexturerenderer_p.h", // mir
         ]
-        fileTags: "moc"
-        overrideTags: false
     }
 
     Group {
         name: "sources"
-        prefix: project.sourcePath + "/qtmultimedia/src/gsttools/"
+        prefix: project.sourceDirectory + "/qtmultimedia/src/gsttools/"
         files: "*.cpp"
         excludeFiles: [
             "qgstreamergltexturerenderer.cpp", // ### fixme: see above
@@ -38,7 +34,5 @@ QtModule {
             "qvideosurfacegstsink.cpp", // gst 0.1
             "qgstreamermirtexturerenderer.cpp", // mir
         ]
-        fileTags: "moc"
-        overrideTags: false
     }
 }

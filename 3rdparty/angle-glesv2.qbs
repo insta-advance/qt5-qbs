@@ -4,11 +4,11 @@ DynamicLibrary {
     targetName: "GLESv2"
     type: "dynamiclibrary"
     builtByDefault: false
-    condition: configure.angle
+    condition: project.angle
 
     cpp.dynamicLibraryPrefix: "lib"
 
-    readonly property path basePath: project.sourcePath + "/qtbase/src/3rdparty/angle"
+    readonly property path basePath: project.sourceDirectory + "/qtbase/src/3rdparty/angle"
     readonly property stringList cppDefines: [
         "ANGLE_TRANSLATOR_STATIC",
         "LIBANGLE_IMPLEMENTATION",
@@ -17,12 +17,7 @@ DynamicLibrary {
         'GL_GLEXT_PROTOTYPES=',
         'EGLAPI=',
         'ANGLE_PRELOADED_D3DCOMPILER_MODULE_NAMES={ "d3dcompiler_47.dll", "d3dcompiler_46.dll", "d3dcompiler_43.dll" }',
-        "ANGLE_MULTITHREADED_D3D_SHADER_COMPILE=0", // ### mingw/msvc2010 only
         "ANGLE_SKIP_DXGI_1_2_CHECK",
-        "NDEBUG", //### fix the ID3DDebug usage instead
-        "D3DCOMPILE_RESERVED16=0x00010000", // ### mingw
-        "D3DCOMPILE_RESERVED17=0x00020000", // ### mingw
-        "D3D11_MAP_FLAG_DO_NOT_WAIT=0x1000000", // ### mingw
     ];
 
     cpp.defines: cppDefines
@@ -35,7 +30,6 @@ DynamicLibrary {
         project.sourceDirectory + "/include/angle/" + project.version,
     ].concat(base)
 
-    Depends { name: "configure" }
     Depends { name: "cpp" }
 
     Properties {
@@ -68,27 +62,20 @@ DynamicLibrary {
     }
 
     Properties {
-        condition: qbs.targetOS.contains("unix")
-        cpp.dynamicLibraries: [
-            "pthread",
-        ].concat(outer)
-    }
-
-    Properties {
         condition: qbs.toolchain.contains("gcc")
         cpp.cxxFlags: [
             "-std=c++11",
             "-Wno-unused-parameter",
-        ].concat(outer)
+        ]
     }
 
     Group {
         name: "QtANGLEHeaders"
         files: [
-            project.sourcePath + "/qtbase/src/3rdparty/angle/include/EGL",
-            project.sourcePath + "/qtbase/src/3rdparty/angle/include/GLES2",
-            project.sourcePath + "/qtbase/src/3rdparty/angle/include/GLES3",
-            project.sourcePath + "/qtbase/src/3rdparty/angle/include/KHR",
+            project.sourceDirectory + "/qtbase/src/3rdparty/angle/include/EGL",
+            project.sourceDirectory + "/qtbase/src/3rdparty/angle/include/GLES2",
+            project.sourceDirectory + "/qtbase/src/3rdparty/angle/include/GLES3",
+            project.sourceDirectory + "/qtbase/src/3rdparty/angle/include/KHR",
         ]
         fileTags: "hpp_ANGLE"
         qbs.install: true
@@ -214,6 +201,6 @@ DynamicLibrary {
 
     Export {
         Depends { name: "cpp" }
-        cpp.includePaths: project.sourcePath + "/qtbase/src/3rdparty/angle/include"
+        cpp.includePaths: project.sourceDirectory + "/qtbase/src/3rdparty/angle/include"
     }
 }

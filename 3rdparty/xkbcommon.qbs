@@ -1,12 +1,13 @@
 import qbs
 
-QtProduct {
-    type: "staticlibrary"
+StaticLibrary {
     condition: qbs.targetOS.contains("unix")
 
+    Depends { name: "cpp" }
+
     cpp.includePaths: [
-        project.sourcePath + "/qtbase/src/3rdparty/xkbcommon",
-        project.sourcePath + "/qtbase/src/3rdparty/xkbcommon/src",
+        project.sourceDirectory + "/qtbase/src/3rdparty/xkbcommon",
+        project.sourceDirectory + "/qtbase/src/3rdparty/xkbcommon/src",
     ].concat(base)
 
     cpp.cFlags: [
@@ -29,7 +30,7 @@ QtProduct {
 
     Group {
         name: "headers"
-        prefix: project.sourcePath + "/qtbase/src/3rdparty/xkbcommon/src/"
+        prefix: project.sourceDirectory + "/qtbase/src/3rdparty/xkbcommon/src/"
         files: [
             "*.h",
             "xkbcomp/*.h",
@@ -38,15 +39,16 @@ QtProduct {
 
     Group {
         name: "sources"
-        prefix: project.sourcePath + "/qtbase/src/3rdparty/xkbcommon/src/"
+        prefix: project.sourceDirectory + "/qtbase/src/3rdparty/xkbcommon/src/"
         files: [
             "*.c",
+            "x11/*.c",
             "xkbcomp/*.c",
         ]
     }
 
     Export {
         Depends { name: "cpp" }
-        cpp.includePaths: project.sourcePath + "/qtbase/src/3rdparty/xkbcommon"
+        cpp.includePaths: project.sourceDirectory + "/qtbase/src/3rdparty/xkbcommon"
     }
 }

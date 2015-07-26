@@ -2,19 +2,11 @@ import qbs
 
 QtPlugin {
     category: "video/videonode"
-    condition: configure.egl && configure.opengl == "es2"
-
-    includeDependencies: [
-        "QtCore-private",
-        "QtGui-private",
-        "QtMultimedia-private",
-        "QtPlatformSupport-private",
-        "QtQuick-private",
-    ]
+    condition: project.egl && project.opengl == "es2"
 
     cpp.defines: {
         var defines = base;
-        if (configure.imx6) {
+        if (project.eglfs_viv) {
             defines.push("LINUX");
             defines.push("EGL_API_FB");
         }
@@ -31,15 +23,11 @@ QtPlugin {
 
     Group {
         name: "headers"
-        files: project.sourcePath + "/qtmultimedia/src/plugins/videonode/egl/*.h"
-        fileTags: "moc"
-        overrideTags: false
+        files: project.sourceDirectory + "/qtmultimedia/src/plugins/videonode/egl/*.h"
     }
 
     Group {
         name: "sources"
-        files: project.sourcePath + "/qtmultimedia/src/plugins/videonode/egl/*.cpp"
-        fileTags: "moc"
-        overrideTags: false
+        files: project.sourceDirectory + "/qtmultimedia/src/plugins/videonode/egl/*.cpp"
     }
 }

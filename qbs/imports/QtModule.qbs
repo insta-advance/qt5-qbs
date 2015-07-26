@@ -12,8 +12,6 @@ QtProduct {
 
     property string simpleName: name.slice(2).toLowerCase()
 
-    Depends { name: "sync" }
-
     Group {
         fileTagsFilter: [
             "debuginfo",

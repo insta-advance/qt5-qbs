@@ -1,15 +1,15 @@
 import qbs
 
-QtProduct {
-    type: "staticlibrary"
-
+StaticLibrary {
     destinationDirectory: project.buildDirectory + "/lib"
+    profiles: project.targetProfiles
+    builtByDefault: false
 
     Depends { name: "cpp" }
 
     Group {
         name: "sources"
-        prefix: project.sourcePath + "/qtbase/src/3rdparty/harfbuzz/src/"
+        prefix: project.sourceDirectory + "/qtbase/src/3rdparty/harfbuzz/src/"
         files: [
             "harfbuzz-buffer.c",
             "harfbuzz-gdef.c",
@@ -25,7 +25,7 @@ QtProduct {
     Export {
         Depends { name: "cpp" }
         cpp.includePaths: [
-            project.sourcePath + "/qtbase/src/3rdparty/harfbuzz/src",
+            project.sourceDirectory + "/qtbase/src/3rdparty/harfbuzz/src",
         ]
     }
 }

@@ -1,26 +1,28 @@
 import qbs
 
-// ### add PkgConfig here so the host libs can be used instead
-QtProduct {
-    type: "staticlibrary"
-    destinationDirectory: project.buildDirectory + "/lib"
+PkgConfigDependency {
+    name: "zlib"
+    type: project.system_zlib ? "hpp" : "staticlibrary"
 
     Depends { name: "cpp" }
+    Depends { name: "QtCoreHeaders"; condition: !project.system_zlib }
+
+    Export {
+        Depends { name: "cpp" }
+        cpp.includePaths: project.system_zlib ? base : [
+            project.sourceDirectory + "/qtbase/src/3rdparty/zlib",
+        ]
+    }
+
+    destinationDirectory: project.buildDirectory + "/lib"
 
     cpp.defines: [
         "QT_BUILD_CONFIGURE",
-        "QT_POINTER_SIZE=" + (qbs.architecture == "x86_64" ? "8" : "4"),
-    ].concat(base)
-
-    cpp.includePaths: [
-        project.sourceDirectory + "/include",
-        project.sourceDirectory + "/include/QtCore",
-        project.sourcePath + "/qtbase/src/corelib/global",
     ].concat(base)
 
     Group {
         name: "headers"
-        prefix: project.sourcePath + "/qtbase/src/3rdparty/zlib/"
+        prefix: project.sourceDirectory + "/qtbase/src/3rdparty/zlib/"
         files: [
             "zutil.h",
             "crc32.h",
@@ -38,7 +40,7 @@ QtProduct {
 
     Group {
         name: "sources"
-        prefix: project.sourcePath + "/qtbase/src/3rdparty/zlib/"
+        prefix: project.sourceDirectory + "/qtbase/src/3rdparty/zlib/"
         files: [
             "zutil.c",
             "adler32.c",
@@ -57,10 +59,5 @@ QtProduct {
             "trees.c",
             "uncompr.c",
         ]
-    }
-
-    Export {
-        Depends { name: "cpp" }
-        cpp.includePaths: project.sourcePath + "/qtbase/src/3rdparty/zlib"
     }
 }

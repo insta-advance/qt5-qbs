@@ -8,13 +8,11 @@ Project {
     ]
 
     QtPlugin {
-        condition: configure.xcb && configure.egl && qbs.targetOS.contains("linux")
+        condition: project.xcb && project.egl && qbs.targetOS.contains("linux")
         category: "platforms"
         targetName: "qxcb"
 
-        readonly property path basePath: project.sourcePath + "/qtbase/src/plugins/platforms/xcb"
-
-        includeDependencies: ["QtCore-private", "QtGui-private", "QtPlatformSupport-private"]
+        readonly property path basePath: project.sourceDirectory + "/qtbase/src/plugins/platforms/xcb"
 
         cpp.includePaths: [
             basePath,
@@ -24,7 +22,8 @@ Project {
         //Depends { name: "xcb-x11" }
         Depends { name: "qt-xcb" }
         Depends { name: "xkbcommon" }
-        //Depends { name: "xkb-x11"; condition: configure.xkb }
+        //Depends { name: "xkb-x11"; condition: project.xkb }
+        Depends { name: "QtGuiHeaders" }
         Depends { name: "QtCore" }
         Depends { name: "QtGui" }
         Depends { name: "QtXcbQpa" }
@@ -33,8 +32,6 @@ Project {
             name: "sources"
             prefix: basePath + "/"
             files: "qxcbmain.cpp"
-            fileTags: "moc"
-            overrideTags: false
         }
     }
 }

@@ -1,13 +1,11 @@
 import qbs
 
 QtPlugin {
-    readonly property string basePath: project.sourcePath + "/qtmultimedia/src/plugins/gstreamer/camerabin"
+    readonly property string basePath: project.sourceDirectory + "/qtmultimedia/src/plugins/gstreamer/camerabin"
 
-    condition: configure.gstreamer
+    condition: project.gstreamer
     targetName: "gstcamerabin"
     category: "mediaservice"
-
-    includeDependencies: ["QtCore-private", "QtGui-private", "QtMultimedia-private"]
 
     Depends { name: "gstreamer" }
     Depends { name: "QtCore" }
@@ -28,8 +26,6 @@ QtPlugin {
             "camerabinflash.h",
             "camerabinlocks.h",
         ]
-        fileTags: "moc"
-        overrideTags: false
     }
 
     Group {
@@ -45,7 +41,5 @@ QtPlugin {
             "camerabinfocus.cpp",
             "camerabinlocks.cpp",
         ]
-        fileTags: "moc"
-        overrideTags: false
     }
 }

@@ -6,7 +6,18 @@ import qbs.TextFile
 // and simpler regular expressions.
 Module {
     // Input
-    property string module
+    property string module: ""
+    property string prefix: "include"
+    property path profile: ""
+    property var classNames: ({})
+    readonly property var classFileNames: {
+        var classFileNames = {};
+        for (var i in classNames) {
+            for (var j in classNames[i])
+                classFileNames[classNames[i][j]] = i;
+        }
+        return classFileNames;
+    }
 
     Depends { name: "cpp" }
 
@@ -15,7 +26,7 @@ Module {
         outputFileTags: "hpp"
         outputArtifacts: {
             var module = product.moduleProperty("sync", "module");
-            var basePath = project.buildDirectory + "/include/" + module + "/";
+            var basePath = [project.buildDirectory, product.moduleProperty("sync", "prefix"), module].join("/") + "/";
 
             var fileTags = ["hpp"];
 
@@ -32,12 +43,12 @@ Module {
             if (input.fileName.endsWith("_p.h")) {
                 return [{
                     filePath: basePath + version + "/" + module + "/private/" + input.fileName,
-                    fileTags: fileTags.concat(["hpp_private"])
+                    fileTags: fileTags.concat(["hpp_private", "hpp_private_" + module])
                 }];
             }
 
             // Everything else is public
-            fileTags.push("hpp_public");
+            fileTags.push("hpp_public", "hpp_public_" + module);
 
             var artifacts = [];
 
@@ -51,30 +62,6 @@ Module {
             var reNamespace = /^namespace \w+( {)?/; //extern "C" could go here too
 
             var classes = [];
-
-            // Special cases
-            switch (input.fileName) {
-            case "qalgorithms.h":
-                classes.push("QtAlgorithms");
-                break;
-            case "qdebug.h":
-                classes.push("QtDebug");
-                break;
-            case "qendian.h":
-                classes.push("QtEndian");
-                break;
-            case "qglobal.h":
-                classes.push("QtGlobal");
-                break;
-            case "qnumeric.h":
-                classes.push("QtNumeric");
-                break;
-            case "qtest.h":
-                classes.push("QTest"); // ### handle in namespace expression (?)
-                break;
-            default:
-                break;
-            }
 
             var insideQt = false;
             var file = new TextFile(input.filePath, TextFile.ReadOnly);
@@ -215,31 +202,24 @@ Module {
             }
             file.close();
 
-            // Special cases/known duplicates
+            var classFileNames = product.moduleProperty("sync", "classFileNames");
             for (var i in classes) {
-                switch (classes[i]) {
-                case "QByteArrayData":
-                    if (input.fileName != "qobjectdefs.h")
-                        continue;
-                    break;
-                case "QByteArrayList":
-                    if (input.fileName != "qbytearraylist.h")
-                        continue;
-                    break;
-                case "QVariantHash":
-                case "QVariantList":
-                case "QVariantMap":
-                    if (input.fileName != "qmetatype.h")
-                        continue;
-                    break;
-                default:
-                    break;
-                }
-
+                if (classes[i] in classFileNames)
+                    continue; // skip explicity defined classes (and handle them below)
                 artifacts.push({
                     filePath: basePath + classes[i],
                     fileTags: fileTags
                 });
+            }
+
+            var classNames = product.moduleProperty("sync", "classNames");
+            if (input.fileName in classNames) {
+                for (var i in classNames[input.fileName]) {
+                    artifacts.push({
+                        filePath: basePath + classNames[input.fileName][i],
+                        fileTags: fileTags
+                    });
+                }
             }
 
             // Tag for the module header
@@ -257,13 +237,13 @@ Module {
         prepare: {
             var cmd = new JavaScriptCommand();
             cmd.description = "syncing " + input.fileName;
-            cmd.developerBuild = project.developerBuild;
+            cmd.developerBuild = product.moduleProperty("configure", "private_tests");
             cmd.sourceCode = function() {
                 for (var i in outputs.hpp) {
                     var header = outputs.hpp[i];
 
                     // uncomment to aid duplicate finding
-                    /*if (File.exists(header.filePath)) { // Helpful for debugging duplicates
+                    /*if (File.exists(header.filePath)) {
                         var file = new TextFile(header.filePath, TextFile.ReadOnly);
                         var contents = file.readAll();
                         file.close();
@@ -300,9 +280,9 @@ Module {
         Artifact {
             filePath: {
                 var module = product.moduleProperty("sync", "module");
-                return project.buildDirectory + "/include/" + module + "/" + module;
+                return [project.buildDirectory, product.moduleProperty("sync", "prefix"), module, module].join("/");
             }
-            fileTags: ["hpp", "hpp_public"]
+            fileTags: ["hpp", "hpp_public", "hpp_public_" + product.moduleProperty("sync", "module")]
         }
         prepare: {
             var cmd = new JavaScriptCommand();
@@ -322,5 +302,52 @@ Module {
             };
             return cmd;
         }
+    }
+
+    // Helpers for parsing sync.profile... use for creating the class name hashes
+    verify: {
+        if (!profile)
+            return;
+
+        var syncProfile = new TextFile(profile, TextFile.ReadOnly);
+
+        var modules = { };
+        while (!syncProfile.atEof()) {
+            // Module parsing
+            var line = syncProfile.readLine();
+            if (line.startsWith('%modules = (')) {
+                line = syncProfile.readLine();
+                while (!line.startsWith(');')) {
+                    var matches = line.match(/"([\w\/]*)" => "([\w\/\.\$\!]*)",/);
+                    if (matches)
+                        modules[matches[1]] = matches[2].replace(/\$basedir/g, project.sourceDirectory);
+                    line = syncProfile.readLine();
+                }
+            }
+
+            // Class name parsing
+            var line = syncProfile.readLine();
+            if (line.startsWith('%classnames = (')) {
+                line = syncProfile.readLine();
+                while (!line.startsWith(');')) {
+                    var matches = line.match(/"([\w\.]*)" => "([\w,]*)",/);
+                    if (matches)
+                        classNames[matches[1]] = matches[2].split(',');
+                    line = syncProfile.readLine();
+                }
+            }
+        }
+
+        print("moduleNames: ({");
+        for (var i in modules)
+            print('"' + i + '": "' + modules[i] + '",');
+        print("})");
+
+        print("classNames: ({");
+        for (var i in classNames)
+            print('"' + i + '": ["' + classNames[i].join('", "') + '"],');
+        print("})");
+
+        syncProfile.close();
     }
 }

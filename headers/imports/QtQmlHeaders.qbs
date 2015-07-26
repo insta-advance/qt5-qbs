@@ -2,7 +2,7 @@ import qbs
 
 Group {
     name: "headers"
-    prefix: project.sourcePath + "/qtdeclarative/src/qml/"
+    prefix: project.sourceDirectory + "/qtdeclarative/src/qml/"
     files: "**/*.h"
     excludeFiles: "doc/**"
 }
