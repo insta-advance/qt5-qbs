@@ -3,18 +3,25 @@ import qbs
 PkgConfigDependency {
     name: "zlib"
     type: project.system_zlib ? "hpp" : "staticlibrary"
-
-    Depends { name: "cpp" }
-    Depends { name: "QtCoreHeaders"; condition: !project.system_zlib }
+    condition: true
+    profiles: project.targetProfiles
+    destinationDirectory: project.buildDirectory + "/lib"
 
     Export {
         Depends { name: "cpp" }
-        cpp.includePaths: project.system_zlib ? base : [
+        cpp.includePaths: project.system_zlib ? includePaths : [
             project.sourceDirectory + "/qtbase/src/3rdparty/zlib",
         ]
     }
 
-    destinationDirectory: project.buildDirectory + "/lib"
+    Properties {
+        condition: project.system_zlib && !found // e.g. Android
+        dynamicLibraries: ["z"]
+    }
+
+    Depends { name: "Android.ndk"; condition: qbs.targetOS.contains("android") }
+    Depends { name: "cpp" }
+    Depends { name: "Qt.core-private"; condition: !project.system_zlib }
 
     cpp.defines: [
         "QT_BUILD_CONFIGURE",

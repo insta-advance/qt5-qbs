@@ -11,8 +11,8 @@ QtPlugin {
     ].concat(base)
 
     Depends { name: "egl" }
-    Depends { name: "QtCore" }
-    Depends { name: "QtGui" }
+    Depends { name: "Qt.core" }
+    Depends { name: "Qt.gui" }
     Depends { name: "QtEglDeviceIntegration" }
     Depends { name: "QtCoreHeaders" }
     Depends { name: "QtGuiHeaders" }

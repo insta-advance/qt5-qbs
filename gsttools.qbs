@@ -6,8 +6,8 @@ QtModule {
     condition: project.gstreamer
 
     Depends { name: "gstreamer" }
-    Depends { name: "QtCore" }
-    Depends { name: "QtGui" }
+    Depends { name: "Qt.core" }
+    Depends { name: "Qt.gui" }
     Depends { name: "QtMultimedia" }
 
     Group {

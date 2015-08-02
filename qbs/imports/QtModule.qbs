@@ -5,8 +5,7 @@ import qbs.PathTools
 import "QtUtils.js" as QtUtils
 
 QtProduct {
-    type: "dynamiclibrary"
-    targetName: "Qt5" + name.slice(2)
+    type: project.staticBuild ? "staticlibrary" : "dynamiclibrary"
     version: project.version
     destinationDirectory: project.buildDirectory + "/lib"
 
@@ -61,17 +60,17 @@ QtProduct {
         prepare: {
             var cmd = new JavaScriptCommand();
             cmd.description = "generating module pri for " + product.name;
-            cmd.defines = "QT_" + product.name.slice(2).toUpperCase() + "_LIB";
+            cmd.defines = "QT_" + product.simpleName.toUpperCase() + "_LIB";
             cmd.version = project.version;
             cmd.versionParts = project.version.split('.');
             cmd.sourceCode = function() {
                 for (var o in outputs.pri) {
                     var output = outputs.pri[o];
                     var isPublic = !output.baseName.endsWith("_private");
-                    var modulePrefix = "QT." + output.baseName.slice(7) + '.';
+                    var modulePrefix = "QT." + product.simpleName + '.';
                     var depends = "";
                     var includes = "$$QT_MODULE_INCLUDE_BASE";
-                    for (var i in product.includeDependencies) {
+                    for (var i in product.includeDependencies) { // ### use inputsFromDependencies
                         var module = product.includeDependencies[i];
                         if (isPublic && module.endsWith("-private"))
                             module = module.slice(0, -8);
@@ -97,10 +96,9 @@ QtProduct {
                         file.writeLine(modulePrefix + "plugins = $$QT_MODULE_PLUGIN_BASE");
                         file.writeLine(modulePrefix + "imports = $$QT_MODULE_IMPORT_BASE");
                         file.writeLine(modulePrefix + "qml = $$QT_MODULE_QML_BASE");
-                        file.writeLine(modulePrefix + "rpath = " + project.prefix + "/lib");
-                        file.writeLine("QT_MODULES += " + module);
+                        file.writeLine(modulePrefix + "rpath = " + qbs.installRoot + "/lib");
+                        file.writeLine("QT_MODULES += " + product.simpleName);
                     }
-
                     file.close();
                 }
             }

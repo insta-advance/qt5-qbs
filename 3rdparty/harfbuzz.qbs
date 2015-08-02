@@ -5,6 +5,7 @@ StaticLibrary {
     profiles: project.targetProfiles
     builtByDefault: false
 
+    Depends { name: "Android.ndk"; condition: qbs.targetOS.contains("android") }
     Depends { name: "cpp" }
 
     Group {

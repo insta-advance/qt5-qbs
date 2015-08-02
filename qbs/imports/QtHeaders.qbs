@@ -2,7 +2,7 @@ import qbs
 import "../../qbs/imports/QtUtils.js" as QtUtils
 
 Product {
-    type: "hpp"
+    type: "staticlibrary"
 
     profiles: project.targetProfiles
 
@@ -26,12 +26,5 @@ Product {
         fileTagsFilter: "hpp_qpa"
         qbs.install: true
         qbs.installDir: sync.prefix + "/QtGui/" + project.version + "/QtGui/qpa"
-    }
-
-    Export {
-        Depends { name: "cpp" }
-        cpp.includePaths: QtUtils.includesForModule(sync.module + "-private",
-                                                    project.buildDirectory + '/' + sync.prefix,
-                                                    project.version)
     }
 }

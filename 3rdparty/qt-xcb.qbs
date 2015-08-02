@@ -2,6 +2,7 @@ import qbs
 
 StaticLibrary {
     condition: project.xcb
+    builtByDefault: false
     destinationDirectory: project.buildDirectory + "/lib"
     profiles: project.targetProfiles
 

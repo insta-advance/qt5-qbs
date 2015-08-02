@@ -29,8 +29,8 @@ QtPlugin {
     }
 
     Depends { name: "mtdev"; condition: project.mtdev }
-    Depends { name: "QtCore" }
-    Depends { name: "QtGui" }
+    Depends { name: "Qt.core" }
+    Depends { name: "Qt.gui" }
     Depends { name: "QtCoreHeaders" }
     Depends { name: "QtGuiHeaders" }
     Depends { name: "QtPlatformHeaders" }

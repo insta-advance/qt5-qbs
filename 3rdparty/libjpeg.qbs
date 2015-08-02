@@ -5,7 +5,6 @@ Product {
     profiles: project.targetProfiles
     builtByDefault: false
 
-    Depends { name: "cpp" }
     Export {
         Depends { name: "cpp" }
         cpp.dynamicLibraries: product.system_jpeg ? [
@@ -16,7 +15,9 @@ Product {
         ]
     }
 
-    // qt-jpeg
+    Depends { name: "Android.ndk"; condition: qbs.targetOS.contains("android") }
+    Depends { name: "cpp" }
+
     Properties {
         condition: qbs.toolchain.contains("gcc")
         cpp.cFlags: [

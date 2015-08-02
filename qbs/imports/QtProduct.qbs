@@ -9,12 +9,7 @@ Product {
 
     profiles: project.targetProfiles
 
-    // ### fixme: this causes a lot of warnings for non-Android. For now, require
-    // it be passed on the command line or set in the profile
-    /*Properties {
-        condition: qbs.targetOS.contains("android")
-        Android.ndk.appStl: "gnustl_shared"
-    }*/
+    Depends { name: "Android.ndk"; condition: qbs.targetOS.contains("android") }
 
     cpp.cxxFlags: {
         var cxxFlags = [];

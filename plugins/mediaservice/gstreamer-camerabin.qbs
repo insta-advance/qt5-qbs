@@ -8,8 +8,8 @@ QtPlugin {
     category: "mediaservice"
 
     Depends { name: "gstreamer" }
-    Depends { name: "QtCore" }
-    Depends { name: "QtGui" }
+    Depends { name: "Qt.core" }
+    Depends { name: "Qt.gui" }
     Depends { name: "QtGstTools" }
     Depends { name: "QtMultimedia" }
 

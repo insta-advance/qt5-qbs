@@ -2,6 +2,7 @@ import qbs
 
 Product {
     type: "hpp"
+    profiles: project.targetProfiles
 
     Depends { name: "cpp" }
 

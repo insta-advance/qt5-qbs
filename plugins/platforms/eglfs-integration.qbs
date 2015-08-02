@@ -34,8 +34,8 @@ QtModule {
     Depends { name: "glib"; condition: project.glib }
     Depends { name: "gl"; condition: project.opengl }
     Depends { name: "libudev"; condition: project.libudev }
-    Depends { name: "QtCore" }
-    Depends { name: "QtGui" }
+    Depends { name: "Qt.core" }
+    Depends { name: "Qt.gui" }
     Depends { name: "QtCoreHeaders" }
     Depends { name: "QtGuiHeaders" }
     Depends { name: "QtPlatformHeaders" }

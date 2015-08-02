@@ -1,10 +1,12 @@
 import qbs
 
 StaticLibrary {
+    builtByDefault: false
     targetName: "pcre16"
     destinationDirectory: project.buildDirectory + "/lib"
     profiles: project.targetProfiles
 
+    Depends { name: "Android.ndk"; condition: qbs.targetOS.contains("android") }
     Depends { name: "cpp" }
 
     cpp.defines: {

@@ -1,35 +1,59 @@
 import qbs
-import qbs.File
-import qbs.Probes
+import "headers/QtQuickTestHeaders.qbs" as ModuleHeaders
 
-Project {
+QtModuleProject {
+    id: module
+    condition: project.qmltest
     name: "QtQuickTest"
+    simpleName: "qmltest"
+    prefix: project.sourceDirectory + "/qtbase/src/qmltest/"
+
+    Product {
+        name: module.privateName
+        profiles: project.targetProfiles
+        type: "hpp"
+        Depends { name: module.moduleName }
+        Export {
+            Depends { name: "cpp" }
+            cpp.defines: module.defines
+            cpp.includePaths: module.includePaths
+        }
+    }
+
+    QtHeaders {
+        name: module.headersName
+        sync.module: module.name
+        ModuleHeaders { fileTags: "header_sync" }
+    }
 
     QtModule {
-        name: "QtQuickTest"
+        name: module.moduleName
         simpleName: "qmltest"
-        condition: project.qmltest !== false
+        targetName: module.targetName
 
-        readonly property path basePath: project.sourceDirectory + "/qtdeclarative/src/qmltest"
+        Export {
+            Depends { name: "cpp" }
+            cpp.includePaths: module.publicIncludePaths
+        }
+
+        Depends { name: module.headersName }
+        Depends { name: "Qt.core" }
+        Depends { name: "Qt.gui" }
+        Depends { name: "Qt.qml" }
+        Depends { name: "Qt.quick" }
+        Depends { name: "Qt.testlib" }
 
         cpp.defines: [
             "QT_QUICKTEST_LIB", "QT_GUI_LIB",
         ].concat(base)
 
-        Depends { name: "QtQuickTestHeaders" }
-        Depends { name: "QtCore" }
-        Depends { name: "QtGui" }
-        Depends { name: "QtQml" }
-        Depends { name: "QtQuick" }
-        Depends { name: "QtTest" }
+        cpp.includePaths: module.includePaths.concat(base)
 
-        QtQuickTestHeaders {
-            name: "headers"
-        }
+        ModuleHeaders { }
 
         Group {
             name: "sources"
-            prefix: basePath + "/"
+            prefix: module.prefix
             files: [
                 "*.cpp",
             ]
@@ -43,23 +67,21 @@ Project {
             targetName: "qmltestplugin"
             pluginPath: "QtTest"
 
-            readonly property string basePath: project.sourceDirectory + "/qtdeclarative/src/imports/testlib"
-
-            Depends { name: "QtCore" }
-            Depends { name: "QtGui" }
-            Depends { name: "QtQml" }
-            Depends { name: "QtTest" }
-            Depends { name: "QtQuickTest" }
+            Depends { name: "Qt.core" }
+            Depends { name: "Qt.gui" }
+            Depends { name: "Qt.qml" }
+            Depends { name: "Qt.testlib" }
+            Depends { name: "Qt.qmltest" }
 
             Group {
                 name: "sources"
-                prefix: basePath + "/"
+                prefix: project.sourceDirectory + "/qtdeclarative/src/imports/testlib/"
                 files: "main.cpp"
             }
 
             Group {
                 name: "qml"
-                prefix: basePath + "/"
+                prefix: project.sourceDirectory + "/qtdeclarative/src/imports/testlib/"
                 files: ["qmldir", "*.qml", "*.js"]
                 qbs.install: true
                 qbs.installDir: "qml/" + pluginPath

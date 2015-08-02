@@ -2,6 +2,7 @@ import qbs
 
 StaticLibrary {
     condition: qbs.targetOS.contains("unix")
+    builtByDefault: false
 
     Depends { name: "cpp" }
 

@@ -6,6 +6,7 @@ Product {
     readonly property bool found: gstreamerProbe.found && gstreamerAppProbe.found
                                   && gstreamerVideoProbe.found && gstreamerAudioProbe.found
                                   && gstreamerPBUtilsProbe.found
+    builtByDefault: false
     type: "hpp"
 
     Depends { name: "cpp" }

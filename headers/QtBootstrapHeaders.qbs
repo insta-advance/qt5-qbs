@@ -113,6 +113,7 @@ Group {
         "tools/qeasingcurve.h",
         "tools/qelapsedtimer.h",
         "tools/qhash.h",
+        "tools/qhashfunctions.h",
         "tools/qiterator.h",
         "tools/qline.h",
         "tools/qlist.h",

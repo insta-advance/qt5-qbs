@@ -18,8 +18,8 @@ QtPlugin {
     Depends { name: "angle-egl"; condition: project.egl }
     Depends { name: "angle-gles2"; condition: project.angle }
     Depends { name: "freetype" }
-    Depends { name: "QtCore" }
-    Depends { name: "QtGui" }
+    Depends { name: "Qt.core" }
+    Depends { name: "Qt.gui" }
     Depends { name: "QtCoreHeaders" }
     Depends { name: "QtGuiHeaders" }
     Depends { name: "QtPlatformSupport" }

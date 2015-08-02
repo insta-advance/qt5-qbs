@@ -1,36 +1,62 @@
 import qbs
+import "headers/QtMultimediaWidgetsHeaders.qbs" as ModuleHeaders
 
-Project {
+QtModuleProject {
+    id: module
     name: "QtMultimediaWidgets"
+    condition: project.multimediawidgets
+    simpleName: "multimediawidgets"
+    prefix: project.sourceDirectory + "/qtmultimedia/src/multimediawidgets/"
+
+    Product {
+        name: module.privateName
+        profiles: project.targetProfiles
+        type: "hpp"
+        Depends { name: module.moduleName }
+        Export {
+            Depends { name: "cpp" }
+            cpp.defines: module.defines
+            cpp.includePaths: module.includePaths
+        }
+    }
+
+    QtHeaders {
+        name: module.headersName
+        sync.module: module.name
+        ModuleHeaders { fileTags: "header_sync" }
+    }
 
     QtModule {
-        condition: project.multimedia !== false && project.widgets && project.multimediawidgets !== false
-        name: "QtMultimediaWidgets"
+        name: module.moduleName
+        targetName: module.targetName
 
-        readonly property path basePath: project.sourceDirectory + "/qtmultimedia/src/multimediawidgets"
+        Export {
+            Depends { name: "cpp" }
+            cpp.includePaths: module.publicIncludePaths
+        }
+
+        Depends { name: module.headersName }
+        Depends { name: "Qt.core" }
+        Depends { name: "Qt.gui" }
+        Depends { name: "Qt.widgets" }
+        Depends { name: "Qt.multimedia" }
 
         cpp.defines: [
             "QT_BUILD_MULTIMEDIAWIDGETS_LIB",
             "QT_NO_OPENGL", // needs porting to QtGui's version of OpenGL
         ].concat(base)
 
-        Depends { name: "QtCore" }
-        Depends { name: "QtGui" }
-        Depends { name: "QtWidgets" }
-        Depends { name: "QtMultimedia" }
-        Depends { name: "QtMultimediaWidgetsHeaders" }
+        cpp.includePaths: module.includePaths.concat(base)
 
-        QtMultimediaWidgetsHeaders {
-            name: "headers"
+        ModuleHeaders {
             excludeFiles: [
-                "doc/**",
                 "qeglimagetexturesurface_p.h", // QtOpenGL
             ]
         }
 
         Group {
             name: "sources"
-            prefix: basePath + "/"
+            prefix: module.prefix
             files: [
                 "*.cpp",
             ]

@@ -5,10 +5,10 @@ QmlPlugin {
     condition: project.multimedia !== false
     pluginPath: "QtMultimedia"
 
-    Depends { name: "QtCore" }
-    Depends { name: "QtGui" }
-    Depends { name: "QtQml" }
-    Depends { name: "QtQuick" }
+    Depends { name: "Qt.core" }
+    Depends { name: "Qt.gui" }
+    Depends { name: "Qt.qml" }
+    Depends { name: "Qt.quick" }
     Depends { name: "QtMultimedia" }
     Depends { name: "QtCoreHeaders" }
     Depends { name: "QtGuiHeaders" }

@@ -9,8 +9,8 @@ QtPlugin {
 
     Depends { name: "angle-egl" }
     Depends { name: "angle-glesv2" }
-    Depends { name: "QtCore" }
-    Depends { name: "QtGui" }
+    Depends { name: "Qt.core" }
+    Depends { name: "Qt.gui" }
     Depends { name: "QtGuiHeaders" }
 
     Group {

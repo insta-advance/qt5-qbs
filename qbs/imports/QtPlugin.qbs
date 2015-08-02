@@ -3,7 +3,7 @@ import qbs
 QtProduct {
     property string category
 
-    type: "dynamiclibrary"
+    type: project.staticBuild ? "staticlibrary" : "dynamiclibrary"
     destinationDirectory: project.buildDirectory + "/plugins/" + category
 
     Group {

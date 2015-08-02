@@ -13,29 +13,34 @@ Project {
             print("You appear to be cross-compiling. Consider setting project.hostProfile to an appropriate profile for the host OS.");
         return profile;
     }
-    readonly property stringList architectures: qbs.targetOS.contains("android") ? "armeabi" : undefined
+    readonly property stringList architectures: qbs.targetOS.contains("android") ? "armv5" : undefined
     readonly property stringList targetProfiles: architectures
-        ? architectures.map(function(a) { return profile + '_' + a; }) : profile
+        ? architectures.map(function(arch) { return profile + '_' + arch; }) : [profile]
     readonly property string hostMkspec: QtUtils.detectHostMkspec(qbs.hostOS, qbs.toolchain)
     readonly property string targetMkspec: QtUtils.detectTargetMkspec(qbs.targetOS, qbs.toolchain, qbs.architecture)
 
     // Configuration
-    readonly property var configDirectory: root.buildDirectory + "/.." // the directory Qt was configured in... this is normally the place Qt is built and also where it is installed for developer builds
+    readonly property var configDirectory: root.buildDirectory + "/.." // the directory Qt was configured in... this is normally the place Qt is built and also where it is installed for developer builds ... and this must become the buildDirectory itself in the case that this project generates the configuration
     readonly property var configuration: {
         var configSummary = configDirectory + "/config.summary";
         if (!File.exists(configSummary)) {
             print("config.summary not found. Please run qt5's configure to generate a build configuration.");
+            return [];
         }
         var configContents = TextFile(configSummary).readAll();
         return configContents.match(/^  Configuration .......... (.*)$/m)[1].split(' ');
     }
 
+    readonly property bool staticBuild: false
+
     // Modules
     readonly property bool concurrent: configuration.contains("concurrent")
+    readonly property bool core: !configuration.contains("no-core")
     readonly property bool dbus: configuration.contains("dbus")
     readonly property bool graphicaleffects: !configuration.contains("no-graphicaleffects")
     readonly property bool gui: !configuration.contains("no-gui")
     readonly property bool multimedia: !configuration.contains("no-multimedia")
+    readonly property bool multimediawidgets: !configuration.contains("no-multimediawidgets") && widgets && multimedia
     readonly property bool network: !configuration.contains("no-network")
     readonly property bool qml: !configuration.contains("no-qml")
     readonly property bool quick: !configuration.contains("no-quick")
@@ -67,7 +72,6 @@ Project {
     readonly property bool harfbuzz: configuration.contains("harfbuzz")
     readonly property bool inotify: configuration.contains("inotify")
     readonly property bool pcre: configuration.contains("pcre")
-    readonly property bool zlib: configuration.contains("zlib")
     readonly property bool system_zlib: configuration.contains("system-zlib")
 
     // QtNetwork
@@ -124,11 +128,10 @@ Project {
     readonly property bool pulseaudio: configuration.contains("pulseaudio")
 
 
-    qbsSearchPaths: ["qbs", "headers"]
-    minimumQbsVersion: "1.4.0"
+    qbsSearchPaths: ["qbs"]
+    minimumQbsVersion: "1.4.1"
 
     references: [
-        "headers/headers.qbs",
         "3rdparty/3rdparty.qbs",
     ]
 
@@ -139,17 +142,15 @@ Project {
             "qtcore.qbs",
             "qtgui.qbs",
             "qtnetwork.qbs",
-            "qtmultimedia.qbs",
-            "qtmultimediaquicktools.qbs",
-            "qtqml.qbs",
-            "qtquick.qbs",
             "qttest.qbs",
             "qtwidgets.qbs",
-            /*"qtmultimediawidgets.qbs",
-            "qtquickcontrols.qbs",
+            "qtqml.qbs",
+            "qtquick.qbs",
             "qtquicktest.qbs",
+            "qtmultimedia.qbs",
+            "qtmultimediawidgets.qbs",
             "qtsvg.qbs",
-            "gsttools.qbs",*/
+            "qtquickcontrols.qbs",
         ]
     }
 
@@ -157,6 +158,8 @@ Project {
         name: "tools"
 
         references: [
+            "tools/androiddeployqt.qbs",
+            "tools/windeployqt.qbs",
             "tools/moc.qbs",
             "tools/rcc.qbs",
             "tools/lrelease.qbs",
@@ -164,7 +167,7 @@ Project {
         ]
     }
 
-    Project {
+    /*Project {
         name: "plugins"
 
         Project {
@@ -208,5 +211,5 @@ Project {
             "qml/qtgraphicaleffects.qbs", // here because it doesn't contain a module
             "qml/declarative_multimedia.qbs",
         ]
-    }
+    }*/
 }

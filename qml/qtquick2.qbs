@@ -6,9 +6,9 @@ QmlPlugin {
     targetName: "qtquick2plugin"
     pluginPath: "QtQuick.2"
 
-    Depends { name: "QtCore" }
-    Depends { name: "QtQml" }
-    Depends { name: "QtQuick" }
+    Depends { name: "Qt.core" }
+    Depends { name: "Qt.qml" }
+    Depends { name: "Qt.quick" }
     Depends { name: "QtCoreHeaders" }
     Depends { name: "QtGuiHeaders" }
     Depends { name: "QtQmlHeaders" }

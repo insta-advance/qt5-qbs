@@ -1,11 +1,10 @@
 import qbs
 
-QtHostTool {
-    type: "application"
+CppApplication {
+    profiles: project.hostProfile
     destinationDirectory: project.buildDirectory + "/bin"
 
-    Depends { name: "QtBootstrap" }
-    Depends { name: "QtCoreHeaders" }
+    Depends { name: "Qt.bootstrap-private" }
 
     cpp.defines: [
         "QT_UIC",

@@ -3,20 +3,20 @@ import qbs
 PkgConfigDependency {
     name: "libpng"
     type: project.system_png ? "hpp" : "staticlibrary"
-    condition: project.system_png ? base : true
+    condition: project.system_png ? found : true
+    destinationDirectory: project.buildDirectory + "/lib"
 
     Export {
         Depends { name: "cpp" }
-        cpp.includePaths: project.system_png ? [
+        cpp.includePaths: project.system_png ? includePaths : [
             project.sourceDirectory + "/qtbase/src/3rdparty/libpng",
-        ] : base
+        ]
     }
 
-    destinationDirectory: project.buildDirectory + "/lib"
-
+    Depends { name: "Android.ndk"; condition: qbs.targetOS.contains("android") }
     Depends { name: "cpp" }
     Depends { name: "zlib" }
-    Depends { name: "QtCoreHeaders" }
+    Depends { name: "Qt.core-private"; condition: !project.system_png }
 
     Group {
         name: "sources"

@@ -22,9 +22,9 @@ QtModule {
     Depends { name: "xcb-keysyms" }
     Depends { name: "xcb-icccm" }
     Depends { name: "QtCoreHeaders" }
-    Depends { name: "QtCore" }
+    Depends { name: "Qt.core" }
     Depends { name: "QtGuiHeaders" }
-    Depends { name: "QtGui" }
+    Depends { name: "Qt.gui" }
     Depends { name: "QtPlatformHeaders" }
     Depends { name: "QtPlatformSupport" }
     Depends { name: "QtDBusHeaders"; condition: project.dbus }

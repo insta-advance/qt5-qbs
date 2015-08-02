@@ -24,8 +24,8 @@ Project {
         Depends { name: "xkbcommon" }
         //Depends { name: "xkb-x11"; condition: project.xkb }
         Depends { name: "QtGuiHeaders" }
-        Depends { name: "QtCore" }
-        Depends { name: "QtGui" }
+        Depends { name: "Qt.core" }
+        Depends { name: "Qt.gui" }
         Depends { name: "QtXcbQpa" }
 
         Group {

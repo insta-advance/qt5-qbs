@@ -5,9 +5,9 @@ QtPlugin {
     category: "imageformats"
     condition: project.svg !== false
 
-    Depends { name: "QtCore" }
-    Depends { name: "QtGui" }
-    Depends { name: "QtSvg" }
+    Depends { name: "Qt.core" }
+    Depends { name: "Qt.gui" }
+    Depends { name: "Qt.svg" }
 
     Group {
         name: "headers"

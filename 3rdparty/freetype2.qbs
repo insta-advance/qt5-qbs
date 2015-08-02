@@ -3,13 +3,10 @@ import qbs
 PkgConfigDependency {
     name: "freetype2"
     type: project.system_freetype ? "hpp" : "staticlibrary"
-    condition: project.system_freetype ? base : true
+    condition: project.system_freetype ? found : true
     destinationDirectory: project.buildDirectory + "/lib"
 
     readonly property string prefix: project.sourceDirectory + "/qtbase/src/3rdparty/freetype/src/"
-
-    Depends { name: "cpp" }
-    Depends { name: "QtCoreHeaders"; condition: !project.system_freetype }
 
     Export {
         Depends { name: "cpp" }
@@ -17,6 +14,10 @@ PkgConfigDependency {
             project.sourceDirectory + "/qtbase/src/3rdparty/freetype/include",
         ]
     }
+
+    Depends { name: "Android.ndk"; condition: qbs.targetOS.contains("android") }
+    Depends { name: "cpp" }
+    Depends { name: "Qt.core-private"; condition: !project.system_freetype }
 
     cpp.defines: [
         "FT2_BUILD_LIBRARY",

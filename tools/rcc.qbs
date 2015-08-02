@@ -1,10 +1,10 @@
 import qbs
 
-QtHostTool {
+CppApplication {
+    profiles: project.hostProfile
     destinationDirectory: project.buildDirectory + "/bin"
 
-    Depends { name: "QtBootstrap" }
-    Depends { name: "QtCoreHeaders" }
+    Depends { name: "Qt.bootstrap-private" }
 
     cpp.includePaths: [
         project.sourceDirectory + "/qtbase/src/tools/rcc",

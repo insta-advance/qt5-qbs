@@ -12,8 +12,8 @@ QtPlugin {
 
     //Depends { name: "xcb-x11" }
     Depends { name: "qt-xcb" }
-    Depends { name: "QtCore" }
-    Depends { name: "QtGui" }
+    Depends { name: "Qt.core" }
+    Depends { name: "Qt.gui" }
     Depends { name: "QtXcbQpa" }
     Depends { name: "QtCoreHeaders" }
     Depends { name: "QtGuiHeaders" }

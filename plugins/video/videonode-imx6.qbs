@@ -12,11 +12,11 @@ QtPlugin {
     ].concat(base)
 
     Depends { name: "opengl" }
-    Depends { name: "QtCore" }
-    Depends { name: "QtGui" }
+    Depends { name: "Qt.core" }
+    Depends { name: "Qt.gui" }
     Depends { name: "QtMultimedia" }
     Depends { name: "QtMultimediaQuickTools" }
-    Depends { name: "QtQuick" }
+    Depends { name: "Qt.quick" }
 
     Group {
         name: "headers"
